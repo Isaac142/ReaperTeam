@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Teleport : MonoBehaviour
+public class Teleport_01 : MonoBehaviour
 {
 
     public float distance = 10f;

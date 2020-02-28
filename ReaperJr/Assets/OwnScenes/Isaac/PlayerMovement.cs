@@ -17,8 +17,10 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask groundLayer;
 
+    private bool m_FacingRight = true;
 
-        //Calling on the CharacterController Component
+
+    //Calling on the CharacterController Component
     void Start()
     {
         controller = GetComponent<Rigidbody>();
@@ -36,13 +38,23 @@ public class PlayerMovement : MonoBehaviour
     void Movement()
     {
         float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
-        transform.Translate(new Vector3(h, 0, 0) * speed * Time.deltaTime);
+        transform.Translate(new Vector3(h, 0, v) * speed * Time.deltaTime);
 
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
+
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    Flip();
+        //}
+        //if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    Flip();
+        //}
     }
 
     void Jump()
@@ -63,5 +75,15 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    private void Flip()
+    {
+        // Switch the way the player is labelled as facing.
+        m_FacingRight = !m_FacingRight;
+
+        //Transform for fire point
+        transform.Rotate(0f, 180f, 0f);
+
     }
 }
