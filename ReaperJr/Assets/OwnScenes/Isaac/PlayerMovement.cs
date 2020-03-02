@@ -8,17 +8,15 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody controller;
 
     public float speed = 1f;
-
     public float velocity = 10f;
+    public float distanceGround = 1.2f;
 
     public bool isGrounded;
-
-    public float distanceGround = 1.2f;
+    private bool m_FacingRight = true;
 
     public LayerMask groundLayer;
 
-    private bool m_FacingRight = true;
-
+    
 
     //Calling on the CharacterController Component
     void Start()
