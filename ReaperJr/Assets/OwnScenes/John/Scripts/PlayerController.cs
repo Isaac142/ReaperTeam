@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-
     Rigidbody controller;
 
     public float speed = 1f;
@@ -15,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
     private bool m_FacingRight = true;
 
     public LayerMask groundLayer;
+
+    public GameObject scythe;
+    public float timeToMove;
 
     //Calling on the CharacterController Component
     void Start()
@@ -27,6 +29,10 @@ public class PlayerMovement : MonoBehaviour
     {
         Movement();
         Grounded();
+        if (Input.GetMouseButtonDown(1))
+        {
+            StartCoroutine(TeleportToScythe());
+        }
     }
 
     #region PlayerMovement
@@ -82,6 +88,24 @@ public class PlayerMovement : MonoBehaviour
         //Transform for fire point
         transform.Rotate(0f, 180f, 0f);
 
+    }
+    #endregion
+
+    #region Teleport
+    IEnumerator TeleportToScythe()
+    {
+        //Get position of the player
+        Vector3 positionOfPlayer = transform.position;
+        //Get position of the scythe
+        Vector3 positionOfScythe = scythe.transform.position;
+        //Lerp position over time
+        float timer = 0f;
+        while (timer < timeToMove)
+        {
+            transform.position = Vector3.Lerp(positionOfPlayer, positionOfScythe, timer / timeToMove);
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
     #endregion
 }
