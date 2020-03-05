@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         Movement();
         Grounded();
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             StartCoroutine(TeleportToScythe());
         }
