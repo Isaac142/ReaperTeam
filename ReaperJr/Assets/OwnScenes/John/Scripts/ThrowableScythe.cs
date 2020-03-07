@@ -31,6 +31,7 @@ public class ThrowableScythe : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             ThrowScythe();
+            scythe.GetComponent<ParabolaController>().FollowParabola();
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
