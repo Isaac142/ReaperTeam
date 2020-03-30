@@ -10,20 +10,20 @@ public class Heavy : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             // Mouse Down, start holding
             holdDownStartTime = Time.time;
         }
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(0))
         {
             // Mouse still down, show force
             float holdDownTime = Time.time - holdDownStartTime;
             scythe.ShowForce(CalculateHoldDownForce(holdDownTime));
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(0))
         {
             // Mouse Up, Launch!
             float holdDownTime = Time.time - holdDownStartTime;
