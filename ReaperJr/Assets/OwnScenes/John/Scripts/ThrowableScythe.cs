@@ -4,26 +4,19 @@ using UnityEngine;
 
 public class ThrowableScythe : MonoBehaviour
 {
-    // The scythe object
-    public Rigidbody scythe;
 
-    // Amount of force to apply when throwing
-    public float throwForce = 50;
-    
-    // the target; which is the player's hand.
-    public Transform target;
-    
-    // The middle point between the scythe and the player's hand, to give it a curve
-    public Transform curve_point;
+    #region Variables
 
-    // Last position of the scythe before returning it, to use in the Bezier Quadratic Curve formula
-    private Vector3 old_pos;
+    public Rigidbody scythe;                    // The scythe object
+    public float throwForce = 50;               // Amount of force to apply when throwing
+    public float rotationSpeed;                 // Rotation speed of scythe when thrown
+    public Transform target;                    // the target; which is the player's hand.
+    public Transform curve_point;               // The middle point between the scythe and the player's hand, to give it a curve
+    private Vector3 old_pos;                    // Last position of the scythe before returning it, to use in the Bezier Quadratic Curve formula
+    private bool isReturning = false;           // Is the scythe returning? To update the calculations in the Update method
+    private float time = 0.0f;                  // Timer to link to the Bezier formual, Beginnning = 0, End = 1
 
-    // Is the scythe returning? To update the calculations in the Update method
-    private bool isReturning = false;
-
-    // Timer to link to the Bezier formual, Beginnning = 0, End = 1
-    private float time = 0.0f;
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -62,7 +55,8 @@ public class ThrowableScythe : MonoBehaviour
         }
     }
 
-    // Throw scythe
+
+    #region Throw scythe
     void ThrowScythe()
     {
         // The scythe isn't returning
@@ -74,11 +68,11 @@ public class ThrowableScythe : MonoBehaviour
         // Add force to the forward axis of the camera
         // We used TransformDirection to conver the axis from local to world
         scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
-        // Add torque to the scythe, to give it much cooler effect (rotating)
-        scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
+        scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * rotationSpeed, ForceMode.Impulse);
     }
+    #endregion
 
-    // Return Scythe
+    #region Return Scythe
     void ReturnScythe()
     {
         // We are returning the scythe; so it is in its first point where time = 0
@@ -92,7 +86,9 @@ public class ThrowableScythe : MonoBehaviour
         // Set isKinematic to true, so now we control its position directly without being affected by force
         scythe.isKinematic = true;
     }
+    #endregion
 
+    #region Reset Scythe
     void ResetScythe()
     {
         // Scythe has reached, so it is not returning anymore
@@ -120,5 +116,5 @@ public class ThrowableScythe : MonoBehaviour
         Vector3 p = (uu * p0) + (2 * u * t * p1) + (tt * p2);
         return p;
     }
-
+    #endregion
 }
