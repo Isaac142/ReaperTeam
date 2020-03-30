@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CodeMonkey.Utils;
 
 public class ThrowableScythe : MonoBehaviour
 {
 
     #region Variables
+
+    public int tapTimes;
+    public float resetTimer;
 
     public Rigidbody scythe;                    // The scythe object
     public float throwForce = 50;               // Amount of force to apply when throwing
@@ -18,19 +22,29 @@ public class ThrowableScythe : MonoBehaviour
 
     #endregion
 
+    IEnumerator ResetTapTimes()
+    {
+        yield return new WaitForSeconds(resetTimer);
+        tapTimes = 0;
+    }
+
+
     // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            StartCoroutine(ResetTapTimes());
+            tapTimes++;
             ThrowScythe();
             scythe.GetComponent<ParabolaController>().FollowParabola();
         }
+        
         if (Input.GetKeyDown(KeyCode.E))
         {
             ReturnScythe();
         }
-
+        
         // If the scythe is returning
         if (isReturning)
         {
@@ -54,6 +68,7 @@ public class ThrowableScythe : MonoBehaviour
             }
         }
     }
+
 
 
     #region Throw scythe
