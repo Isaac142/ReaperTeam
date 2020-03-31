@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &5162534001338845459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4441905539609307933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 166573c95b43bfd42ba4b347a470303f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!1 &9207516963809348282
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,13 +179,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bf88ba25eed56640b3a6499c503362c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tapTimes: 0
-  resetTimer: 0.2
-  IsHoldingDown: 0
-  speed: 1.5
+  chargeSpeed: 0.1
+  chargeValue: 0
   scythe: {fileID: 4441905539609307930}
-  throwForce: 150
-  rotationSpeed: 200
+  throwForce: 50
   target: {fileID: 9207516963809348281}
   curve_point: {fileID: 9207516964471374456}
 --- !u!1 &9207516964471374457

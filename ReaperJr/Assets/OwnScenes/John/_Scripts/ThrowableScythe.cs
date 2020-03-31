@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils;
 
 public class ThrowableScythe : MonoBehaviour
 {
 
     #region Variables
+    public float chargeSpeed = 0.1f;
+    const float min = 0f, max = 1f;
+    float throwPower = 100f;
+    public float chargeValue;
 
-    public int tapTimes;
-    public float resetTimer;
+    float normalThrowTimer = 0f, normalThrowThreshold = 0.5f;
 
     public Rigidbody scythe;                    // The scythe object
     public float throwForce = 50;               // Amount of force to apply when throwing
-    public float rotationSpeed;                 // Rotation speed of scythe when thrown
     public Transform target;                    // the target; which is the player's hand.
     public Transform curve_point;               // The middle point between the scythe and the player's hand, to give it a curve
     private Vector3 old_pos;                    // Last position of the scythe before returning it, to use in the Bezier Quadratic Curve formula
@@ -22,29 +23,44 @@ public class ThrowableScythe : MonoBehaviour
 
     #endregion
 
-    IEnumerator ResetTapTimes()
-    {
-        yield return new WaitForSeconds(resetTimer);
-        tapTimes = 0;
-    }
-
-
+    #region Update
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            StartCoroutine(ResetTapTimes());
-            tapTimes++;
-            ThrowScythe();
-            scythe.GetComponent<ParabolaController>().FollowParabola();
+            normalThrowTimer += Time.deltaTime;
+
+            if (chargeValue < max)
+            {
+                chargeValue += chargeSpeed * Time.deltaTime;
+                if (chargeValue > max)
+                {
+                    chargeValue = max;
+                }
+            }
         }
-        
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (normalThrowTimer < normalThrowThreshold)
+            {
+                ThrowScythe();
+                scythe.GetComponent<ParabolaController>().FollowParabola();
+            }
+
+            if (chargeValue > 0.2f)
+            {
+                Fire(chargeValue * throwPower);
+            }
+            chargeValue = min;
+            normalThrowTimer = 0f;
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             ReturnScythe();
         }
-        
+
         // If the scythe is returning
         if (isReturning)
         {
@@ -68,8 +84,15 @@ public class ThrowableScythe : MonoBehaviour
             }
         }
     }
+    #endregion
 
-
+    #region Charge
+    void Fire(float power)
+    {
+        Debug.Log("This much power: " + power);
+        ThrowScythe();
+    }
+    #endregion
 
     #region Throw scythe
     void ThrowScythe()
@@ -83,7 +106,7 @@ public class ThrowableScythe : MonoBehaviour
         // Add force to the forward axis of the camera
         // We used TransformDirection to conver the axis from local to world
         scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
-        scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * rotationSpeed, ForceMode.Impulse);
+        scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
     }
     #endregion
 
