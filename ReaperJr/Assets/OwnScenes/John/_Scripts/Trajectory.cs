@@ -36,7 +36,9 @@ public class Trajectory : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
         { //drag
-            endPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 10);
+            Vector3 mousePos2D = Input.mousePosition;
+            mousePos2D.z = -Camera.main.transform.position.z;
+            endPos = Camera.main.ScreenToWorldPoint(mousePos2D);
             gameObject.transform.position = endPos;
             forceAtPlayer = endPos - startPos;
             for (int i = 0; i < number; i++)
