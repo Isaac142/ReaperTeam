@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float horizontalSpeed = 10f, verticalSpeed = 5f;
     public bool isFacingLeft;
+    public bool isFacingFront;
 
     public LayerMask groundLayer;
 
@@ -42,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
         h = Mathf.Abs(h);
 
         Debug.Log("H" + h);
+        Debug.Log("V" + v);
         if (Input.GetKeyDown(KeyCode.A))
         {
             if (!isFacingLeft)
@@ -62,6 +64,46 @@ public class PlayerMovement : MonoBehaviour
             isFacingLeft = false;
 
             transform.eulerAngles = Vector3.zero;
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            if (!isFacingFront)
+            {
+                horizontalSpeed = -horizontalSpeed;
+            }
+            isFacingFront = true;
+            transform.eulerAngles = new Vector3(0, 275, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (isFacingFront)
+            {
+                horizontalSpeed = -horizontalSpeed;
+            }
+            isFacingFront = false;
+            transform.eulerAngles = new Vector3(0, 90, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) && Input.GetKeyDown(KeyCode.D))
+        {
+            transform.eulerAngles = new Vector3(0, 45, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) && Input.GetKeyDown(KeyCode.A))
+        {
+            transform.eulerAngles = new Vector3(0, 135, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && Input.GetKeyDown(KeyCode.A))
+        {
+            transform.eulerAngles = new Vector3(0, 225, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && Input.GetKeyDown(KeyCode.D))
+        {
+            transform.eulerAngles = new Vector3(0, 315, 0);
         }
 
         transform.Translate(new Vector3(h * horizontalSpeed, 0, v * verticalSpeed) * Time.deltaTime);
