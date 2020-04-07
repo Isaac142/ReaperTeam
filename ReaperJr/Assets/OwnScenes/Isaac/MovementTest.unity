@@ -232,7 +232,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &620999014
 GameObject:
@@ -683,7 +683,7 @@ Transform:
   - {fileID: 620999018}
   - {fileID: 2000999155}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1888921987
 GameObject:
@@ -719,7 +719,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f74b376d455db4419f97235c228a9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
   velocity: 300
   distanceGround: 1.5
   isGrounded: 0
@@ -727,6 +726,9 @@ MonoBehaviour:
   verticalSpeed: 5
   isFacingLeft: 0
   isFacingFront: 0
+  isDiagonal: 0
+  isVertical: 0
+  isHorizontal: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
