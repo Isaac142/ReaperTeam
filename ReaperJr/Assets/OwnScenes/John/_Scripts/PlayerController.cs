@@ -11,7 +11,10 @@ public class PlayerController : MonoBehaviour
     public float distanceGround = 1.2f;
 
     public bool isGrounded;
-    private bool facingRight;
+    private bool m_FacingRight = true;
+
+    public float horizontalSpeed = 10f, verticalSpeed = 5f;
+    public bool isFacingLeft;
 
     public LayerMask groundLayer;
 
@@ -21,15 +24,44 @@ public class PlayerController : MonoBehaviour
     //Calling on the CharacterController Component
     void Start()
     {
-        facingRight = true;
         controller = GetComponent<Rigidbody>();
     }
 
     //Calling the PlayerJumping function
     void Update()
     {
-        Movement();
+        //Movement();
         Grounded();
+
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        h = Mathf.Abs(h);
+
+        Debug.Log("H" + h);
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (!isFacingLeft)
+            {
+                verticalSpeed = -verticalSpeed;
+            }
+            isFacingLeft = true;
+
+            transform.eulerAngles = new Vector3(0, 180, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (isFacingLeft)
+            {
+                verticalSpeed = -verticalSpeed;
+            }
+            isFacingLeft = false;
+
+            transform.eulerAngles = Vector3.zero;
+        }
+
+        transform.Translate(new Vector3(h * horizontalSpeed, 0, v * verticalSpeed) * Time.deltaTime);
+
         if (Input.GetMouseButtonDown(1))
         {
             StartCoroutine(TeleportToScythe());
@@ -39,6 +71,8 @@ public class PlayerController : MonoBehaviour
     #region PlayerMovement
     //Creating the player jumping, and player movement function.
     //If the player is on ground then he is able to jump, depending on the jumpforce and gravity.
+    /*
+     * 
     void Movement()
     {
         float horizontal = Input.GetAxis("Horizontal");
@@ -51,7 +85,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        /*
+        
         if (Input.GetKeyDown(KeyCode.A))
         {
             Flip() ;
@@ -60,13 +94,14 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
-        */
+        
     }
 
     void Jump()
     {
         controller.AddForce(new Vector3(0, velocity, 0));
     }
+    */
 
     void Grounded()
     {
@@ -83,6 +118,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /*
     private void Flip()
     {
         // Switch the way the player is labelled as facing.
@@ -92,6 +128,7 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0f, 180f, 0f);
 
     }
+    */
     #endregion
 
     #region Teleport

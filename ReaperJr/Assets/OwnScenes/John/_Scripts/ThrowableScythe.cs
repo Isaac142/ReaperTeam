@@ -5,7 +5,11 @@ using UnityEngine;
 public class ThrowableScythe : MonoBehaviour
 {
 
+
     #region Variables
+
+    private bool isHolding = false;
+
     public float chargeSpeed = 0.1f;
     const float min = 0f, max = 1f;
     float throwPower = 100f;
@@ -29,8 +33,8 @@ public class ThrowableScythe : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            isHolding = true;
             normalThrowTimer += Time.deltaTime;
-
             if (chargeValue < max)
             {
                 chargeValue += chargeSpeed * Time.deltaTime;
@@ -39,9 +43,11 @@ public class ThrowableScythe : MonoBehaviour
                     chargeValue = max;
                 }
             }
+
         }
         if (Input.GetMouseButtonUp(0))
         {
+            isHolding = false;
             if (normalThrowTimer < normalThrowThreshold)
             {
                 ThrowScythe();
@@ -55,6 +61,7 @@ public class ThrowableScythe : MonoBehaviour
             chargeValue = min;
             normalThrowTimer = 0f;
         }
+
 
         if (Input.GetKeyDown(KeyCode.E))
         {

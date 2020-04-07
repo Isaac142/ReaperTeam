@@ -162,6 +162,9 @@ MonoBehaviour:
   velocity: 300
   distanceGround: 1.4
   isGrounded: 0
+  horizontalSpeed: 10
+  verticalSpeed: 5
+  isFacingLeft: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -179,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bf88ba25eed56640b3a6499c503362c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeSpeed: 0.1
+  chargeSpeed: 0.5
   chargeValue: 0
   scythe: {fileID: 4441905539609307930}
   throwForce: 50
@@ -234,10 +237,20 @@ PrefabInstance:
       propertyPath: Animation
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1903862883582425390, guid: a73e42c905450a940a34474ea309dc1e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3879369864042479809, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3879369864042479809, guid: a73e42c905450a940a34474ea309dc1e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783801818636405938, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
@@ -319,10 +332,15 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 6026197892469238301, guid: a73e42c905450a940a34474ea309dc1e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8214597592556852835, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8214597592556852835, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}

@@ -5,6 +5,7 @@ using CodeMonkey.Utils;
 
 public class ScytheScript : MonoBehaviour
 {
+
     public bool activated;
 
     private void OnCollisionEnter(Collision collision)
