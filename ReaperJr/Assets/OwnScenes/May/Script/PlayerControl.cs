@@ -44,19 +44,9 @@ public class PlayerControl : MonoBehaviour
     void Movement()
     {           
         float xMove = Input.GetAxis("Horizontal");
-        Vector3 move = xMove * transform.right;
+        float zMove = Input.GetAxis("Vertical");
+        Vector3 move = zMove * transform.forward + xMove * transform.right;
         Vector3 characterRotation = transform.localEulerAngles;
-
-
-        if(Input.GetKey(KeyCode.W))
-        {
-            transform.RotateAround (transform.position, transform.up, -turnSpeed * Time.deltaTime);
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.RotateAround(transform.position, transform.up, turnSpeed * Time.deltaTime);
-        }
 
         if (dash)
         {
@@ -70,7 +60,7 @@ public class PlayerControl : MonoBehaviour
         }
         else
         {
-            transform.Translate((xMove * Vector3.right) * forwardSpeed * Time.deltaTime);
+            transform.Translate((xMove * Vector3.right + zMove * Vector3.forward) * forwardSpeed * Time.deltaTime);
             rb.velocity += Vector3.up * Physics.gravity.y * (gModifier - 1) * Time.deltaTime;            
         }       
     }
