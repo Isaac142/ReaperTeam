@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Trajectory : MonoBehaviour
 {
+    private bool touchStart = false;
+    //public Transform scythe;
+
     private Vector3 startPos;
     private Vector3 endPos;
     public Vector3 initPos;
-    public Rigidbody scythe;
+    public Rigidbody scytheRigidbody;
     private Vector3 forceAtPlayer;
     public float forceFactor;
 
@@ -18,7 +21,7 @@ public class Trajectory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scythe = GetComponent<Rigidbody>();
+        scytheRigidbody = GetComponent<Rigidbody>();
         trajectoryDots = new GameObject[number];
     }
 
@@ -27,7 +30,7 @@ public class Trajectory : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         { //click
-            startPos = gameObject.transform.position;
+            startPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.z));
             for (int i = 0; i < number; i++)
             {
                 trajectoryDots[i] = Instantiate(trajectoryDot, gameObject.transform);
@@ -36,25 +39,44 @@ public class Trajectory : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
         { //drag
-            Vector3 mousePos2D = Input.mousePosition;
-            mousePos2D.z = -Camera.main.transform.position.z;
-            endPos = Camera.main.ScreenToWorldPoint(mousePos2D);
-            gameObject.transform.position = endPos;
-            forceAtPlayer = endPos - startPos;
+            touchStart = true;
+            endPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.z));
+            forceAtPlayer = startPos - endPos;
             for (int i = 0; i < number; i++)
             {
                 trajectoryDots[i].transform.position = calculatePosition(i * 0.1f);
             }
         }
+        else
+        {
+            touchStart = false;
+        }
         if (Input.GetMouseButtonUp(0))
         { //leave
-            scythe.velocity = new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor);
+            scytheRigidbody.velocity = new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor);
             for (int i = 0; i < number; i++)
             {
                 Destroy(trajectoryDots[i]);
             }
         }
     }
+
+    private void FixedUpdate()
+    {
+        if (touchStart)
+        {
+            Vector2 offset = endPos = startPos;
+            Vector2 direction = Vector2.ClampMagnitude(offset, 1.0f);
+            //moveScythe(direction * -1);
+        }
+    }
+
+    /*
+    void moveScythe(Vector2 direction)
+    {
+        scythe.Translate(direction * Time.deltaTime);
+    }
+    */
 
     private Vector2 calculatePosition(float elapsedTime)
     {

@@ -7,8 +7,7 @@ public class ThrowableScythe : MonoBehaviour
 
 
     #region Variables
-
-    private bool isHolding = false;
+    public PlayerController player;
 
     public float chargeSpeed = 0.1f;
     const float min = 0f, max = 1f;
@@ -24,8 +23,13 @@ public class ThrowableScythe : MonoBehaviour
     private Vector3 old_pos;                    // Last position of the scythe before returning it, to use in the Bezier Quadratic Curve formula
     private bool isReturning = false;           // Is the scythe returning? To update the calculations in the Update method
     private float time = 0.0f;                  // Timer to link to the Bezier formual, Beginnning = 0, End = 1
-
+    bool canThrow;
     #endregion
+
+    private void Start()
+    {
+        canThrow = true;
+    }
 
     #region Update
     // Update is called once per frame
@@ -33,7 +37,6 @@ public class ThrowableScythe : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            isHolding = true;
             normalThrowTimer += Time.deltaTime;
             if (chargeValue < max)
             {
@@ -45,9 +48,9 @@ public class ThrowableScythe : MonoBehaviour
             }
 
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && canThrow)
         {
-            isHolding = false;
+            canThrow = false;
             if (normalThrowTimer < normalThrowThreshold)
             {
                 ThrowScythe();
@@ -61,7 +64,6 @@ public class ThrowableScythe : MonoBehaviour
             chargeValue = min;
             normalThrowTimer = 0f;
         }
-
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -114,6 +116,7 @@ public class ThrowableScythe : MonoBehaviour
         // We used TransformDirection to conver the axis from local to world
         scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
         scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
+        canThrow = false;
     }
     #endregion
 
@@ -144,6 +147,7 @@ public class ThrowableScythe : MonoBehaviour
         scythe.position = target.position;
         // Set its rotation to the target's
         scythe.rotation = target.rotation;
+        canThrow = true;
     }
 
     // Bezier Quadratic Curve formula
