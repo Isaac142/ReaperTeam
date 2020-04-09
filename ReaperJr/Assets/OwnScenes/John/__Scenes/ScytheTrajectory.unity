@@ -405,49 +405,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 49.992, y: -30.000002, z: 0}
---- !u!1 &1817019129 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4441905539609307933, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-    type: 3}
-  m_PrefabInstance: {fileID: 9207516963742841735}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1817019130 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 4441905539609307930, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-    type: 3}
-  m_PrefabInstance: {fileID: 9207516963742841735}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1817019133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817019129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6e6f72739f5e04986babe0e9edcec7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initPos: {x: 0, y: 0, z: -0.6}
-  scytheRigidbody: {fileID: 1817019130}
-  forceFactor: 10
-  trajectoryDot: {fileID: 6254977800071730412, guid: efd1ae4ca4db12b4582cafeabcce2fe2,
-    type: 3}
-  number: 10
---- !u!114 &1817019134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817019129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 166573c95b43bfd42ba4b347a470303f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!1 &1846208545
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,27 +615,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207516964035639820, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-        type: 3}
-      propertyPath: trajectoryDot
-      value: 
-      objectReference: {fileID: 6254977800071730412, guid: efd1ae4ca4db12b4582cafeabcce2fe2,
-        type: 3}
-    - target: {fileID: 9207516964035639820, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-        type: 3}
-      propertyPath: number
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207516964035639820, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-        type: 3}
-      propertyPath: forceFactor
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207516964035639820, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-        type: 3}
-      propertyPath: initPos.z
-      value: -0.6
       objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}

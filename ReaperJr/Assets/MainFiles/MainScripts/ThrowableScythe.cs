@@ -7,8 +7,6 @@ public class ThrowableScythe : MonoBehaviour
 
 
     #region Variables
-    public PlayerController player;
-
     public float chargeSpeed = 0.1f;
     const float min = 0f, max = 1f;
     float throwPower = 100f;
