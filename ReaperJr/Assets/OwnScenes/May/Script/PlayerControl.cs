@@ -125,6 +125,12 @@ public class PlayerControl : MonoBehaviour
                         //do something --> collected amount, visual clue...
                     }
 
+                    if (hit.transform.tag == "FakeSoul")
+                    {
+                        GameManager.Instance.dead = true;
+                        //do something --> collected amount, visual clue...
+                    }
+
                     //if there's other collectables
                 }
             }
