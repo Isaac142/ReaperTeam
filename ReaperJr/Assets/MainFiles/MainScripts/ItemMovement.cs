@@ -18,17 +18,20 @@ public class ItemMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if(Input.GetMouseButtonDown(1))
         {
-            isHolding = true;
+            isHolding  =  !isHolding;
+        }
 
+        if (Input.GetMouseButtonDown(1) && isHolding)
+        {
             player.GetComponent<Rigidbody>().mass += mass;
             gameObject.transform.parent = player.transform;
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && isHolding == true)
+        if (Input.GetMouseButtonDown(1) && !isHolding)
         {
-            isHolding = false;
+            player.GetComponent<Rigidbody>().mass -= mass;
             transform.parent = null;
         }
 
