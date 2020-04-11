@@ -15,6 +15,8 @@ public class MoveableItemTrigger : MonoBehaviour
         if (other.tag == "Player")
         {
             itemMovement.enabled = true;
+            if(transform.parent.GetComponent<Renderer>() != null)
+                transform.parent.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
         }
     }
 
@@ -25,6 +27,8 @@ public class MoveableItemTrigger : MonoBehaviour
             if (itemMovement.isHolding != true)
             {
                 itemMovement.enabled = false;
+                if (transform.parent.GetComponent<Renderer>() != null)
+                    transform.parent.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
             }
         }
     }

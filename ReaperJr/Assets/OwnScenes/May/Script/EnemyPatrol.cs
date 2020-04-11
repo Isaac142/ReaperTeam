@@ -14,40 +14,56 @@ public class EnemyPatrol : MonoBehaviour
     private float toPlayer;
     private int patrolIndex = 0;
     
+    private enum EnemyType { ENEMY, DUMMY}
+    private EnemyType enemyType;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
+        if (transform.tag == "Enemy")
+            enemyType = EnemyType.ENEMY;
+        if (transform.tag == "Dummy")
+            enemyType = EnemyType.DUMMY;
     }
 
     // Update is called once per frame
     void Update()
     {
         toPlayer = Vector3.Distance(player.position, transform.position);
-
-        if(toPlayer < awareDistance)
+        switch(enemyType)
         {
-            transform.LookAt(player);
-
-            RaycastHit hit;
-            if(Physics.Raycast(transform.position, transform.forward, out hit )) //check if character is in sight
-            {
-                if(hit.transform.tag == "Player")
+            case EnemyType.ENEMY:
+                if (toPlayer < awareDistance)
                 {
-                    if (toPlayer > 2f) //preventing enemy pushes character
-                    {
-                        agent.destination = player.position;
-                    }
-                    else
-                        NextPatrolPoint();
-                }
-            }
-        }
+                    transform.LookAt(player);
 
-        if (agent.remainingDistance < 0.5f)
-            NextPatrolPoint();       
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
+                    {
+                        if (hit.transform.tag == "Player")
+                        {
+                            if (toPlayer > 2f) //preventing enemy pushes character
+                            {
+                                agent.destination = player.position;
+                            }
+                            else
+                                NextPatrolPoint();
+                        }
+                    }
+                }
+
+                if (agent.remainingDistance < 0.5f)
+                    NextPatrolPoint();
+                break;
+
+
+            case EnemyType.DUMMY:
+                if (agent.remainingDistance < 0.5f)
+                    NextPatrolPoint();
+                break;
+        }
+             
     }
 
     void NextPatrolPoint()
@@ -59,5 +75,4 @@ public class EnemyPatrol : MonoBehaviour
             patrolIndex %= patrolPoints.Count; //cycling index number.
         }
     }
-
 }
