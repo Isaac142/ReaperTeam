@@ -297,18 +297,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f74b376d455db4419f97235c228a9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 10
+  jumpForce: 20
   distanceGround: 1
   isGrounded: 0
   horizontalSpeed: 10
   verticalSpeed: 5
   addForce: 500
+  gModifier: 5
   isDiagonal: 0
   isVertical: 0
   isHorizontal: 0
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
   scythe: {fileID: 4441905539609307933}
   timeToMove: 0.1
   collectableDist: 5
@@ -330,7 +328,7 @@ MonoBehaviour:
   throwForce: 50
   target: {fileID: 9207516963809348281}
   curve_point: {fileID: 9207516964471374456}
-  isTrown: 0
+  isThrown: 0
 --- !u!1 &9207516964471374457
 GameObject:
   m_ObjectHideFlags: 0

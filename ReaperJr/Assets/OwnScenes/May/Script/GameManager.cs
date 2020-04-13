@@ -10,6 +10,31 @@ public class GameManager : MonoBehaviour
     public bool isHolding = false;
     public bool scytheEquiped = true;
 
+    public float maxTimerInSeconds = 5 * 60f;
+    public float warningTimeInSeconds =  60f;
+    public float rewardTime = 10f;
+    private float _timer;
+    public float Timer
+    {
+        get { return _timer; }
+        set { _timer = value; }
+    }
+
+    public float maxEnergy = 100f;
+    public float throwEngery = 5f;
+    public float teleportingEnergy = 20f;
+    public float energyReturnFactor = 1f;
+    private float _energy;
+    public float Energy
+    {
+        get { return _energy; }
+        set { _energy = value; }
+    }
+
+    public bool isPaused = false;
+    public bool gameOver = false;
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -25,6 +50,10 @@ public class GameManager : MonoBehaviour
         void Start()
     {
         dead = false;
+        isPaused = false;
+        gameOver = false;
+        _timer = maxTimerInSeconds;
+        _energy = maxEnergy;
     }
 
     // Update is called once per frame
@@ -36,12 +65,31 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             dead = false;
         }
+
+        if (!isPaused && _timer > 0) //timer count down and return energy when game is not paused.
+        {
+            _timer -= Time.deltaTime;
+
+            if (_energy < maxEnergy)
+            {
+                _energy += energyReturnFactor * Time.deltaTime;
+            }
+        }
+
+        if (_timer <= 0)
+        {
+            gameOver = true;
+            _timer = 0;
+        }
+
+        if(_energy < 0)
+        {
+            _energy = 0;
+        } 
         
-    }
-
-    IEnumerator Restart()
-    {
-        yield return new WaitForSeconds(1);
-
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPaused = !isPaused;
+        }
     }
 }

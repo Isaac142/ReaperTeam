@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float horizontalSpeed = 10f, verticalSpeed = 5f;
     public float addForce = 500f; //added by May
+    public float gModifier = 7f; // gravite modifier when character is in air
 
     public bool isDiagonal;
     public bool isVertical;
@@ -39,9 +40,10 @@ public class PlayerMovement : MonoBehaviour
         Movement();
         Grounded();
 
-        if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true)
+        if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true && GameManager.Instance.Energy >= GameManager.Instance.teleportingEnergy)
         {
             StartCoroutine(TeleportToScythe());
+            GameManager.Instance.Energy -= GameManager.Instance.teleportingEnergy;
         }
 
         if(Input.GetMouseButtonDown(1))
@@ -142,7 +144,10 @@ public class PlayerMovement : MonoBehaviour
             controller.AddForce(transform.right * speed * addForce * Time.deltaTime);
         }
         else
+        {
             transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime);
+            controller.velocity += Vector3.up * Physics.gravity.y * (gModifier - 1) * Time.deltaTime;
+        }
 
         isVertical = false;
         isHorizontal = false;
@@ -162,7 +167,6 @@ public class PlayerMovement : MonoBehaviour
     void Grounded()
     {
         Vector3 dir = new Vector3(0, -1, 0);
-
         if (Physics.Raycast(transform.position, dir, distanceGround))
         {
             isGrounded = true;
@@ -170,8 +174,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isGrounded = false;
-        }
-        
+        }        
     }
     #endregion
 
@@ -200,6 +203,11 @@ public class PlayerMovement : MonoBehaviour
                         //do something --> collected amount, visual clue...
                     }
 
+                    if(hit.transform.tag == "HiddenItem")
+                    {
+                        GameManager.Instance.Timer += GameManager.Instance.rewardTime;
+                        Destroy(hit.transform.gameObject);
+                    }
                     //if there's other collectables
                 }
             }

@@ -36,6 +36,9 @@ public class ThrowableScythe : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery)
+            canThrow = true;
+
         if (Input.GetMouseButton(0) && GameManager.Instance.scytheEquiped)
         {
             normalThrowTimer += Time.deltaTime;
@@ -64,6 +67,7 @@ public class ThrowableScythe : MonoBehaviour
             }
             chargeValue = min;
             normalThrowTimer = 0f;
+            GameManager.Instance.Energy -= GameManager.Instance.throwEngery;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
