@@ -19,7 +19,7 @@ public class SwitchControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canClick)
+        if(canClick && !GameManager.Instance.scytheEquiped)
         {
             if (Input.GetMouseButtonDown(0))
             {

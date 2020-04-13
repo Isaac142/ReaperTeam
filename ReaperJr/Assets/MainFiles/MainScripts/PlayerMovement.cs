@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
 
     //public float speed = 1f;
     private ThrowableScythe scytheScript; // added by May, used to control teleporting
-    public float velocity = 10f;
+    public float jumpForce = 10f;
     public float distanceGround;
 
     public bool isGrounded;
@@ -21,10 +21,10 @@ public class PlayerMovement : MonoBehaviour
     public bool isVertical;
     public bool isHorizontal;
 
-    public LayerMask groundLayer;
-
     public GameObject scythe;
     public float timeToMove;
+
+    public float collectableDist = 5f;
 
     //Calling on the CharacterController Component
     void Start()
@@ -43,6 +43,17 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(TeleportToScythe());
         }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            Collect();
+        }
+
+        EquipScythe();
+        if (GameManager.Instance.scytheEquiped)
+            scythe.SetActive(true);
+        else
+            scythe.SetActive(false);
     }
 
     #region PlayerMovement
@@ -145,21 +156,63 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-        controller.AddForce(new Vector3(0, velocity, 0));
+        controller.AddForce(new Vector3(0, jumpForce, 0),ForceMode.Impulse);
     }
 
     void Grounded()
     {
-        RaycastHit hit;
         Vector3 dir = new Vector3(0, -1, 0);
 
-        if (Physics.Raycast(transform.position, dir, out hit, distanceGround))
+        if (Physics.Raycast(transform.position, dir, distanceGround))
         {
             isGrounded = true;
         }
         else
         {
             isGrounded = false;
+        }
+        
+    }
+    #endregion
+
+    #region Collecting
+    void Collect()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.tag != "Untagged")
+            {
+                if (Vector3.Distance(transform.position, hit.transform.position) <= collectableDist) //calculate if the collectable is with in the collectable distance.
+                {
+                    if (hit.transform.tag == "Soul")
+                    {
+                        GameManager.Instance.scytheEquiped = true;
+                        Destroy(hit.transform.gameObject);
+                        //do something --> collected amount, visual clue...
+                    }
+
+                    if (hit.transform.tag == "FakeSoul")
+                    {
+                        GameManager.Instance.scytheEquiped = true;
+                        GameManager.Instance.dead = true;
+                        //do something --> collected amount, visual clue...
+                    }
+
+                    //if there's other collectables
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region EquipScythe
+    void EquipScythe()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            GameManager.Instance.scytheEquiped = !GameManager.Instance.scytheEquiped;
         }
     }
     #endregion

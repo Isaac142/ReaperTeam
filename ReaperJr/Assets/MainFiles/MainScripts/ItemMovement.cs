@@ -18,7 +18,7 @@ public class ItemMovement : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(1))
+        if(Input.GetMouseButtonDown(1) && !GameManager.Instance.scytheEquiped)
         {
             isHolding  =  !isHolding;
         }
@@ -39,5 +39,6 @@ public class ItemMovement : MonoBehaviour
         {
                 itemMovement.enabled = true;
         }
+        GameManager.Instance.isHolding = isHolding;
     }
 }

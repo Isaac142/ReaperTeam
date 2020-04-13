@@ -465,6 +465,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dead: 0
+  isHolding: 0
+  scytheEquiped: 1
 --- !u!4 &218959780
 Transform:
   m_ObjectHideFlags: 0
@@ -1312,7 +1314,7 @@ GameObject:
   - component: {fileID: 814786695}
   - component: {fileID: 814786694}
   - component: {fileID: 814786693}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: EnemyTrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2683,20 +2685,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 990441177945185471, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+    - target: {fileID: 2153150415476659423, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
-      propertyPath: distanceGround
-      value: 1
+      propertyPath: m_Drag
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 4441905539609307930, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+    - target: {fileID: 9207516964035639808, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
-      propertyPath: m_Mass
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639810, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
       propertyPath: m_Name
       value: Player 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207516964035639810, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
@@ -3008,6 +3015,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dead: 0
+  isHolding: 0
+  scytheEquiped: 1
 --- !u!1 &1806977760
 GameObject:
   m_ObjectHideFlags: 0
@@ -3690,7 +3699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd41efb13ab8d349b0be9c02e03c8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1699955632}
+  player: {fileID: 548862882}
   cameraDistance: -15
   yModifier: 5
 --- !u!1 &2042643145

@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public bool dead = false;
+    public bool isHolding = false;
+    public bool scytheEquiped = true;
 
     private void Awake()
     {

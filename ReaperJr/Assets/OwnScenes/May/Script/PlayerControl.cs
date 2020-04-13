@@ -19,7 +19,7 @@ public class PlayerControl : MonoBehaviour
     public LayerMask groundLayer;   
 
     private bool IsGrounded()
-    { return Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), -transform.up, 0.1f, groundLayer); }
+    { return Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), -transform.up, 0.1f); }
     private bool dash = false;
 
     // Start is called before the first frame update
