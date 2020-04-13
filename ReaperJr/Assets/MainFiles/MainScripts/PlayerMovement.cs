@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody controller;
 
     //public float speed = 1f;
+    private ThrowableScythe scytheScript; // added by May, used to control teleporting
     public float velocity = 10f;
     public float distanceGround = 1.2f;
 
@@ -15,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private bool m_FacingRight = true;
 
     public float horizontalSpeed = 10f, verticalSpeed = 5f;
+    public float addForce = 500f; //added by May
     public bool isFacingLeft;
     public bool isFacingFront;
 
@@ -31,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         controller = GetComponent<Rigidbody>();
+        scytheScript = GetComponent<ThrowableScythe>();
     }
 
     //Calling the PlayerJumping function
@@ -39,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
         Movement();
         Grounded();
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0) && scytheScript.isTrown == true)
         {
             StartCoroutine(TeleportToScythe());
         }
@@ -169,7 +172,12 @@ public class PlayerMovement : MonoBehaviour
             speed = v * horizontalSpeed;
         }
 
-        transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime);
+        if (isGrounded) // added by May --> change movement control to addForce, when changinng ground condition, just need to alter rigidbody componenet 
+        {
+            controller.AddForce(transform.right * speed * addForce * Time.deltaTime);
+        }
+        else
+            transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime);
 
         isVertical = false;
         isHorizontal = false;
