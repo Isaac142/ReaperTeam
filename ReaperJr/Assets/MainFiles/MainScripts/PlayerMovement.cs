@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
         Movement();
         Grounded();
 
-        if (Input.GetMouseButtonDown(0) && scytheScript.isTrown == true)
+        if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true)
         {
             StartCoroutine(TeleportToScythe());
         }

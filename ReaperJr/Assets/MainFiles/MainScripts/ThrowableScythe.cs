@@ -24,7 +24,7 @@ public class ThrowableScythe : MonoBehaviour
     private float time = 0.0f;                  // Timer to link to the Bezier formual, Beginnning = 0, End = 1
     bool canThrow;
 
-    public bool isTrown = false;
+    public bool isThrown = false;
     #endregion
 
     private void Start()
@@ -118,7 +118,7 @@ public class ThrowableScythe : MonoBehaviour
         scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
         scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
         canThrow = false;
-        isTrown = true;
+        isThrown = true;
     }
     #endregion
 
@@ -150,7 +150,7 @@ public class ThrowableScythe : MonoBehaviour
         // Set its rotation to the target's
         scythe.rotation = target.rotation;
         canThrow = true;
-        isTrown = false;
+        isThrown = false;
     }
 
     // Bezier Quadratic Curve formula
