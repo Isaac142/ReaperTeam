@@ -324,7 +324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85062d80a747c104683f6edb41f7ec62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeSpeed: 0.1
+  chargeSpeed: 0.2
   chargeValue: 0
   scythe: {fileID: 4441905539609307930}
   throwForce: 50
@@ -385,7 +385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4858482940080530, guid: a73e42c905450a940a34474ea309dc1e, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1069248043391404989, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
