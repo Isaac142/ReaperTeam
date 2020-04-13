@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isGrounded;
 
     public float horizontalSpeed = 10f, verticalSpeed = 5f;
+    public float addForce = 500f; //added by May
 
     public bool isDiagonal;
     public bool isVertical;
