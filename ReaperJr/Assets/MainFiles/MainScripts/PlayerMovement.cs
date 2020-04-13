@@ -10,15 +10,11 @@ public class PlayerMovement : MonoBehaviour
     //public float speed = 1f;
     private ThrowableScythe scytheScript; // added by May, used to control teleporting
     public float velocity = 10f;
-    public float distanceGround = 1.2f;
+    public float distanceGround;
 
     public bool isGrounded;
-    private bool m_FacingRight = true;
 
     public float horizontalSpeed = 10f, verticalSpeed = 5f;
-    public float addForce = 500f; //added by May
-    public bool isFacingLeft;
-    public bool isFacingFront;
 
     public bool isDiagonal;
     public bool isVertical;
@@ -50,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
 
     #region PlayerMovement
     //Creating the player jumping, and player movement function.
-    //If the player is on ground then he is able to jump, depending on the jumpforce and gravity.
     void Movement()
     {
         isDiagonal = false;
@@ -62,47 +57,6 @@ public class PlayerMovement : MonoBehaviour
 
         Debug.Log("H" + h);
         Debug.Log("V" + v);
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    if (!isFacingLeft)
-        //    {
-        //        verticalSpeed = -verticalSpeed;
-        //    }
-        //    isFacingLeft = true;
-
-        //    transform.eulerAngles = new Vector3(0, 180, 0);
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.D))
-        //{
-        //    if (isFacingLeft)
-        //    {
-        //        verticalSpeed = -verticalSpeed;
-        //    }
-        //    isFacingLeft = false;
-
-        //    transform.eulerAngles = Vector3.zero;
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    if (!isFacingFront)
-        //    {
-        //        horizontalSpeed = -horizontalSpeed;
-        //    }
-        //    isFacingFront = true;
-        //    transform.eulerAngles = new Vector3(0, 275, 0);
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    if (isFacingFront)
-        //    {
-        //        horizontalSpeed = -horizontalSpeed;
-        //    }
-        //    isFacingFront = false;
-        //    transform.eulerAngles = new Vector3(0, 90, 0);
-        //}
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -152,7 +106,6 @@ public class PlayerMovement : MonoBehaviour
             isDiagonal = true;
         }
 
-        //transform.Translate(new Vector3(h * horizontalSpeed, 0, v * verticalSpeed) * Time.deltaTime);
         float speed = 0f;
 
         if (isDiagonal)

@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
     {
         if (dead)
         {
-            SceneManager.LoadScene(0);
+            //SceneManager.LoadScene(0);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             dead = false;
         }
         
