@@ -2054,7 +2054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 304227934}
-  offset: {x: 0, y: 1, z: -4}
+  offset: {x: 0, y: 1, z: -8}
   speed: 20
 --- !u!1001 &2032429979
 PrefabInstance:
@@ -2066,12 +2066,22 @@ PrefabInstance:
     - target: {fileID: 990441177945185471, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
       propertyPath: velocity
-      value: 200
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 990441177945185471, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+        type: 3}
+      propertyPath: horizontalSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2153150415476659423, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
       propertyPath: m_Mass
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2153150415476659423, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+        type: 3}
+      propertyPath: m_Drag
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639810, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
