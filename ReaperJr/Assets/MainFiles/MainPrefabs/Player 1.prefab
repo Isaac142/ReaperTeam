@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 745557320}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1066194246}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1083285848}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1992785499}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37622e6c01052f1458bca7abf915cb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 20
+  Speed: 25
   ParabolaRoot: {fileID: 1066194245}
   Autostart: 0
   Animation: 0
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 2153150415476659423}
   - component: {fileID: 990441177945185471}
   - component: {fileID: 6651269460899519704}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -414,7 +414,7 @@ PrefabInstance:
     - target: {fileID: 4783801818636405938, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4783801819413185177, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
@@ -424,6 +424,16 @@ PrefabInstance:
     - target: {fileID: 4783801819413185177, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783801819413185182, guid: a73e42c905450a940a34474ea309dc1e,
+        type: 3}
+      propertyPath: m_Drag
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783801819413185182, guid: a73e42c905450a940a34474ea309dc1e,
+        type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4783801819413185183, guid: a73e42c905450a940a34474ea309dc1e,
@@ -484,7 +494,7 @@ PrefabInstance:
     - target: {fileID: 4783801819691190595, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6026197892469238301, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}

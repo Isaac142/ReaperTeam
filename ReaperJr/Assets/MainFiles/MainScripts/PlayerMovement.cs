@@ -240,6 +240,7 @@ public class PlayerMovement : MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
+        scytheScript.ResetScythe();
     }
     #endregion
 }

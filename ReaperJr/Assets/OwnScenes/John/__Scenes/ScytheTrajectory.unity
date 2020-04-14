@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36748781}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.97, y: 0.43999994, z: 0}
+  m_LocalPosition: {x: -23.31, y: 0.43999994, z: 0}
   m_LocalScale: {x: 2.9754, y: 2.9754, z: 2.9754}
   m_Children: []
   m_Father: {fileID: 1456231997}
@@ -395,17 +395,66 @@ Transform:
   m_GameObject: {fileID: 647282306}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 114.46999, y: 1, z: 10}
+  m_LocalScale: {x: 114.46999, y: 1, z: 73.117}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &805061001 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-    type: 3}
-  m_PrefabInstance: {fileID: 9207516963742841735}
+--- !u!1 &1078554501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1078554503}
+  - component: {fileID: 1078554502}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1078554502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078554501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dead: 0
+  isHolding: 0
+  scytheEquiped: 1
+  maxTimerInSeconds: 300
+  warningTimeInSeconds: 60
+  rewardTime: 10
+  maxEnergy: 100
+  throwEngery: 5
+  teleportingEnergy: 20
+  energyReturnFactor: 1
+  isPaused: 0
+  gameOver: 0
+--- !u!4 &1078554503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078554501}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.873908, y: 3.2678633, z: 2.0717945}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1451170096 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9207516964035639810, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
@@ -781,19 +830,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2043259021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56d062b06dbf7cc459796f65e9bdf6f6, type: 3}
+  m_Script: {fileID: 11500000, guid: a7d88c0fde1a5c14695e6d808638409d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 805061001}
-  smoothTimer: 0.2
-  YMaxEnabled: 1
-  YMaxValue: 25
-  YMinEnabled: 1
-  YMinValue: 2.6
-  XMaxEnabled: 1
-  XMaxValue: 68
-  XMinEnabled: 1
-  XMinValue: -2.66
+  target: {fileID: 0}
+  scythe: {fileID: 0}
+  cameraPos: {x: 0, y: 0, z: 0}
+  cameraRot: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0, z: 0}
+  movingDis: 2
+  betweenDis: 0
+  speed: 1
 --- !u!81 &2043259023
 AudioListener:
   m_ObjectHideFlags: 0
@@ -866,6 +913,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 166438513, guid: 3ed7fdcabc92e2b4981b58a20d978a74, type: 3}
+      propertyPath: Speed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639810, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
       propertyPath: m_Name
