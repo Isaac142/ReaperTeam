@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float horizontalSpeed = 10f, verticalSpeed = 5f;
     public float addForce = 500f; //added by May
-    public float gModifier = 7f; // gravite modifier when character is in air
+    public float gModifier = 7f; // gravity modifier when character is in air
 
     public bool isDiagonal;
     public bool isVertical;
@@ -69,8 +69,8 @@ public class PlayerMovement : MonoBehaviour
         h = Mathf.Abs(h);
         v = Mathf.Abs(v);
 
-        Debug.Log("H" + h);
-        Debug.Log("V" + v);
+        //Debug.Log("H" + h);
+        //Debug.Log("V" + v);
 
         if (Input.GetKey(KeyCode.W))
         {

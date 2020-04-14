@@ -10,7 +10,7 @@ public class GroundEffects : MonoBehaviour
     public float dragModify = 3f;
     public float delayTime = 1f;
 
-    private enum GroundEffect {SLOW, SLIP, TRAP }
+    private enum GroundEffect {SLOW, SLIP, PITTRAP }
     private GroundEffect groundEffect;
 
     private void Start()
@@ -21,8 +21,8 @@ public class GroundEffects : MonoBehaviour
         if (transform.tag == "Slippery")
             groundEffect = GroundEffect.SLIP;
 
-        if (transform.tag == "Trap")
-            groundEffect = GroundEffect.TRAP;
+        if (transform.tag == "PitTrap")
+            groundEffect = GroundEffect.PITTRAP;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,15 +32,20 @@ public class GroundEffects : MonoBehaviour
             switch (groundEffect)
             {
                 case GroundEffect.SLOW:
-
-                    other.GetComponent<Rigidbody>().mass += slowtFactor; //used for addForce type of character control
+                    if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
+                    {
+                        other.GetComponent<PlayerMovement>().addForce -= slowtFactor * 100;
+                    }
+                    else
+                        other.GetComponent<Rigidbody>().mass += slowtFactor; //used for addForce type of character control
                     break;
 
                 case GroundEffect.SLIP:
-                    other.GetComponent<Rigidbody>().drag -= dragModify; //used for addForce type of character control
+                    if (other.GetComponent<Rigidbody>() != null) //prevent bug, if character has no rigid body attached
+                        other.GetComponent<Rigidbody>().drag -= dragModify; //used for addForce type of character control
                     break;
 
-                case GroundEffect.TRAP:
+                case GroundEffect.PITTRAP:
                     StartCoroutine("FloorDisappear");
                     break;
             }
@@ -54,15 +59,21 @@ public class GroundEffects : MonoBehaviour
             switch (groundEffect)
             {
                 case GroundEffect.SLOW:
+                    if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
+                    {
+                        other.GetComponent<PlayerMovement>().addForce += slowtFactor * 100;
+                    }
 
-                    other.GetComponent<Rigidbody>().mass -= slowtFactor; //used for addForce type of character control
+                    else
+                        other.GetComponent<Rigidbody>().mass -= slowtFactor;
                     break;
 
                 case GroundEffect.SLIP:
-                    other.GetComponent<Rigidbody>().drag += dragModify; //used for addForce type of character control
+                    if (other.GetComponent<Rigidbody>() != null)
+                        other.GetComponent<Rigidbody>().drag += dragModify;
                     break;
 
-                case GroundEffect.TRAP:
+                case GroundEffect.PITTRAP:
                     transform.GetChild(0).gameObject.SetActive(true);
                     break;
             }

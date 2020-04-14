@@ -840,7 +840,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.7
+  m_Radius: 0.8
   m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -4457,7 +4457,7 @@ GameObject:
   - component: {fileID: 1634532343}
   m_Layer: 2
   m_Name: GroundEffect_Trap
-  m_TagString: Trap
+  m_TagString: PitTrap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6092,7 +6092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00b3189a893c63940b2ad5e0c98396b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slowtFactor: 2
+  slowtFactor: 3
   dragModify: 3
   delayTime: 1
 --- !u!65 &2111899279
