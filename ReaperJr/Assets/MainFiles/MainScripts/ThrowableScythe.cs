@@ -23,6 +23,7 @@ public class ThrowableScythe : MonoBehaviour
     private bool isReturning = false;           // Is the scythe returning? To update the calculations in the Update method
     private float time = 0.0f;                  // Timer to link to the Bezier formual, Beginnning = 0, End = 1
     bool canThrow;
+    bool throwLeft;
 
     public bool isThrown = false;
     #endregion
@@ -36,6 +37,11 @@ public class ThrowableScythe : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isThrown)
+        {
+            scythe.transform.position = target.position;
+        }
+
         if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery)
             canThrow = true;
 
@@ -54,6 +60,14 @@ public class ThrowableScythe : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0) && canThrow && GameManager.Instance.scytheEquiped)
         {
+            if(transform.position.x < Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
+            {
+                throwLeft = true;
+            }
+            else
+            {
+                throwLeft = false;
+            }
             canThrow = false;
             if (normalThrowTimer < normalThrowThreshold)
             {
@@ -78,6 +92,7 @@ public class ThrowableScythe : MonoBehaviour
         // If the scythe is returning
         if (isReturning)
         {
+            Debug.Log("Is Returning");
             // Returning calcs
             if (time < 1.0f)
             {
@@ -111,18 +126,30 @@ public class ThrowableScythe : MonoBehaviour
     #region Throw scythe
     void ThrowScythe()
     {
-        // The scythe isn't returning
-        isReturning = false;
-        // Deatach it form its parent
-        scythe.transform.parent = null;
-        // Set isKinematic to false, so we can apply force to it
-        scythe.isKinematic = false;
-        // Add force to the forward axis of the camera
-        // We used TransformDirection to conver the axis from local to world
-        scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
-        scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
-        canThrow = false;
-        isThrown = true;
+        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery)
+        {
+            // The scythe isn't returning
+            isReturning = false;
+            // Deatach it form its parent
+            scythe.transform.parent = null;
+            // Set isKinematic to false, so we can apply force to it
+            scythe.isKinematic = false;
+            // Add force to the forward axis of the camera
+            // We used TransformDirection to conver the axis from local to world
+            if (throwLeft)
+            {
+                scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.left) * throwForce, ForceMode.Impulse);
+                //scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
+            }
+            else
+            {
+                scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
+                //scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
+            }
+            canThrow = false;
+            isThrown = true;
+        }
+            
     }
     #endregion
 
@@ -143,18 +170,22 @@ public class ThrowableScythe : MonoBehaviour
     #endregion
 
     #region Reset Scythe
-    void ResetScythe()
+    public void ResetScythe()
     {
+        scythe.velocity = Vector3.zero;
+        scythe.angularVelocity = Vector3.zero;
+        scythe.GetComponent<ParabolaController>().StopFollow();
         // Scythe has reached, so it is not returning anymore
         isReturning = false;
-        // Attach back to its parent, in this case it will attach it to the player (or where you attached the script to)
-        scythe.transform.parent = transform;
         // Set its position to the target's
-        scythe.position = target.position;
+        scythe.transform.position = target.position;
         // Set its rotation to the target's
-        scythe.rotation = target.rotation;
+        scythe.transform.rotation = target.rotation;
         canThrow = true;
         isThrown = false;
+        // Attach back to its parent, in this case it will attach it to the player (or where you attached the script to)
+        scythe.transform.parent = transform;
+        //Debug.Break();
     }
 
     // Bezier Quadratic Curve formula
