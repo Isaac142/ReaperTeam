@@ -16,7 +16,13 @@ public class FallingObjects : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             rb.isKinematic = false;
-            Debug.Log(" Items Dropping ");
+            Debug.Log(" LOOK OUT!! ");
+        }
+
+        if (other.gameObject.tag == "Soul")
+        {
+            Destroy(other.gameObject,0.5f);
+            Debug.Log(" Soul lost to the abyss ");
         }
 
     }
@@ -28,6 +34,8 @@ public class FallingObjects : MonoBehaviour
             rb.isKinematic = false;
             Debug.Log(" Player Hit ");
         }
+        
+
     }
 
 }
