@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     public bool dead = false;
     public bool isHolding = false;
+    public bool holdingLightObject = false;
     public bool scytheEquiped = true;
 
     public float maxTimerInSeconds = 5 * 60f;
@@ -52,6 +53,8 @@ public class GameManager : MonoBehaviour
         dead = false;
         isPaused = false;
         gameOver = false;
+        holdingLightObject = false;
+        isHolding = false;
         _timer = maxTimerInSeconds;
         _energy = maxEnergy;
     }
