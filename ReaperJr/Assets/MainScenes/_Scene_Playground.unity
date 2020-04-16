@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 218784065}
   - component: {fileID: 218784068}
   - component: {fileID: 218784069}
+  - component: {fileID: 218784070}
   m_Layer: 0
   m_Name: Moveable
   m_TagString: Box
@@ -341,7 +342,28 @@ MonoBehaviour:
   mass: 1
   itemMovement: {fileID: 218784069}
   isHolding: 0
+  isLigther: 0
   player: {fileID: 304227927}
+  playerMass: 1
+  relasingThreshold: 0.3
+  gravityFactor: 7
+  objectRB: {fileID: 0}
+--- !u!54 &218784070
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218784063}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &218959778
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +395,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  holdingLightObject: 0
   scytheEquiped: 1
+  maxTimerInSeconds: 300
+  warningTimeInSeconds: 60
+  rewardTime: 10
+  maxEnergy: 100
+  throwEngery: 5
+  teleportingEnergy: 20
+  energyReturnFactor: 1
+  isPaused: 0
+  gameOver: 0
 --- !u!4 &218959780
 Transform:
   m_ObjectHideFlags: 0
@@ -1386,6 +1418,7 @@ GameObject:
   - component: {fileID: 1289319801}
   - component: {fileID: 1289319800}
   - component: {fileID: 1289319799}
+  - component: {fileID: 1289319805}
   m_Layer: 0
   m_Name: Moveable (1)
   m_TagString: Box
@@ -1408,7 +1441,12 @@ MonoBehaviour:
   mass: 1
   itemMovement: {fileID: 1289319799}
   isHolding: 0
+  isLigther: 0
   player: {fileID: 304227927}
+  playerMass: 1
+  relasingThreshold: 0.3
+  gravityFactor: 7
+  objectRB: {fileID: 0}
 --- !u!208 &1289319800
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -1500,6 +1538,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1289319805
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289319798}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1372829241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1594,6 +1648,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1646296826 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4441905539609307931, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+    type: 3}
+  m_PrefabInstance: {fileID: 2032429979}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1731917676
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,7 +1792,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  holdingLightObject: 0
   scytheEquiped: 1
+  maxTimerInSeconds: 300
+  warningTimeInSeconds: 60
+  rewardTime: 10
+  maxEnergy: 100
+  throwEngery: 5
+  teleportingEnergy: 20
+  energyReturnFactor: 1
+  isPaused: 0
+  gameOver: 0
 --- !u!1 &1846040928
 GameObject:
   m_ObjectHideFlags: 0
@@ -2058,7 +2128,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 304227934}
+  scythe: {fileID: 1646296826}
+  cameraPos: {x: 0, y: 0, z: -10}
+  cameraRot: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 1, z: -8}
+  movingDis: 2
+  betweenDis: 0
   speed: 20
 --- !u!1001 &2032429979
 PrefabInstance:

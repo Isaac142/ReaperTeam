@@ -139,12 +139,12 @@ public class ThrowableScythe : MonoBehaviour
             if (throwLeft)
             {
                 scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.left) * throwForce, ForceMode.Impulse);
-                //scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
+                scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
             }
             else
             {
                 scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
-                //scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
+                scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
             }
             canThrow = false;
             isThrown = true;
