@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     Rigidbody controller;
 
     //public float speed = 1f;
@@ -14,18 +13,24 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isGrounded;
 
-    public float horizontalSpeed = 10f, verticalSpeed = 5f;
+    public float speedFactor = 10f;
     public float addForce = 500f; //added by May
     public float gModifier = 7f; // gravity modifier when character is in air
 
-    public bool isDiagonal;
-    public bool isVertical;
-    public bool isHorizontal;
+    private bool isDiagonal;
+    private bool isVertical;
+    private bool isHorizontal;
+    private bool facingF = false, facingR = false, facingL = false, facingB = false;
 
     public GameObject scythe;
     public float timeToMove;
 
     public float collectableDist = 5f;
+    private float speed = 0f;
+
+    private enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT}
+    private FacingDirection facingDirection;
+
 
     //Calling on the CharacterController Component
     void Start()
@@ -37,8 +42,15 @@ public class PlayerMovement : MonoBehaviour
     //Calling the PlayerJumping function
     void Update()
     {
-        Movement();
+
+        DirectionSwitch();
         Grounded();
+        Movement();
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            Jump();
+        }
 
         if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true && GameManager.Instance.Energy >= GameManager.Instance.teleportingEnergy)
         {
@@ -58,112 +70,336 @@ public class PlayerMovement : MonoBehaviour
             scythe.SetActive(false);
     }
 
+    #region FacingDirectionSwitch
+    void DirectionSwitch()
+    {
+        if (Input.GetKey(KeyCode.W))
+            facingDirection = FacingDirection.BACK;
+
+        if (Input.GetKey(KeyCode.S))
+            facingDirection = FacingDirection.FRONT;
+
+        if (Input.GetKey(KeyCode.D))
+            facingDirection = FacingDirection.RIGHT;
+
+        if (Input.GetKey(KeyCode.A))
+            facingDirection = FacingDirection.LEFT;
+
+        if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
+            facingDirection = FacingDirection.FRONTRIGHT;
+
+        if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
+            facingDirection = FacingDirection.FRONTLEFT;
+
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
+            facingDirection = FacingDirection.BACKLEFT;
+
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
+            facingDirection = FacingDirection.BACKRIGHT;
+
+        if (transform.eulerAngles == new Vector3(0, 270, 0))
+            facingB = true;
+        else
+            facingB = false;
+
+        if (transform.eulerAngles == new Vector3(0, 90, 0))
+            facingF = true;
+        else
+            facingF = false;
+
+        if (transform.eulerAngles == new Vector3(0, 0, 0))
+            facingR = true;
+        else
+            facingR = false;
+
+        if (transform.eulerAngles == new Vector3(0, 180, 0))
+            facingL = true;
+        else
+            facingL = false;
+    }
+    #endregion
+
     #region PlayerMovement
     //Creating the player jumping, and player movement function.
     void Movement()
     {
-        isDiagonal = false;
-
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        h = Mathf.Abs(h);
-        v = Mathf.Abs(v);
 
-        //Debug.Log("H" + h);
-        //Debug.Log("V" + v);
-
-        if (Input.GetKey(KeyCode.W))
+        #region NormalMovement
+        if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject)
         {
-            transform.eulerAngles = new Vector3(0, 270, 0);
-            isVertical = true;
+            h = Mathf.Abs(h);
+            v = Mathf.Abs(v);
+        
+            switch (facingDirection)
+            {
+                case FacingDirection.FRONT:
+                    transform.eulerAngles = new Vector3(0, 90, 0);
+                    isDiagonal = false;
+                    isHorizontal = false;
+                    isVertical = true;
+                    break;
+
+                case FacingDirection.BACK:
+                    transform.eulerAngles = new Vector3(0, 270, 0);
+                    isDiagonal = false;
+                    isHorizontal = false;
+                    isVertical = true;
+                    break;
+
+                case FacingDirection.LEFT:
+                    transform.eulerAngles = new Vector3(0, 180, 0);
+                    isDiagonal = false;
+                    isHorizontal = true;
+                    isVertical = false;
+                    break;
+
+                case FacingDirection.RIGHT:
+                    transform.eulerAngles = new Vector3(0, 0, 0);
+                    isDiagonal = false;
+                    isHorizontal = true;
+                    isVertical = false;
+                    break;
+
+                case FacingDirection.FRONTLEFT:
+                    transform.eulerAngles = new Vector3(0, 135, 0);
+                    isDiagonal = true;
+                    isHorizontal = false;
+                    isVertical = false;
+                    break;
+
+                case FacingDirection.FRONTRIGHT:
+                    transform.eulerAngles = new Vector3(0, 45, 0);
+                    isDiagonal = true;
+                    isHorizontal = false;
+                    isVertical = false;
+                    break;
+
+                case FacingDirection.BACKLEFT:
+                    transform.eulerAngles = new Vector3(0, 225, 0);
+                    isDiagonal = true;
+                    isHorizontal = false;
+                    isVertical = false;
+                    break;
+
+                case FacingDirection.BACKRIGHT:
+                    transform.eulerAngles = new Vector3(0, 315, 0);
+                    isDiagonal = true;
+                    isHorizontal = false;
+                    isVertical = false;
+                    break;
+            }
+
+            if (isDiagonal)
+                speed = (h + v) * speedFactor / 2f;
+
+            if (isHorizontal)
+                speed = h * speedFactor;
+
+            if (isVertical)
+                speed = v * speedFactor;
+
+            if (isGrounded)
+                controller.AddForce(transform.right * speed * addForce * Time.deltaTime);
+            else
+                transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime);
         }
+        #endregion
 
-        if (Input.GetKey(KeyCode.S))
+        if(GameManager.Instance.isHolding && !GameManager.Instance.holdingLightObject)
         {
-            transform.eulerAngles = new Vector3(0, 90, 0);
-            isVertical = true;
-        }
+            if (facingF)
+            {
+                switch (facingDirection)
+                {
+                    case FacingDirection.FRONT:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
-            isHorizontal = true;
-        }
+                    case FacingDirection.BACK:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.eulerAngles = new Vector3(0, 180, 0);
-            isHorizontal = true;
-        }
+                    case FacingDirection.LEFT:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
 
-        if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
-        {
-            transform.eulerAngles = new Vector3(0, 45, 0);
-            isDiagonal = true;
-        }
+                    case FacingDirection.RIGHT:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
 
-        if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
-        {
-            transform.eulerAngles = new Vector3(0, 135, 0);
-            isDiagonal = true;
-        }
+                    case FacingDirection.FRONTLEFT:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
 
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
-        {
-            transform.eulerAngles = new Vector3(0, 225, 0);
-            isDiagonal = true;
-        }
+                    case FacingDirection.FRONTRIGHT:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
 
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
-        {
-            transform.eulerAngles = new Vector3(0, 315, 0);
-            isDiagonal = true;
-        }
+                    case FacingDirection.BACKLEFT:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
 
-        float speed = 0f;
+                    case FacingDirection.BACKRIGHT:
+                        transform.eulerAngles = new Vector3(0, 90, 0);
+                        break;
+                }
 
-        if (isDiagonal)
-        {
-            isHorizontal = false;
-            isVertical = false;
-            speed = (h + v) * horizontalSpeed / 2f;
-        }
+                speed = speedFactor;
 
-        if(isHorizontal)
-        {
-            speed = h * horizontalSpeed;
-        }
+                if (isGrounded)
+                    controller.AddForce((transform.forward * h - transform.right * v) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
+            }
 
-        if (isVertical)
-        {
-            speed = v * horizontalSpeed;
-        }
+            if (facingB)
+            {
+                switch (facingDirection)
+                {
+                    case FacingDirection.FRONT:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
 
-        if (isGrounded) // added by May --> change movement control to addForce, when changinng ground condition, just need to alter rigidbody componenet 
-        {
-            controller.AddForce(transform.right * speed * addForce * Time.deltaTime);
-        }
-        else
-        {
-            transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime);
-            controller.velocity += Vector3.up * Physics.gravity.y * (gModifier - 1) * Time.deltaTime;
-        }
+                    case FacingDirection.BACK:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
 
-        isVertical = false;
-        isHorizontal = false;
-        isDiagonal = false;
+                    case FacingDirection.LEFT:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            Jump();
+                    case FacingDirection.RIGHT:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
+
+                    case FacingDirection.FRONTLEFT:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
+
+                    case FacingDirection.FRONTRIGHT:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
+
+                    case FacingDirection.BACKLEFT:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
+
+                    case FacingDirection.BACKRIGHT:
+                        transform.eulerAngles = new Vector3(0, 270, 0);
+                        break;
+                }
+
+                speed = speedFactor;
+
+                if (isGrounded)
+                    controller.AddForce((-transform.forward * h + transform.right * v) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
+            }
+
+            if (facingR)
+            {
+                switch (facingDirection)
+                {
+                    case FacingDirection.FRONT:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+
+                    case FacingDirection.BACK:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+
+                    case FacingDirection.LEFT:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+
+                    case FacingDirection.RIGHT:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+
+                    case FacingDirection.FRONTLEFT:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+
+                    case FacingDirection.FRONTRIGHT:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+
+                    case FacingDirection.BACKLEFT:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+
+                    case FacingDirection.BACKRIGHT:
+                        transform.eulerAngles = new Vector3(0, 0, 0);
+                        break;
+                }
+
+                speed = speedFactor;
+
+                if (isGrounded)
+                    controller.AddForce((transform.forward * v + transform.right * h) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
+            }
+
+            if (facingL)
+            {
+                switch (facingDirection)
+                {
+                    case FacingDirection.FRONT:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+
+                    case FacingDirection.BACK:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+
+                    case FacingDirection.LEFT:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+
+                    case FacingDirection.RIGHT:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+
+                    case FacingDirection.FRONTLEFT:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+
+                    case FacingDirection.FRONTRIGHT:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+
+                    case FacingDirection.BACKLEFT:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+
+                    case FacingDirection.BACKRIGHT:
+                        transform.eulerAngles = new Vector3(0, 180, 0);
+                        break;
+                }
+
+                speed = speedFactor;
+
+                if (isGrounded)
+                    controller.AddForce((-transform.forward * v - transform.right * h) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
+            }
         }
     }
+    #endregion
 
+    #region Jump
     void Jump()
     {
         controller.AddForce(new Vector3(0, jumpForce, 0),ForceMode.Impulse);
     }
+    #endregion
 
+    #region Grounded Testing
     void Grounded()
     {
         Vector3 dir = new Vector3(0, -1, 0);
@@ -174,6 +410,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isGrounded = false;
+            controller.velocity += Vector3.up * Physics.gravity.y * (gModifier - 1) * Time.deltaTime; //modifying gravity
         }        
     }
     #endregion
