@@ -10,7 +10,7 @@ public class GroundEffects : MonoBehaviour
     public float dragModify = 3f;
     public float delayTime = 1f;
 
-    private enum GroundEffect {SLOW, SLIP, PITTRAP }
+    private enum GroundEffect {SLOW, SLIP, PITTRAP}
     private GroundEffect groundEffect;
 
     private void Start()
@@ -29,12 +29,14 @@ public class GroundEffects : MonoBehaviour
     {
         if(other.tag == "Player")
         {
+            GameManager.Instance.onSpecialGround = true;
             switch (groundEffect)
             {
                 case GroundEffect.SLOW:
                     if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
                     {
                         other.GetComponent<PlayerMovement>().addForce -= slowtFactor * 100;
+                        other.GetComponent<Rigidbody>().drag += slowtFactor;
                     }
                     else
                         other.GetComponent<Rigidbody>().mass += slowtFactor; //used for addForce type of character control
@@ -56,12 +58,15 @@ public class GroundEffects : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            GameManager.Instance.onSpecialGround = false;
+
             switch (groundEffect)
             {
                 case GroundEffect.SLOW:
                     if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
                     {
                         other.GetComponent<PlayerMovement>().addForce += slowtFactor * 100;
+                        other.GetComponent<Rigidbody>().drag -= slowtFactor;
                     }
 
                     else

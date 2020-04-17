@@ -15,9 +15,7 @@ public class MoveableItemTrigger : MonoBehaviour
         if (other.tag == "Player")
         {
             itemMovement.player = other.gameObject;
-
-            if(transform.parent.GetComponent<Renderer>() != null)
-                transform.parent.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+            itemMovement.canHold = true;
         }
     }
 
@@ -26,9 +24,7 @@ public class MoveableItemTrigger : MonoBehaviour
         if (other.tag == "Player")
         {
             itemMovement.player = null;
-
-            if (transform.parent.GetComponent<Renderer>() != null)
-                transform.parent.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+            itemMovement.canHold = false;
         }
     }
 }

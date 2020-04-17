@@ -8,14 +8,14 @@ public class PlayerMovement : MonoBehaviour
 
     //public float speed = 1f;
     private ThrowableScythe scytheScript; // added by May, used to control teleporting
-    public float jumpForce = 10f;
+    public float jumpForce = 20f;
     public float distanceGround;
 
     public bool isGrounded;
 
-    public float speedFactor = 10f;
-    public float addForce = 500f; //added by May
-    public float gModifier = 7f; // gravity modifier when character is in air
+    public float speedFactor = 7f;
+    public float addForce = 600f; //added by May
+    public float gModifier = 5f; // gravity modifier when character is in air
 
     private bool isDiagonal;
     private bool isVertical;
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject scythe;
     public float timeToMove;
 
-    public float collectableDist = 5f;
+    public float collectableDist = 3f;
     private float speed = 0f;
 
     private enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT}
@@ -42,9 +42,8 @@ public class PlayerMovement : MonoBehaviour
     //Calling the PlayerJumping function
     void Update()
     {
-
-        DirectionSwitch();
         Grounded();
+        DirectionSwitch();
         Movement();
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
@@ -125,6 +124,12 @@ public class PlayerMovement : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
+
+        if (!GameManager.Instance.onSpecialGround) //prevent character sliding
+        {
+            if (speed <= 0.05f)
+                controller.velocity = new Vector3(0f, controller.velocity.y, 0f);
+        }
 
         #region NormalMovement
         if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject)
@@ -207,7 +212,8 @@ public class PlayerMovement : MonoBehaviour
         }
         #endregion
 
-        if(GameManager.Instance.isHolding && !GameManager.Instance.holdingLightObject)
+        #region MovingHeavyObject
+        if (GameManager.Instance.isHolding && !GameManager.Instance.holdingLightObject)
         {
             if (facingF)
             {
@@ -389,6 +395,7 @@ public class PlayerMovement : MonoBehaviour
                     transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
             }
         }
+        #endregion
     }
     #endregion
 
@@ -455,10 +462,14 @@ public class PlayerMovement : MonoBehaviour
     #region EquipScythe
     void EquipScythe()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        if (!scytheScript.isThrown)
         {
-            GameManager.Instance.scytheEquiped = !GameManager.Instance.scytheEquiped;
+            if (Input.GetAxis("Mouse ScrollWheel") != 0)
+            {
+                GameManager.Instance.scytheEquiped = !GameManager.Instance.scytheEquiped;
+            }
         }
+        else return;
     }
     #endregion
 

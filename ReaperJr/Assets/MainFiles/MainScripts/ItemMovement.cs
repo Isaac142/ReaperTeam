@@ -17,6 +17,8 @@ public class ItemMovement : MonoBehaviour
     public float drag = 5f; //object's rigidbody's sliperness on ground
     public bool isHolding;
     public bool isLigther = false;
+    public bool canHold = false;
+
     public GameObject player;
     public float playerMass = 1f; //need to manully set.
     public float relasingThreshold = 0.3f; 
@@ -24,11 +26,10 @@ public class ItemMovement : MonoBehaviour
 
     private Rigidbody objectRB;
     private Vector3 offset;
-    public bool isGround = true;
+    private bool isGround = true;
 
     private float iniDistance;
     private float CurrDist;
-    private bool canHold = false;
     
     private Vector3 size;
     private double groundDist;
@@ -58,16 +59,26 @@ public class ItemMovement : MonoBehaviour
 
     void Update()
     {
-        if (objectRB != null && !objectRB.isKinematic)
+        if (objectRB != null && !objectRB.isKinematic || !objectRB.IsSleeping())
         {
             objectRB.velocity += Vector3.up * Physics.gravity.y * (gravityFactor - 1) * Time.deltaTime;
             IsGrounded();
             if (isGround)
                 objectRB.isKinematic = true;
+            else
+                objectRB.mass = mass;
         }
         
         if (player == null)
             return;
+
+        if (GetComponent<Renderer>() != null)
+        {
+            if(canHold)
+                GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+            else
+                GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+        }
 
         if (Input.GetMouseButtonDown(1)) //events happen on click event
         {
@@ -142,6 +153,7 @@ public class ItemMovement : MonoBehaviour
             if (isHolding)
             {
                 objectRB.isKinematic = false;
+                objectRB.mass = 0f;
 
                 if (!isLigther)
                 {
@@ -173,7 +185,7 @@ public class ItemMovement : MonoBehaviour
             }
             else
             {
-                
+                objectRB.mass = mass;
             }
         }
 
@@ -192,7 +204,7 @@ public class ItemMovement : MonoBehaviour
         }
     }   
 
-    void IsGrounded()
+    void IsGrounded() //test if the object is on ground.
     {
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit))

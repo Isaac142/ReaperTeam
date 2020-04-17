@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public bool isHolding = false;
     public bool holdingLightObject = false;
     public bool scytheEquiped = true;
+    public bool isTeleported = false;
+    public bool onSpecialGround = false;
 
     public float maxTimerInSeconds = 5 * 60f;
     public float warningTimeInSeconds =  60f;
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
         gameOver = false;
         holdingLightObject = false;
         isHolding = false;
+        onSpecialGround = false;
         _timer = maxTimerInSeconds;
         _energy = maxEnergy;
     }
