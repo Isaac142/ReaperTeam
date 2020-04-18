@@ -5738,14 +5738,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44294dee064694841946b36853d4f304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemMovement: {fileID: 218784069}
   mass: 1
   drag: 5
-  isHolding: 0
   isLigther: 0
   canHold: 0
   player: {fileID: 0}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
 --- !u!54 &218784070
@@ -5757,7 +5754,7 @@ Rigidbody:
   m_GameObject: {fileID: 218784063}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 5
+  m_Drag: 10
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -5795,6 +5792,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  canHold: 0
   holdingLightObject: 0
   scytheEquiped: 1
   isTeleported: 0
@@ -7306,14 +7304,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44294dee064694841946b36853d4f304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemMovement: {fileID: 525278801}
   mass: 0.8
   drag: 5
-  isHolding: 0
   isLigther: 0
   canHold: 0
   player: {fileID: 0}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
 --- !u!208 &525278802
@@ -13832,6 +13827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  canHold: 0
   holdingLightObject: 0
   scytheEquiped: 1
   isTeleported: 0
@@ -14641,14 +14637,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44294dee064694841946b36853d4f304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemMovement: {fileID: 1174440748}
   mass: 0.5
   drag: 5
-  isHolding: 0
   isLigther: 0
   canHold: 0
   player: {fileID: 0}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
 --- !u!208 &1174440749
@@ -16866,6 +16859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  canHold: 0
   holdingLightObject: 0
   scytheEquiped: 1
   isTeleported: 0

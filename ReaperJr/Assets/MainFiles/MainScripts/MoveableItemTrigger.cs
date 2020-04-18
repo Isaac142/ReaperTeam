@@ -15,7 +15,11 @@ public class MoveableItemTrigger : MonoBehaviour
         if (other.tag == "Player")
         {
             itemMovement.player = other.gameObject;
-            itemMovement.canHold = true;
+
+            if (itemMovement.mass < other.GetComponent<Rigidbody>().mass)
+                itemMovement.isLigther = true;
+            else
+                itemMovement.isLigther = false;
         }
     }
 
@@ -25,6 +29,11 @@ public class MoveableItemTrigger : MonoBehaviour
         {
             itemMovement.player = null;
             itemMovement.canHold = false;
+
+            if (itemMovement.transform.GetComponent<Renderer>() != null)
+                itemMovement.transform.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+
+            itemMovement.isLigther = false;
         }
     }
 }

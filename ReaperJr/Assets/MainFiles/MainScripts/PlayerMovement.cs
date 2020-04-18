@@ -42,9 +42,6 @@ public class PlayerMovement : MonoBehaviour
     //Calling the PlayerJumping function
     void Update()
     {
-        Grounded();
-        DirectionSwitch();
-        Movement();
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
@@ -67,6 +64,13 @@ public class PlayerMovement : MonoBehaviour
             scythe.SetActive(true);
         else
             scythe.SetActive(false);
+    }
+
+    private void FixedUpdate() //prevent character walking into walls.
+    {
+        DirectionSwitch();
+        Grounded();
+        Movement();
     }
 
     #region FacingDirectionSwitch
@@ -95,26 +99,42 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
             facingDirection = FacingDirection.BACKRIGHT;
+        
+            facingB = false;
+            facingF = false;
+            facingL = false;
+            facingR = false;
+            isHorizontal = false;
+            isVertical = false;
+            isDiagonal = true;
 
         if (transform.eulerAngles == new Vector3(0, 270, 0))
+        {
             facingB = true;
-        else
-            facingB = false;
+            isVertical = true;
+            isDiagonal = false;
+        }
 
         if (transform.eulerAngles == new Vector3(0, 90, 0))
+        {
             facingF = true;
-        else
-            facingF = false;
+            isVertical = true;
+            isDiagonal = false;
+        }
 
         if (transform.eulerAngles == new Vector3(0, 0, 0))
+        {
             facingR = true;
-        else
-            facingR = false;
+            isHorizontal = true;
+            isDiagonal = false;
+        }
 
         if (transform.eulerAngles == new Vector3(0, 180, 0))
+        {
             facingL = true;
-        else
-            facingL = false;
+            isHorizontal = true;
+            isDiagonal = false;
+        }        
     }
     #endregion
 
@@ -125,74 +145,89 @@ public class PlayerMovement : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (!GameManager.Instance.onSpecialGround) //prevent character sliding
+        if (GameManager.Instance.isHolding && !GameManager.Instance.holdingLightObject)
+        #region MovingHeavyObject
         {
-            if (speed <= 0.05f)
-                controller.velocity = new Vector3(0f, controller.velocity.y, 0f);
-        }
+            speed = speedFactor;
+            if (facingF)
+            {
+                transform.eulerAngles = new Vector3(0, 90, 0);
 
+                if (GameManager.Instance.onSpecialGround)
+                    controller.AddForce((transform.forward * h - transform.right * v) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
+            }
+
+            if (facingB)
+            {
+                transform.eulerAngles = new Vector3(0, 270, 0);
+
+                if (GameManager.Instance.onSpecialGround)
+                    controller.AddForce((-transform.forward * h + transform.right * v) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
+            }
+
+            if (facingR)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+
+                if (GameManager.Instance.onSpecialGround)
+                    controller.AddForce((transform.forward * v + transform.right * h) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
+            }
+
+            if (facingL)
+            {
+                transform.eulerAngles = new Vector3(0, 180, 0);
+
+                if (GameManager.Instance.onSpecialGround)
+                    controller.AddForce((-transform.forward * v - transform.right * h) * speed * addForce * Time.deltaTime);
+                else
+                    transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
+            }
+        }
+        #endregion
+        else
         #region NormalMovement
-        if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject)
         {
             h = Mathf.Abs(h);
             v = Mathf.Abs(v);
-        
+
             switch (facingDirection)
             {
                 case FacingDirection.FRONT:
                     transform.eulerAngles = new Vector3(0, 90, 0);
-                    isDiagonal = false;
-                    isHorizontal = false;
-                    isVertical = true;
                     break;
 
                 case FacingDirection.BACK:
                     transform.eulerAngles = new Vector3(0, 270, 0);
-                    isDiagonal = false;
-                    isHorizontal = false;
-                    isVertical = true;
                     break;
 
                 case FacingDirection.LEFT:
                     transform.eulerAngles = new Vector3(0, 180, 0);
-                    isDiagonal = false;
-                    isHorizontal = true;
-                    isVertical = false;
                     break;
 
                 case FacingDirection.RIGHT:
                     transform.eulerAngles = new Vector3(0, 0, 0);
-                    isDiagonal = false;
-                    isHorizontal = true;
-                    isVertical = false;
                     break;
 
                 case FacingDirection.FRONTLEFT:
                     transform.eulerAngles = new Vector3(0, 135, 0);
-                    isDiagonal = true;
-                    isHorizontal = false;
-                    isVertical = false;
                     break;
 
                 case FacingDirection.FRONTRIGHT:
                     transform.eulerAngles = new Vector3(0, 45, 0);
-                    isDiagonal = true;
-                    isHorizontal = false;
-                    isVertical = false;
                     break;
 
                 case FacingDirection.BACKLEFT:
                     transform.eulerAngles = new Vector3(0, 225, 0);
-                    isDiagonal = true;
-                    isHorizontal = false;
-                    isVertical = false;
                     break;
 
                 case FacingDirection.BACKRIGHT:
                     transform.eulerAngles = new Vector3(0, 315, 0);
-                    isDiagonal = true;
-                    isHorizontal = false;
-                    isVertical = false;
                     break;
             }
 
@@ -205,195 +240,10 @@ public class PlayerMovement : MonoBehaviour
             if (isVertical)
                 speed = v * speedFactor;
 
-            if (isGrounded)
+            if (GameManager.Instance.onSpecialGround)
                 controller.AddForce(transform.right * speed * addForce * Time.deltaTime);
             else
                 transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime);
-        }
-        #endregion
-
-        #region MovingHeavyObject
-        if (GameManager.Instance.isHolding && !GameManager.Instance.holdingLightObject)
-        {
-            if (facingF)
-            {
-                switch (facingDirection)
-                {
-                    case FacingDirection.FRONT:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-
-                    case FacingDirection.BACK:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-
-                    case FacingDirection.LEFT:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-
-                    case FacingDirection.RIGHT:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-
-                    case FacingDirection.FRONTLEFT:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-
-                    case FacingDirection.FRONTRIGHT:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-
-                    case FacingDirection.BACKLEFT:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-
-                    case FacingDirection.BACKRIGHT:
-                        transform.eulerAngles = new Vector3(0, 90, 0);
-                        break;
-                }
-
-                speed = speedFactor;
-
-                if (isGrounded)
-                    controller.AddForce((transform.forward * h - transform.right * v) * speed * addForce * Time.deltaTime);
-                else
-                    transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
-            }
-
-            if (facingB)
-            {
-                switch (facingDirection)
-                {
-                    case FacingDirection.FRONT:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-
-                    case FacingDirection.BACK:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-
-                    case FacingDirection.LEFT:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-
-                    case FacingDirection.RIGHT:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-
-                    case FacingDirection.FRONTLEFT:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-
-                    case FacingDirection.FRONTRIGHT:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-
-                    case FacingDirection.BACKLEFT:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-
-                    case FacingDirection.BACKRIGHT:
-                        transform.eulerAngles = new Vector3(0, 270, 0);
-                        break;
-                }
-
-                speed = speedFactor;
-
-                if (isGrounded)
-                    controller.AddForce((-transform.forward * h + transform.right * v) * speed * addForce * Time.deltaTime);
-                else
-                    transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
-            }
-
-            if (facingR)
-            {
-                switch (facingDirection)
-                {
-                    case FacingDirection.FRONT:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-
-                    case FacingDirection.BACK:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-
-                    case FacingDirection.LEFT:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-
-                    case FacingDirection.RIGHT:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-
-                    case FacingDirection.FRONTLEFT:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-
-                    case FacingDirection.FRONTRIGHT:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-
-                    case FacingDirection.BACKLEFT:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-
-                    case FacingDirection.BACKRIGHT:
-                        transform.eulerAngles = new Vector3(0, 0, 0);
-                        break;
-                }
-
-                speed = speedFactor;
-
-                if (isGrounded)
-                    controller.AddForce((transform.forward * v + transform.right * h) * speed * addForce * Time.deltaTime);
-                else
-                    transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
-            }
-
-            if (facingL)
-            {
-                switch (facingDirection)
-                {
-                    case FacingDirection.FRONT:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-
-                    case FacingDirection.BACK:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-
-                    case FacingDirection.LEFT:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-
-                    case FacingDirection.RIGHT:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-
-                    case FacingDirection.FRONTLEFT:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-
-                    case FacingDirection.FRONTRIGHT:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-
-                    case FacingDirection.BACKLEFT:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-
-                    case FacingDirection.BACKRIGHT:
-                        transform.eulerAngles = new Vector3(0, 180, 0);
-                        break;
-                }
-
-                speed = speedFactor;
-
-                if (isGrounded)
-                    controller.AddForce((-transform.forward * v - transform.right * h) * speed * addForce * Time.deltaTime);
-                else
-                    transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
-            }
         }
         #endregion
     }

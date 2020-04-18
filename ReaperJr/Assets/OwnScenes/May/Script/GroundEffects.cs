@@ -35,7 +35,7 @@ public class GroundEffects : MonoBehaviour
                 case GroundEffect.SLOW:
                     if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
                     {
-                        other.GetComponent<PlayerMovement>().addForce -= slowtFactor * 100;
+                        other.GetComponent<PlayerMovement>().speedFactor -= slowtFactor;
                         other.GetComponent<Rigidbody>().drag += slowtFactor;
                     }
                     else
@@ -65,7 +65,7 @@ public class GroundEffects : MonoBehaviour
                 case GroundEffect.SLOW:
                     if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
                     {
-                        other.GetComponent<PlayerMovement>().addForce += slowtFactor * 100;
+                        other.GetComponent<PlayerMovement>().speedFactor += slowtFactor;
                         other.GetComponent<Rigidbody>().drag -= slowtFactor;
                     }
 

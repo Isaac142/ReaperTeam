@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     public bool dead = false;
     public bool isHolding = false;
+    public bool canHold = true;
     public bool holdingLightObject = false;
     public bool scytheEquiped = true;
     public bool isTeleported = false;
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
         gameOver = false;
         holdingLightObject = false;
         isHolding = false;
+        canHold = true;
         onSpecialGround = false;
         _timer = maxTimerInSeconds;
         _energy = maxEnergy;
