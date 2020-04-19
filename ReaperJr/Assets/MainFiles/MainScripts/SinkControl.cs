@@ -12,7 +12,7 @@ public class SinkControl : MonoBehaviour
     public GameObject plugSwitch;
     public GameObject filmSwitch;
 
-    public GameObject soul;
+    public GameObject soulInTab;
     private Animator soulAnme;
 
     public float raisingFactor = 0.3f;
@@ -47,9 +47,12 @@ public class SinkControl : MonoBehaviour
         waterLevel.SetActive(false);
         fillTimeRemind = fillDuration;
         drainTimerRemind = drainDuration;
-        soulAnme = soul.GetComponent<Animator>();
-        soul.GetComponent<Rigidbody>().isKinematic = true;
-        soul.SetActive(false);
+        if(soulInTab != null)
+        {
+            soulAnme = soulInTab.GetComponent<Animator>();
+            soulInTab.GetComponent<Rigidbody>().isKinematic = true;
+            soulInTab.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -72,12 +75,12 @@ public class SinkControl : MonoBehaviour
                             {
                                 tabOn = !tabOn;
 
-                                if (soul != null)
+                                if (soulInTab != null)
                                 {
-                                    soul.SetActive(true);
+                                    soulInTab.SetActive(true);
                                     soulAnme.SetBool("SoulOut", true);
-                                    soul.GetComponent<Rigidbody>().isKinematic = false;
-                                    soul.GetComponent<Rigidbody>().AddForce(soul.transform.right * 5, ForceMode.Impulse);
+                                    soulInTab.GetComponent<Rigidbody>().isKinematic = false;
+                                    soulInTab.GetComponent<Rigidbody>().AddForce(soulInTab.transform.right * 5, ForceMode.Impulse);
                                 }
                             }
                         }

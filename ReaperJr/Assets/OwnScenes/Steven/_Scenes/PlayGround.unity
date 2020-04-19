@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.42872268, g: 0.46271867, b: 0.49238706, a: 1}
+  m_IndirectSpecularColor: {r: 0.42872238, g: 0.46271825, b: 0.49238616, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -367,16 +367,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44294dee064694841946b36853d4f304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemMovement: {fileID: 69415655}
   mass: 0
   drag: 5
-  isHolding: 0
   isLigther: 0
+  canHold: 0
   player: {fileID: 689740413}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
-  isGround: 1
+  emiColorSet: {x: 0, y: 0, z: 0}
+  emiColorHold: {x: 0, y: 0, z: 0}
 --- !u!65 &69415656
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2894,12 +2893,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  canHold: 1
   holdingLightObject: 0
   scytheEquiped: 1
-  maxTimerInSeconds: 300
+  isTeleported: 0
+  onSpecialGround: 0
+  maxTimerInSeconds: 10000
   warningTimeInSeconds: 60
   rewardTime: 10
-  maxEnergy: 100
+  maxEnergy: 100000
   throwEngery: 5
   teleportingEnergy: 20
   energyReturnFactor: 1

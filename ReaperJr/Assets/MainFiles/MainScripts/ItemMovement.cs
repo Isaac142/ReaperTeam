@@ -60,7 +60,7 @@ public class ItemMovement : MonoBehaviour
         {
             objectRB.velocity += Vector3.up * Physics.gravity.y * (gravityFactor - 1) * Time.deltaTime;
             IsGrounded();
-            if (isGround)
+            if (isGround && !isHolding)
                 objectRB.isKinematic = true;
             else
                 objectRB.isKinematic = false;
@@ -98,7 +98,7 @@ public class ItemMovement : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.transform.name == transform.name)
+                if (hit.collider.transform.position == transform.position)
                 {
                     if (!GameManager.Instance.isHolding && !GameManager.Instance.scytheEquiped)
                     {
@@ -137,9 +137,6 @@ public class ItemMovement : MonoBehaviour
 
                 if (objectRB != null)
                 {
-                    objectRB.isKinematic = false;
-                    objectRB.constraints = RigidbodyConstraints.FreezeAll;
-
                     if (!isLigther)
                         iniDistance = Vector3.Distance(transform.position, player.transform.position);
                 }
@@ -162,31 +159,34 @@ public class ItemMovement : MonoBehaviour
 
         if (objectRB != null) //dynamic events
         {
-            if(GameManager.Instance.onSpecialGround != checkGroundCondition) //on entre/exit special ground event.
-            {
-                checkGroundCondition = GameManager.Instance.onSpecialGround;
-                if(GameManager.Instance.onSpecialGround)
-                {
-                    player.GetComponent<Rigidbody>().mass += mass;
-                    player.GetComponent<PlayerMovement>().speedFactor += mass;
-
-                    objectRB.mass = 0;
-                }
-                else
-                {
-                    player.GetComponent<Rigidbody>().mass -= mass;
-                    player.GetComponent<PlayerMovement>().speedFactor -= mass;
-                    objectRB.mass = mass;
-                }
-            }
-
             if (isHolding)
             {
+                objectRB.isKinematic = false;
+                objectRB.constraints = RigidbodyConstraints.FreezeAll;
+
+                if (GameManager.Instance.onSpecialGround != checkGroundCondition) //on entre/exit special ground event.
+                {
+                    checkGroundCondition = GameManager.Instance.onSpecialGround;
+                    if (GameManager.Instance.onSpecialGround)
+                    {
+                        player.GetComponent<Rigidbody>().mass += mass;
+                        player.GetComponent<PlayerMovement>().speedFactor += mass;
+
+                        objectRB.mass = 0f; 
+                    }
+                    else
+                    {
+                        player.GetComponent<Rigidbody>().mass -= mass;
+                        player.GetComponent<PlayerMovement>().speedFactor -= mass;
+                        objectRB.mass = mass;
+                    }
+                }
+
                 if (!isLigther)
                 {
                     if (!isGround) //when the center of mass is not grounded, object is at higher risk of fall.
                     {
-                        objectRB.constraints = RigidbodyConstraints.None; 
+                        objectRB.constraints = RigidbodyConstraints.None;
                         ConstrainSetUp(); //constrain rotation at the mostly upwards axis.
                     }
 
@@ -212,6 +212,9 @@ public class ItemMovement : MonoBehaviour
                     }
                 }
             }
+
+            else
+                objectRB.mass = mass;
         }
     }
 
