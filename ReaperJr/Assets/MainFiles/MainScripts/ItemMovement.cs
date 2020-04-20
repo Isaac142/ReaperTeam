@@ -25,47 +25,54 @@ public class ItemMovement : MonoBehaviour
     public Vector3 emiColorHold = Vector3.zero;
 
     private Rigidbody objectRB;
-    private bool isGround = true;
 
     private float iniDistance; //initial distance between character and object when the object is held. use for heavy object
     private float CurrDist; //current distance between character and object as the character is holding object. use for heavy object.
     
-    private Vector3 colliderSize;
-    private double groundDist;
-
     private float localDirX;
     private float localDirY;
     private float localDirZ;
 
-    private bool checkGroundCondition; //used to test if the character has entered special ground.
+    bool IsGrounded() //test if the object is on ground.
+    {
+        return (Physics.Raycast(transform.position, Vector3.down, GetComponent<Collider>().bounds.size.y / 2));
+    }
 
     private void Start()
     {
         isHolding = false;
-        canHold = true;
-        colliderSize = GetComponent<Collider>().bounds.size;
+        canHold = false;
+        if (mass < GameManager.Instance.playerMass)
+            isLigther = true;
+        else
+            isLigther = false;
 
         if (GetComponent<Rigidbody>() != null)
         {
             objectRB = GetComponent<Rigidbody>();
             objectRB.mass = mass;
             objectRB.drag = drag;
-            objectRB.isKinematic = true;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (objectRB != null) //let object with rigid body fall naturally
+        {
+            objectRB.velocity += Vector3.up * Physics.gravity.y * (gravityFactor - 1) * Time.deltaTime;
+
+            if (!objectRB.isKinematic)
+            {
+                if (IsGrounded() && !isHolding)
+                    objectRB.isKinematic = true;
+                else
+                    objectRB.isKinematic = false;
+            }
         }
     }
 
     void Update()
     {
-        if (objectRB != null) //let object with rigid body fall naturally
-        {
-            objectRB.velocity += Vector3.up * Physics.gravity.y * (gravityFactor - 1) * Time.deltaTime;
-            IsGrounded();
-            if (isGround && !isHolding)
-                objectRB.isKinematic = true;
-            else
-                objectRB.isKinematic = false;
-        }
-
         if (player == null) //if there's no character around, stop reading script here --> optimising performance.
             return;
 
@@ -125,11 +132,12 @@ public class ItemMovement : MonoBehaviour
             if (isHolding)
             {
                 player.GetComponent<PlayerMovement>().speedFactor -= mass;
+                player.GetComponent<Rigidbody>().mass += mass;
                 gameObject.transform.parent = player.transform;
 
                 if (isLigther)
                 {
-                    transform.position = new Vector3(transform.position.x, player.transform.position.y + colliderSize.y / 2, transform.position.z); //can change to hand position
+                    transform.position = new Vector3(transform.position.x, player.transform.position.y + GetComponent<Collider>().bounds.size.y / 2, transform.position.z); //can change to hand position
                     GameManager.Instance.holdingLightObject = true;
                 }
                 else
@@ -145,6 +153,7 @@ public class ItemMovement : MonoBehaviour
             else
             {
                 player.GetComponent<PlayerMovement>().speedFactor += mass;
+                player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
                 transform.parent = null;
                 GameManager.Instance.holdingLightObject = false;
 
@@ -162,41 +171,26 @@ public class ItemMovement : MonoBehaviour
             if (isHolding)
             {
                 objectRB.isKinematic = false;
+                objectRB.mass = 0f;
                 objectRB.constraints = RigidbodyConstraints.FreezeAll;
-
-                if (GameManager.Instance.onSpecialGround != checkGroundCondition) //on entre/exit special ground event.
-                {
-                    checkGroundCondition = GameManager.Instance.onSpecialGround;
-                    if (GameManager.Instance.onSpecialGround)
-                    {
-                        player.GetComponent<Rigidbody>().mass += mass;
-                        player.GetComponent<PlayerMovement>().speedFactor += mass;
-
-                        objectRB.mass = 0f; 
-                    }
-                    else
-                    {
-                        player.GetComponent<Rigidbody>().mass -= mass;
-                        player.GetComponent<PlayerMovement>().speedFactor -= mass;
-                        objectRB.mass = mass;
-                    }
-                }
 
                 if (!isLigther)
                 {
-                    if (!isGround) //when the center of mass is not grounded, object is at higher risk of fall.
+                    if (!IsGrounded()) //when the center of mass is not grounded, object is at higher risk of fall.
                     {
+                        objectRB.mass = mass;
                         objectRB.constraints = RigidbodyConstraints.None;
                         ConstrainSetUp(); //constrain rotation at the mostly upwards axis.
+                        CurrDist = Vector3.Distance(transform.position, player.transform.position); //if object rotat further enough, object falls.
                     }
-
-                    CurrDist = Vector3.Distance(transform.position, player.transform.position); //if object rotat further enough, object falls.
+                    
                     if (CurrDist - iniDistance >= relasingThreshold)
                     {
                         isHolding = false;
                         GameManager.Instance.isHolding = false;
                         GameManager.Instance.canHold = true;
                         player.GetComponent<PlayerMovement>().speedFactor += mass;
+                        player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
                         transform.parent = null;
                         objectRB.constraints = RigidbodyConstraints.None;
                     }
@@ -207,6 +201,7 @@ public class ItemMovement : MonoBehaviour
                         GameManager.Instance.isHolding = false;
                         GameManager.Instance.canHold = true;
                         player.GetComponent<PlayerMovement>().speedFactor += mass;
+                        player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
                         transform.parent = null;
                         objectRB.constraints = RigidbodyConstraints.None;
                     }
@@ -223,26 +218,11 @@ public class ItemMovement : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(player.transform.position, Vector3.down, out hit))
         {
-            if (hit.collider.transform.name == transform.name)
+            if (hit.collider.transform.position == transform.position)
                 canHold = false;
             else
                 canHold = true;
         }
-    }   
-
-    void IsGrounded() //test if the object is on ground.
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit))
-        {
-            groundDist = System.Math.Round(Vector3.Distance(transform.position, hit.point), 2);
-        }
-        if (groundDist == colliderSize.x / 2 || groundDist == colliderSize.y / 2 || groundDist == colliderSize.z / 2) //might have problem with irregular shaped collider.
-        {
-            isGround = true;
-        }
-        else
-            isGround = false;
     }
 
     void ConstrainSetUp () //testing the local upward axis and set up constrains.

@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         controller = GetComponent<Rigidbody>();
+        controller.mass = GameManager.Instance.playerMass;
         scytheScript = GetComponent<ThrowableScythe>();
     }
 

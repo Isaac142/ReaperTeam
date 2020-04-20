@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    // character rigidbody reference
+    public float playerMass = 1f;
     public bool dead = false;
     public bool isHolding = false;
     public bool canHold = true;
@@ -13,6 +15,7 @@ public class GameManager : MonoBehaviour
     public bool scytheEquiped = true;
     public bool isTeleported = false;
     public bool onSpecialGround = false;
+    public bool changedRoom = false;
 
     public float maxTimerInSeconds = 5 * 60f;
     public float warningTimeInSeconds =  60f;

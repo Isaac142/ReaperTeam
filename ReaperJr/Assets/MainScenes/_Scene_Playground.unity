@@ -340,14 +340,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
-  itemMovement: {fileID: 218784069}
-  isHolding: 0
+  drag: 5
   isLigther: 0
+  canHold: 0
   player: {fileID: 304227927}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
-  objectRB: {fileID: 0}
+  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
+  isGround: 0
+  colliderSize: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
+  groundDist: 0
+  collider: {fileID: 0}
 --- !u!54 &218784070
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -395,8 +399,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  canHold: 1
   holdingLightObject: 0
   scytheEquiped: 1
+  isTeleported: 0
+  onSpecialGround: 0
   maxTimerInSeconds: 300
   warningTimeInSeconds: 60
   rewardTime: 10
@@ -1439,14 +1446,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
-  itemMovement: {fileID: 1289319799}
-  isHolding: 0
+  drag: 5
   isLigther: 0
+  canHold: 0
   player: {fileID: 304227927}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
-  objectRB: {fileID: 0}
+  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
+  isGround: 0
+  colliderSize: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
+  groundDist: 0
+  collider: {fileID: 0}
 --- !u!208 &1289319800
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -1792,8 +1803,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dead: 0
   isHolding: 0
+  canHold: 1
   holdingLightObject: 0
   scytheEquiped: 1
+  isTeleported: 0
+  onSpecialGround: 0
   maxTimerInSeconds: 300
   warningTimeInSeconds: 60
   rewardTime: 10
@@ -2331,6 +2345,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2058621415}
+  - component: {fileID: 2058621416}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2352,6 +2367,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2058621416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058621414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dead: 0
+  isHolding: 0
+  canHold: 1
+  holdingLightObject: 0
+  scytheEquiped: 1
+  isTeleported: 0
+  onSpecialGround: 0
+  maxTimerInSeconds: 300
+  warningTimeInSeconds: 60
+  rewardTime: 10
+  maxEnergy: 100
+  throwEngery: 5
+  teleportingEnergy: 20
+  energyReturnFactor: 1
+  isPaused: 0
+  gameOver: 0
 --- !u!1 &2105445639
 GameObject:
   m_ObjectHideFlags: 0

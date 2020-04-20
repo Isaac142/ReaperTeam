@@ -29,10 +29,11 @@ public class GroundEffects : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            GameManager.Instance.onSpecialGround = true;
             switch (groundEffect)
             {
                 case GroundEffect.SLOW:
+                    GameManager.Instance.onSpecialGround = true;
+
                     if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
                     {
                         other.GetComponent<PlayerMovement>().speedFactor -= slowtFactor;
@@ -43,6 +44,8 @@ public class GroundEffects : MonoBehaviour
                     break;
 
                 case GroundEffect.SLIP:
+
+                    GameManager.Instance.onSpecialGround = true;
                     if (other.GetComponent<Rigidbody>() != null) //prevent bug, if character has no rigid body attached
                         other.GetComponent<Rigidbody>().drag -= dragModify; //used for addForce type of character control
                     break;
