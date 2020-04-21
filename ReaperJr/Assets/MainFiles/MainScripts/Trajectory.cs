@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Trajectory : MonoBehaviour
 {
+    Vector2 Direction;
+
     private bool touchStart = false;
     //public Transform scythe;
 
@@ -44,7 +46,11 @@ public class Trajectory : MonoBehaviour
             forceAtPlayer = startPos - endPos;
             for (int i = 0; i < number; i++)
             {
-                trajectoryDots[i].transform.position = calculatePosition(i * 0.1f);
+                Vector2 tempPos = calculatePosition(i * 0.05f);
+                Vector3 newPos = Vector3.zero;
+                newPos.x = tempPos.x;
+                newPos.y = tempPos.y;
+                trajectoryDots[i].transform.localPosition = newPos;
             }
         }
         else
@@ -53,7 +59,8 @@ public class Trajectory : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         { //leave
-            scytheRigidbody.velocity = new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor);
+            scytheRigidbody.velocity = new Vector3(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor * 2.5f);
+            //scytheRigidbody.AddForce(new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor * 2.5f));
             for (int i = 0; i < number; i++)
             {
                 Destroy(trajectoryDots[i]);
@@ -78,10 +85,19 @@ public class Trajectory : MonoBehaviour
     }
     */
 
+    private Vector2 calculateScythePosition(float t)
+    {
+        Vector2 currentPointPos = (Vector2)transform.position + (Direction.normalized * forceFactor * t) + 0.5f * Physics2D.gravity * (t * t);
+        Debug.Log(Physics2D.gravity);
+        return currentPointPos;
+    }
+
+    
     private Vector2 calculatePosition(float elapsedTime)
     {
         return new Vector2(endPos.x, endPos.y) + //X0
                 new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor) * elapsedTime + //ut
                 0.5f * Physics2D.gravity * elapsedTime * elapsedTime;
     }
+    
 }

@@ -1409,14 +1409,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
-  itemMovement: {fileID: 237820370}
-  isHolding: 0
+  drag: 5
   isLigther: 0
+  canHold: 0
   player: {fileID: 0}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
-  objectRB: {fileID: 0}
+  emiColorSet: {x: 0, y: 0, z: 0}
+  emiColorHold: {x: 0, y: 0, z: 0}
 --- !u!208 &237820371
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -2982,9 +2982,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dummies:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 646985026}
+  - {fileID: 1875549551}
+  - {fileID: 940241102}
 --- !u!65 &560914083
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3217,11 +3217,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9bb6a542aabcd42969febc68e5e79e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1451170097}
   awareDistance: 10
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!195 &646985028
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3863,14 +3865,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 0.5
-  itemMovement: {fileID: 760712332}
-  isHolding: 0
+  drag: 5
   isLigther: 0
+  canHold: 0
   player: {fileID: 0}
-  playerMass: 1
   relasingThreshold: 0.3
   gravityFactor: 7
-  objectRB: {fileID: 0}
+  emiColorSet: {x: 0, y: 0, z: 0}
+  emiColorHold: {x: 0, y: 0, z: 0}
 --- !u!208 &760712333
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -4161,11 +4163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9bb6a542aabcd42969febc68e5e79e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1451170097}
   awareDistance: 10
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!195 &940241104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4915,10 +4919,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerMass: 1
   dead: 0
   isHolding: 0
+  canHold: 1
   holdingLightObject: 0
   scytheEquiped: 1
+  isTeleported: 0
+  onSpecialGround: 0
+  changedRoom: 0
   maxTimerInSeconds: 300
   warningTimeInSeconds: 60
   rewardTime: 10
@@ -5964,13 +5973,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9bb6a542aabcd42969febc68e5e79e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1451170097}
   awareDistance: 10
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!136 &1274847310
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6810,7 +6821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4400406714cd78d4a9ca0a3a5cb401dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soul: {fileID: 0}
+  soul: {fileID: 23944761}
 --- !u!65 &1488284135
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8685,11 +8696,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9bb6a542aabcd42969febc68e5e79e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1451170097}
   awareDistance: 10
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!195 &1875549553
 NavMeshAgent:
   m_ObjectHideFlags: 0

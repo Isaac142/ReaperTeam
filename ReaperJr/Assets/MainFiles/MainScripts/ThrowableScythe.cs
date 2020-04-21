@@ -24,6 +24,7 @@ public class ThrowableScythe : MonoBehaviour
     private float time = 0.0f;                  // Timer to link to the Bezier formual, Beginnning = 0, End = 1
     bool canThrow;
     bool throwLeft;
+    bool isPlayerHolding;
 
     public bool isThrown = false;
     #endregion
@@ -31,6 +32,7 @@ public class ThrowableScythe : MonoBehaviour
     private void Start()
     {
         canThrow = true;
+        isPlayerHolding = true;
     }
 
     #region Update
@@ -112,6 +114,14 @@ public class ThrowableScythe : MonoBehaviour
                 ResetScythe();
             }
         }
+
+        if(Vector3.Distance(scythe.velocity, Vector3.zero) < 0.5f && !isReturning)
+        {
+            //if coming to a stop do this
+            scythe.velocity = Vector3.zero;
+            scythe.angularVelocity = Vector3.zero;
+            StartCoroutine(ResetRotation());
+        }
     }
     #endregion
 
@@ -126,8 +136,9 @@ public class ThrowableScythe : MonoBehaviour
     #region Throw scythe
     void ThrowScythe()
     {
-        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery)
+        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery && isPlayerHolding) 
         {
+            isPlayerHolding = false;
             // The scythe isn't returning
             isReturning = false;
             // Deatach it form its parent
@@ -177,6 +188,7 @@ public class ThrowableScythe : MonoBehaviour
         scythe.GetComponent<ParabolaController>().StopFollow();
         // Scythe has reached, so it is not returning anymore
         isReturning = false;
+        isPlayerHolding = true;
         // Set its position to the target's
         scythe.transform.position = target.position;
         // Set its rotation to the target's
@@ -204,4 +216,16 @@ public class ThrowableScythe : MonoBehaviour
         return p;
     }
     #endregion
+
+    IEnumerator ResetRotation()
+    {
+        Vector3 startRotation = scythe.transform.eulerAngles;
+        float timer = 0f, time = 0.2f;
+        while(timer < time)
+        {
+            scythe.transform.eulerAngles = Vector3.Lerp(startRotation,target.eulerAngles, (timer/time));
+            timer += Time.deltaTime;
+            yield return null;
+        }
+    }
 }

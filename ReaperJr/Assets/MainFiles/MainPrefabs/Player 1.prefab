@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745557319}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1066194246}
@@ -87,7 +87,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083285847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 1, z: 0}
+  m_LocalPosition: {x: 10, y: 0.5, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1066194246}
@@ -117,7 +117,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1992785498}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 4, z: 0}
+  m_LocalPosition: {x: 5, y: 4, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1066194246}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37622e6c01052f1458bca7abf915cb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 25
+  Speed: 20
   ParabolaRoot: {fileID: 1066194245}
   Autostart: 0
   Animation: 0
@@ -200,7 +200,7 @@ Transform:
   m_GameObject: {fileID: 9207516964035639810}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 9207516964471374456}
   - {fileID: 9207516963809348281}
@@ -300,13 +300,9 @@ MonoBehaviour:
   jumpForce: 20
   distanceGround: 1.2
   isGrounded: 0
-  horizontalSpeed: 10
-  verticalSpeed: 10
+  speedFactor: 7
   addForce: 500
   gModifier: 5
-  isDiagonal: 0
-  isVertical: 0
-  isHorizontal: 0
   scythe: {fileID: 4441905539609307933}
   timeToMove: 0.1
   collectableDist: 5
@@ -429,7 +425,7 @@ PrefabInstance:
     - target: {fileID: 4783801819413185182, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_Drag
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4783801819413185182, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
