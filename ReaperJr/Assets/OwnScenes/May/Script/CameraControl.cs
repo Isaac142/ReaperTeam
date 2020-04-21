@@ -29,7 +29,8 @@ public class CameraControl : MonoBehaviour
 
     public Vector2 camClampX = Vector2.zero;
     public Vector2 camClampY = Vector2.zero;
-    //public Vector2 camClampZ = Vector2.zero;
+    public Vector2 camClampZ = Vector2.zero;
+
     private float offScreenZ = -3f; //character out of camera below this number
     public float distToEdgeWhenDisppear = 4.5f; 
     public Vector3 norRot = new Vector3(18f, 0, 0);
@@ -73,8 +74,11 @@ public class CameraControl : MonoBehaviour
         else
             offset = Vector3.zero;
 
-        transform.position = Vector3.Lerp(transform.position, tarPos + cameraPos + offset, followSpeed * Time.deltaTime);
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, camClampX.x, camClampX.y), Mathf.Clamp(transform.position.y, camClampY.x, camClampY.y), cameraPos.z);
+        if (target.position.z > camClampZ.x + cameraDistRef + camDistFactor)
+            transform.position = Vector3.Lerp(transform.position, tarPos + cameraPos + offset, followSpeed * Time.deltaTime);
+        else
+            transform.position = Vector3.Slerp(transform.position, new Vector3(tarPos.x, tarPos.y, 0) + cameraPos + offset, followSpeed * Time.deltaTime);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, camClampX.x, camClampX.y), Mathf.Clamp(transform.position.y, camClampY.x, camClampY.y), Mathf.Clamp(transform.position.z, camClampZ.x, camClampZ.y));
 
         if (tarPos.z <= offScreenZ)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(norRot), rotateSpeed * Time.deltaTime);
@@ -88,13 +92,18 @@ public class CameraControl : MonoBehaviour
     {
         colliderSize = roomCollider.bounds.size;
         colliderPos = roomCollider.transform.position;
+
         camClampX = new Vector2(colliderPos.x - (colliderSize.x / 2f) + (cameraDistRef * Camera.main.fieldOfView / 100f), colliderPos.x + (colliderSize.x / 2f) - (cameraDistRef * Camera.main.fieldOfView / 100f));
         if (camClampX.x > camClampX.y)
-        {
-            camClampX.x = colliderPos.x;
-            camClampX.y = colliderPos.x;
-        }
+            camClampX.y = camClampX.x;
+
         camClampY = new Vector2(colliderPos.y - colliderSize.y / 2f + cameraPos.y, colliderSize.y);
+
+        camClampZ = new Vector2(colliderPos.z - (colliderSize.z / 2f) - camDistFactor, colliderPos.z + (colliderSize.z / 2f) - cameraDistRef);
+        if (camClampZ.x > camClampZ.y)
+            camClampZ.y = camClampZ.x;
+       
+
         cameraPos.z = colliderPos.z - (colliderSize.z / 2f) - camDistFactor;
         offScreenZ = colliderPos.z - (colliderSize.z / 2f) + distToEdgeWhenDisppear;
     }
