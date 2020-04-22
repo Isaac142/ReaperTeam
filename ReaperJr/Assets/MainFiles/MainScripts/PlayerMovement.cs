@@ -46,7 +46,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            Jump();
+            if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject) // character can not jump if it's holding heavy objects.
+                Jump();
         }
 
         if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true && GameManager.Instance.Energy >= GameManager.Instance.teleportingEnergy)
@@ -69,9 +70,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate() //prevent character walking into walls.
     {
-        DirectionSwitch();
         Grounded();
         Movement();
+        DirectionSwitch();
     }
 
     #region FacingDirectionSwitch
@@ -342,4 +343,9 @@ public class PlayerMovement : MonoBehaviour
         scytheScript.ResetScythe();
     }
     #endregion
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.transform.name);
+    }
 }

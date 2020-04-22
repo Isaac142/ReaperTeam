@@ -7,6 +7,7 @@ using UnityEngine;
  * when the object has rigidbody component, if the mass of object is greater than player's mass, player pushes is, and the object is able to fall from edge.
  * player can teleport while carries light object.
  * equip scythe when hold heavy object will relase the object.
+ * character CAN NOT jump if holding heavy object.
 */
 public class ItemMovement : MonoBehaviour
 {
@@ -30,8 +31,8 @@ public class ItemMovement : MonoBehaviour
     private Rigidbody objectRB;
     private GameObject placeHolder;
 
-    private float iniDistance; //initial distance between character and object when the object is held. use for heavy object
-    private float CurrDist; //current distance between character and object as the character is holding object. use for heavy object.
+    public float iniDistance; //initial distance between character and object when the object is held. use for heavy object
+    public float CurrDist; //current distance between character and object as the character is holding object. use for heavy object.
     
 
     bool IsFlat() //test if the object is flat on ground.
@@ -60,7 +61,7 @@ public class ItemMovement : MonoBehaviour
             objectRB.mass = mass;
             objectRB.drag = drag;
             objectRB.isKinematic = false;
-        }
+        }        
     }
 
     private void FixedUpdate()
@@ -74,9 +75,7 @@ public class ItemMovement : MonoBehaviour
                 if (!isHolding)
                 {
                     if (IsFlat() && IsGrounded())
-                    {
                         objectRB.isKinematic = true;
-                    }
                 }
             }
         }
@@ -86,28 +85,27 @@ public class ItemMovement : MonoBehaviour
     {
         if (player == null) //if there's no character around, stop reading script here --> optimising performance.
             return;
-        
-            CanHold();
+
+        if (!isHolding && objectRB != null)
+        {
+            if (IsFlat() && IsGrounded())
+                objectRB.isKinematic = true;
+            else
+                objectRB.isKinematic = false;
+        }
+
+        CanHold();
 
         if (GetComponent<Renderer>() != null)
         #region EmissionControl
         {
+            GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
             if (playerIn)
-            {
-                GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
                 GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorPlayerIn.x, emiColorPlayerIn.y, emiColorPlayerIn.z));
-            }
-
             if (canHold)
-            {
-                GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
                 GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorCanHold.x, emiColorCanHold.y, emiColorCanHold.z));
-            }
             if (isHolding)
-            {
-                GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
                 GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorHold.x, emiColorHold.y, emiColorHold.z));
-            }
         }
         #endregion
 
@@ -148,11 +146,9 @@ public class ItemMovement : MonoBehaviour
                 {
                     objectRB.isKinematic = false;
                     objectRB.mass = 0;
+                    CreateCollider();
                     if (!isLigther)
                         iniDistance = Vector3.Distance(transform.position, player.transform.position);
-                    //else
-                        
-                    //CreateCollider();
                 }
             }
             else
@@ -164,7 +160,7 @@ public class ItemMovement : MonoBehaviour
 
                 if (objectRB != null)
                 {
-                    //DeleteCollider();
+                    DeleteCollider();
                     objectRB.mass = mass;
                     objectRB.constraints = RigidbodyConstraints.None;
                 }
@@ -180,28 +176,31 @@ public class ItemMovement : MonoBehaviour
                 objectRB.isKinematic = false;
                 objectRB.mass = 0f;
                 objectRB.constraints = RigidbodyConstraints.FreezeAll;
+                if (placeHolder == null)
+                    CreateCollider();
+                transform.GetComponent<Collider>().isTrigger = true;
+                placeHolder.GetComponent<Collider>().isTrigger = false;
 
                 if (!isLigther)
                 {
                     if (!IsGrounded()) //when the center of mass is not grounded, object is at higher risk of fall.
                     {
+                        placeHolder.GetComponent<Collider>().isTrigger = true;
+                        transform.GetComponent<Collider>().isTrigger = false;
                         objectRB.mass = mass;
                         objectRB.constraints = RigidbodyConstraints.None;
                         ConstrainSetUp(); //constrain rotation at the mostly upwards axis.
                         CurrDist = Vector3.Distance(transform.position, player.transform.position); //if object rotat further enough, object falls.
                         objectRB.AddForce(Vector3.down * 3f, ForceMode.Impulse);
                     }
-                    else
-                    {
-                        objectRB.mass = 0f;
-                        objectRB.constraints = RigidbodyConstraints.FreezeAll;
-                    }
 
                     if (CurrDist - iniDistance >= relasingThreshold)
                     {
+                        DeleteCollider();
                         isHolding = false;
                         GameManager.Instance.isHolding = false;
                         GameManager.Instance.canHold = true;
+                        GameManager.Instance.holdingLightObject = false;
                         player.GetComponent<PlayerMovement>().speedFactor += mass;
                         player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
                         transform.parent = null;
@@ -211,9 +210,11 @@ public class ItemMovement : MonoBehaviour
 
                     if (GameManager.Instance.scytheEquiped) //equip scythe releases heavy object
                     {
+                        DeleteCollider();
                         isHolding = false;
                         GameManager.Instance.isHolding = false;
                         GameManager.Instance.canHold = true;
+                        GameManager.Instance.holdingLightObject = false;
                         player.GetComponent<PlayerMovement>().speedFactor += mass;
                         player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
                         transform.parent = null;
@@ -222,9 +223,6 @@ public class ItemMovement : MonoBehaviour
                     }
                 }
             }
-
-            else
-                objectRB.mass = mass;
         }
     }
 
@@ -244,7 +242,11 @@ public class ItemMovement : MonoBehaviour
         }
 
         RaycastHit hor;
-        if (Physics.Raycast(player.transform.position, player.transform.right, out hor, pickUpDist))
+        //if (Physics.Raycast(player.transform.position, player.transform.right, out hor, pickUpDist))
+        Vector3 topPoint = player.transform.position + player.GetComponent<CapsuleCollider>().center + Vector3.up * (player.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
+        Vector3 bottomPoint = player.transform.position + player.GetComponent<CapsuleCollider>().center - Vector3.up * (player.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
+        float radius = player.GetComponent<CapsuleCollider>().radius - 0.05f;
+        if(Physics.CapsuleCast(topPoint,bottomPoint, radius, player.transform.right, out hor, pickUpDist))
         {
             if (hor.transform == transform)
                 inFront = true;
@@ -280,22 +282,22 @@ public class ItemMovement : MonoBehaviour
             objectRB.constraints = RigidbodyConstraints.FreezeRotationZ; 
     }
 
-    //void CreateCollider()
-    //{
-    //    placeHolder = new GameObject("MovablePlaceHolder");
-    //    placeHolder.transform.position = transform.position;
-    //    placeHolder.transform.parent = player.transform;
-    //    objectRB.GetComponent<Collider>().isTrigger = true;
-    //    BoxCollider collider = (BoxCollider)placeHolder.AddComponent(typeof(BoxCollider));
-    //    collider.size = objectRB.GetComponent<BoxCollider>().bounds.size;
-    //}
+    void CreateCollider()
+    {
+        placeHolder = new GameObject("MovablePlaceHolder");
+        placeHolder.transform.position = transform.position;
+        placeHolder.transform.parent = player.transform;
+        objectRB.GetComponent<Collider>().isTrigger = true;
+        BoxCollider collider = (BoxCollider)placeHolder.AddComponent(typeof(BoxCollider));
+        collider.size = objectRB.GetComponent<BoxCollider>().bounds.size;
+    }
 
-    //void DeleteCollider()
-    //{
-    //    if (placeHolder != null)
-    //    {
-    //        Destroy(placeHolder);
-    //        objectRB.GetComponent<Collider>().isTrigger = false;
-    //    }
-    //}
+    void DeleteCollider()
+    {
+        if (placeHolder != null)
+        {
+            Destroy(placeHolder);
+            objectRB.GetComponent<Collider>().isTrigger = false;
+        }
+    }
 }

@@ -270,6 +270,7 @@ public class SinkControl : MonoBehaviour
             tabClickable = false;
             plugClickable = false;            
             switchClickable = false;
+            player = null;
         }
     }
 
