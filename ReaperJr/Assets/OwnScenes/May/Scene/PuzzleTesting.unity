@@ -245,7 +245,7 @@ Transform:
   - {fileID: 762754187}
   - {fileID: 1479303141}
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &26677023
 GameObject:
@@ -669,7 +669,7 @@ Transform:
   - {fileID: 129324163}
   - {fileID: 260215092}
   m_Father: {fileID: 0}
-  m_RootOrder: 26
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &125245819
 GameObject:
@@ -5742,15 +5742,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  isGround: 0
+  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
   colliderSize: {x: 0, y: 0, z: 0}
-  groundDist: 0
-  collider: {fileID: 0}
 --- !u!54 &218784070
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5796,6 +5796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerMass: 1
   dead: 0
   isHolding: 0
   canHold: 0
@@ -5803,6 +5804,7 @@ MonoBehaviour:
   scytheEquiped: 1
   isTeleported: 0
   onSpecialGround: 0
+  changedRoom: 0
   maxTimerInSeconds: 300
   warningTimeInSeconds: 30
   rewardTime: 10
@@ -5880,7 +5882,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.8
+  m_Radius: 1
   m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -6725,6 +6727,8 @@ MonoBehaviour:
   patrolPoints:
   - {fileID: 135384924}
   - {fileID: 1930096772}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!1 &359122680
 GameObject:
   m_ObjectHideFlags: 0
@@ -7287,7 +7291,7 @@ Transform:
   m_GameObject: {fileID: 510442352}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.004134063, y: 0.004133943, z: 0.004133903}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 1117910897}
   m_RootOrder: 0
@@ -7372,15 +7376,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  isGround: 0
+  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
   colliderSize: {x: 0, y: 0, z: 0}
-  groundDist: 0
-  collider: {fileID: 0}
 --- !u!208 &525278802
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -7470,7 +7474,7 @@ Transform:
   m_Children:
   - {fileID: 1398336534}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &548862882 stripped
 Transform:
@@ -7626,7 +7630,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -2.48, z: 0}
 --- !u!1 &598521201
 GameObject:
@@ -7659,7 +7663,7 @@ Transform:
   - {fileID: 125245820}
   - {fileID: 267413635}
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &633537495
 GameObject:
@@ -7753,7 +7757,7 @@ Transform:
   - {fileID: 135384924}
   - {fileID: 1930096772}
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &703493404
 GameObject:
@@ -8606,7 +8610,7 @@ Transform:
   - {fileID: 1462061227}
   - {fileID: 496988982}
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &908710712
 MonoBehaviour:
@@ -13723,7 +13727,7 @@ Transform:
   m_GameObject: {fileID: 1020164141}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.004134063, y: 0.004133943, z: 0.004133903}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 218784064}
   m_RootOrder: 0
@@ -13895,6 +13899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerMass: 1
   dead: 0
   isHolding: 0
   canHold: 0
@@ -13902,6 +13907,7 @@ MonoBehaviour:
   scytheEquiped: 1
   isTeleported: 0
   onSpecialGround: 0
+  changedRoom: 0
   maxTimerInSeconds: 0
   warningTimeInSeconds: 0
   rewardTime: 10
@@ -14343,15 +14349,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  isGround: 0
+  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
   colliderSize: {x: 0, y: 0, z: 0}
-  groundDist: 0
-  collider: {fileID: 0}
 --- !u!208 &1117910893
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -14441,7 +14447,7 @@ Transform:
   m_Children:
   - {fileID: 510442353}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1124315489
 GameObject:
@@ -14865,15 +14871,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  isGround: 0
+  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
   colliderSize: {x: 0, y: 0, z: 0}
-  groundDist: 0
-  collider: {fileID: 0}
 --- !u!208 &1174440749
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -14957,13 +14963,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174440746}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.46, y: 0.65, z: 0.7}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.46, y: 5.55, z: 0.7}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 1937406232}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1176118890
 GameObject:
@@ -15838,7 +15844,7 @@ Transform:
   m_Children:
   - {fileID: 633537496}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1398336533
 GameObject:
@@ -15867,7 +15873,7 @@ Transform:
   m_GameObject: {fileID: 1398336533}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.004134063, y: 0.004133943, z: 0.004133903}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 525278806}
   m_RootOrder: 0
@@ -16065,7 +16071,7 @@ Transform:
   m_Children:
   - {fileID: 2009414217}
   m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1460632242
 MonoBehaviour:
@@ -16314,7 +16320,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 27
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1529336336
 MonoBehaviour:
@@ -16328,6 +16334,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5356166fc7171884596e6ddb4b91fa00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1544946418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1544946419}
+  - component: {fileID: 1544946420}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1544946419
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544946418}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.38, y: 1.4, z: 5.62}
+  m_LocalScale: {x: 3, y: 2.5, z: 3}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1544946420
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544946418}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1569791525
 GameObject:
   m_ObjectHideFlags: 0
@@ -16572,7 +16622,7 @@ PrefabInstance:
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
@@ -17087,6 +17137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerMass: 1
   dead: 0
   isHolding: 0
   canHold: 0
@@ -17094,6 +17145,7 @@ MonoBehaviour:
   scytheEquiped: 1
   isTeleported: 0
   onSpecialGround: 0
+  changedRoom: 0
   maxTimerInSeconds: 0
   warningTimeInSeconds: 0
   rewardTime: 10
@@ -17396,6 +17448,8 @@ MonoBehaviour:
   patrolPoints:
   - {fileID: 762754187}
   - {fileID: 1479303141}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!195 &1889169547
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -17562,6 +17616,8 @@ MonoBehaviour:
   patrolPoints:
   - {fileID: 267413635}
   - {fileID: 125245820}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!195 &1935468625
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -17687,7 +17743,7 @@ Transform:
   m_GameObject: {fileID: 1937406231}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.004134063, y: 0.004133943, z: 0.004133903}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 1174440753}
   m_RootOrder: 0
@@ -17781,6 +17837,8 @@ MonoBehaviour:
   - {fileID: 825133009}
   - {fileID: 962999787}
   - {fileID: 846489893}
+  patrolSpeed: 3
+  chasingSpeed: 3
 --- !u!136 &1940653394
 CapsuleCollider:
   m_ObjectHideFlags: 0

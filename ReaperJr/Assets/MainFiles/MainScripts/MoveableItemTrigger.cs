@@ -15,7 +15,7 @@ public class MoveableItemTrigger : MonoBehaviour
         if (other.tag == "Player")
         {
             itemMovement.player = other.gameObject;
-            itemMovement.canHold = true;
+            itemMovement.playerIn = true;
         }
     }
 
@@ -24,10 +24,11 @@ public class MoveableItemTrigger : MonoBehaviour
         if (other.tag == "Player")
         {
             itemMovement.player = null;
+            itemMovement.playerIn = false;
             itemMovement.canHold = false;
 
-            if (itemMovement.transform.GetComponent<Renderer>() != null)
-                itemMovement.transform.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+            if (itemMovement.transform.GetComponentInParent<Renderer>() != null)
+                itemMovement.transform.GetComponentInParent<Renderer>().material.DisableKeyword("_EMISSION");
         }
     }
 }

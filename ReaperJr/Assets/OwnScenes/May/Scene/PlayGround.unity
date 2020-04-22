@@ -841,6 +841,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ed7fdcabc92e2b4981b58a20d978a74, type: 3}
 --- !u!1 &231612647
@@ -3710,6 +3725,7 @@ MonoBehaviour:
   rotateSpeed: 2
   camClampX: {x: -18, y: 18}
   camClampY: {x: 10, y: 15}
+  camClampZ: {x: 0, y: 0}
   distToEdgeWhenDisppear: 4.5
   norRot: {x: 18, y: 0, z: 0}
   topRot: {x: 24, y: 0, z: 0}
@@ -3886,11 +3902,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0.5, y: 0.5, z: 0.5}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
+  emiColorPlayerIn: {x: 0.1, y: 0.1, z: 0.1}
+  colliderSize: {x: 0, y: 0, z: 0}
 --- !u!208 &1173190086
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -4037,11 +4057,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.6039216, y: 0.4862745, z: 0.043137256}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0.5, y: 0.5, z: 0.5}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
+  emiColorPlayerIn: {x: 0.1, y: 0.1, z: 0.1}
+  colliderSize: {x: 0, y: 0, z: 0}
 --- !u!208 &1207258378
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -4752,11 +4776,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.44313726, y: 0.101960786, z: 0.5294118}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0.3882353, y: 0.007843138, z: 0.44}
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
 --- !u!208 &1431205307
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -10239,11 +10267,15 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0.44313726, y: 0.101960786, z: 0.5294118}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0.3882353, y: 0.007843138, z: 0.44}
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
 --- !u!65 &1663323460
 BoxCollider:
   m_ObjectHideFlags: 0
