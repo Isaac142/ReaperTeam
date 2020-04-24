@@ -37,7 +37,8 @@ public class CameraControl : MonoBehaviour
     public Vector3 topRot = new Vector3(24f, 0, 0);
 
     public float cameraDistRef = 18f;
-    private bool roomChangeCheck;
+    public bool inRoom = false;
+    public bool outRoom = false;
 
     // Start is called before the first frame update
     void Start()
@@ -55,12 +56,9 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.changedRoom != roomChangeCheck)
-        {
-            roomChangeCheck = GameManager.Instance.changedRoom;
-            if (!GameManager.Instance.changedRoom)
-                SetCamera();
-        }
+
+        if(roomCollider == null)
+            transform.position = Vector3.Slerp(transform.position, new Vector3(tarPos.x, tarPos.y, 0) + cameraPos + offset, followSpeed * Time.deltaTime);
 
 
         tarPos = target.position;
@@ -75,7 +73,7 @@ public class CameraControl : MonoBehaviour
             offset = Vector3.zero;
 
         if (target.position.z > camClampZ.x + cameraDistRef + camDistFactor)
-            transform.position = Vector3.Lerp(transform.position, tarPos + cameraPos + offset, followSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, tarPos + cameraPos - Vector3.forward * camDistFactor + offset, followSpeed * Time.deltaTime);
         else
             transform.position = Vector3.Slerp(transform.position, new Vector3(tarPos.x, tarPos.y, 0) + cameraPos + offset, followSpeed * Time.deltaTime);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, camClampX.x, camClampX.y), Mathf.Clamp(transform.position.y, camClampY.x, camClampY.y), Mathf.Clamp(transform.position.z, camClampZ.x, camClampZ.y));
@@ -88,7 +86,7 @@ public class CameraControl : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(cameraRot), rotateSpeed* Time.deltaTime);
     }
 
-    void SetCamera()
+    public void SetCamera()
     {
         colliderSize = roomCollider.bounds.size;
         colliderPos = roomCollider.transform.position;

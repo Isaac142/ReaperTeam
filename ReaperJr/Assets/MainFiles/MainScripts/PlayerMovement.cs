@@ -343,9 +343,4 @@ public class PlayerMovement : MonoBehaviour
         scytheScript.ResetScythe();
     }
     #endregion
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.transform.name);
-    }
 }

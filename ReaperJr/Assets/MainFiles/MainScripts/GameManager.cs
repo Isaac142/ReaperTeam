@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     public bool scytheEquiped = true;
     public bool isTeleported = false;
     public bool onSpecialGround = false;
-    public bool changedRoom = false;
 
     public float maxTimerInSeconds = 5 * 60f;
     public float warningTimeInSeconds =  60f;
