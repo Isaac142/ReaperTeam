@@ -457,6 +457,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &356359302 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1393668285753549251, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+    type: 3}
+  m_PrefabInstance: {fileID: 1857240649}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &383523797
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +569,7 @@ GameObject:
   - component: {fileID: 410622097}
   m_Layer: 2
   m_Name: RoomCollider1
-  m_TagString: Untagged
+  m_TagString: RoomCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -607,7 +613,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 9cdf15b0d2955f14ca9af8cf7505a225, type: 2}
   cameraControl: {fileID: 1683829259}
   inFront: []
   frontWall:
@@ -1909,12 +1914,12 @@ GameObject:
   - component: {fileID: 1173798417}
   - component: {fileID: 1173798416}
   m_Layer: 2
-  m_Name: Collider2 Collider
-  m_TagString: Untagged
+  m_Name: Corridor2 Collider
+  m_TagString: CorridorCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1173798416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1927,7 +1932,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 6f6d74a6127c6e043ab1efb75c5e3639, type: 2}
   cameraControl: {fileID: 1683829259}
   inFront: []
   frontWall: []
@@ -1946,7 +1950,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9.7, y: 15, z: 35}
+  m_Size: {x: 10, y: 15, z: 35}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1173798418
 Transform:
@@ -2254,7 +2258,7 @@ GameObject:
   - component: {fileID: 1266991406}
   m_Layer: 2
   m_Name: Room2 Collider
-  m_TagString: Untagged
+  m_TagString: RoomCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2298,7 +2302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 4f27b1c33110bb842bab4ab90db522ae, type: 2}
   cameraControl: {fileID: 1683829259}
   inFront:
   - {fileID: 2077277847}
@@ -2658,7 +2661,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1473549772}
   m_LocalRotation: {x: 0.30070576, y: -0, z: -0, w: 0.953717}
-  m_LocalPosition: {x: 0, y: 15.639013, z: 0.18940997}
+  m_LocalPosition: {x: 0, y: 16.5, z: 0.172}
   m_LocalScale: {x: 0.1, y: 0.104596004, z: 0.052466206}
   m_Children: []
   m_Father: {fileID: 2082875130}
@@ -2689,7 +2692,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 42c3a73f15ae55549b468f7d510dd50a, type: 2}
   cameraControl: {fileID: 0}
   inFront: []
   frontWall: []
@@ -2711,7 +2713,7 @@ GameObject:
   - component: {fileID: 1570617636}
   m_Layer: 2
   m_Name: LevelCollider
-  m_TagString: Untagged
+  m_TagString: LevelCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2728,7 +2730,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 86e49156f4eb756499d6c3725dfa88cc, type: 2}
   cameraControl: {fileID: 0}
   inFront:
   - {fileID: 1999548754}
@@ -2886,8 +2887,8 @@ GameObject:
   - component: {fileID: 1580748120}
   - component: {fileID: 1580748119}
   m_Layer: 2
-  m_Name: Coridor1 Collider
-  m_TagString: Untagged
+  m_Name: Corridor1 Collider
+  m_TagString: CorridorCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2918,7 +2919,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: c8379748cd31a014ca14e0e0eb8941b2, type: 2}
   cameraControl: {fileID: 1683829259}
   inFront: []
   frontWall: []
@@ -3070,7 +3070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba7406ae7f27e04d8a4bd247749cac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1794108003}
+  player: {fileID: 356359302}
   scythe: {fileID: 563603683}
   chaseThreshold: 0.5
   camToPlayerDist: {x: 12, y: 20}
@@ -3090,6 +3090,7 @@ MonoBehaviour:
   swithRoomDelayTime: 1
   inRoom: 0
   onStairs: 0
+  inCorridor: 0
 --- !u!1 &1760768326
 GameObject:
   m_ObjectHideFlags: 0
@@ -3183,12 +3184,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1760768326}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1794108003 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-    type: 3}
-  m_PrefabInstance: {fileID: 1857240649}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1804433495
 GameObject:
   m_ObjectHideFlags: 0
@@ -3425,7 +3420,7 @@ PrefabInstance:
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.15
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
@@ -3982,7 +3977,7 @@ GameObject:
   - component: {fileID: 2045932257}
   m_Layer: 2
   m_Name: Room3 Colider
-  m_TagString: Untagged
+  m_TagString: RoomCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4026,7 +4021,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: 181c61dfe815826498a0804dcbb16c94, type: 2}
   cameraControl: {fileID: 1683829259}
   inFront:
   - {fileID: 853333233}
@@ -4561,7 +4555,7 @@ GameObject:
   - component: {fileID: 2126721178}
   m_Layer: 2
   m_Name: Level2Collider
-  m_TagString: Untagged
+  m_TagString: LevelCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4578,7 +4572,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 11400000, guid: c18ef40789bff344e8c0a8dbaa84ca20, type: 2}
   cameraControl: {fileID: 0}
   inFront: []
   frontWall: []

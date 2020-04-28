@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraControlScript : MonoBehaviour
@@ -42,8 +43,8 @@ public class CameraControlScript : MonoBehaviour
     public Vector2 followSpeed = new Vector2(2.5f, 2f); // how fast camera moves to follow player. x = movement speed, y = tilting speed.
     public float swithRoomDelayTime = 1f; //waith time to load new boundaries.
        
-    [HideInInspector]
-    public bool inRoom = false, onStairs = false;
+    //[HideInInspector]
+    public bool inRoom = false, onStairs = false, inCorridor = false;
     private bool checkEntre;
 
     private void Awake()
@@ -97,10 +98,13 @@ public class CameraControlScript : MonoBehaviour
 
         if (!inRoom && !onStairs)
         {
-            //set up camera boundaries based on the level boundaries.
+            //set up camera boundaries based on the level boundaries. 
+            if (!inCorridor)
+                camDepthBoundaries.x = levelDepthBoundaries.x - miniCamToEdgeDist;
             camHorBoundaries = new Vector2(levelHorBoundaries.x + worldSpaceScreenSize.x / 2f + camHorClampFactor.x, levelHorBoundaries.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
             camVerBoundaries = new Vector2(levelVerBoundaries.x + camHeight.x, levelVerBoundaries.x + camHeight.y);
             camDepthBoundaries = new Vector2(camDepthBoundaries.x, levelDepthBoundaries.y - miniCamToEdgeDist);
+           
         }
 
         transform.position = Vector3.Lerp(transform.position, playerPos + toPlayerDist + offset, followSpeed.x * Time.deltaTime); //camera movement
@@ -124,12 +128,8 @@ public class CameraControlScript : MonoBehaviour
         }
     }
 
-    public IEnumerator RoomSwitch(RoomData room) //set up new boundary clamps when switch rooms.
+    public IEnumerator RoomSwitch(Vector2 roomSides, Vector2 roomHeight, Vector2 roomDepth) //set up new boundary clamps when switch rooms.
     {
-        Vector3 roomPosition = room.roomPosition;
-        Vector2 roomSides = new Vector2(room.roomPosition.x - room.roomSize.x / 2f, room.roomPosition.x + room.roomSize.x / 2f);
-        Vector2 roomHeight = new Vector2(room.roomPosition.y - room.roomSize.y / 2f, room.roomPosition.y + room.roomSize.y / 2f);
-        Vector2 roomDepth = new Vector2(room.roomPosition.z - room.roomSize.z / 2f, room.roomPosition.z + room.roomSize.z / 2f);
         inRoom = true;
 
         camHorBoundaries = new Vector2(roomSides.x +  worldSpaceScreenSize.x/2f + camHorClampFactor.x, roomSides.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
@@ -146,22 +146,16 @@ public class CameraControlScript : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator CoridorSwitch(RoomData coridor)
+    public IEnumerator CoridorSwitch(Vector2 roomDepth)
     {
         //set up minimun camera z value, others will be follow the level boundary rules.
         //this set up only require room colliders when z-clamp changes.
-        Vector2 roomDepth = new Vector2(coridor.roomPosition.z - coridor.roomSize.z / 2f, coridor.roomPosition.z + coridor.roomSize.z / 2f);      
         camDepthBoundaries.x = roomDepth.x - miniCamToEdgeDist;
         yield return null;
     }
 
-    public IEnumerator StairSwitch(RoomData stair)
+    public IEnumerator StairSwitch(Vector2 roomSides, Vector2 roomHeight, Vector2 roomDepth)
     {
-        Vector3 roomPosition = stair.roomPosition;
-        Vector2 roomSides = new Vector2(stair.roomPosition.x - stair.roomSize.x / 2f, stair.roomPosition.x + stair.roomSize.x / 2f);
-        Vector2 roomHeight = new Vector2(stair.roomPosition.y - stair.roomSize.y / 2f, stair.roomPosition.y + stair.roomSize.y / 2f);
-        Vector2 roomDepth = new Vector2(stair.roomPosition.z - stair.roomSize.z / 2f, stair.roomPosition.z + stair.roomSize.z / 2f);
-
         camHorBoundaries = new Vector2(roomSides.x + worldSpaceScreenSize.x / 2f + camHorClampFactor.x, roomSides.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
         if (camHorBoundaries.x > camHorBoundaries.y) //if the room is too narrow, camera stays at the middle of the room
         {

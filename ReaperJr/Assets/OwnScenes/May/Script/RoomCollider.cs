@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RoomCollider : MonoBehaviour
 {
-    public RoomData room;
+    Collider roomCollider;
     [HideInInspector]
     public CameraControlScript cameraControl;
     public List<GameObject> inFront = new List<GameObject>(); //all game objects will not be shown when player is in this collider
@@ -17,53 +17,47 @@ public class RoomCollider : MonoBehaviour
 
     private void Awake()
     {
-        cameraControl = Camera.main.GetComponent<CameraControlScript>();   
+        cameraControl = Camera.main.GetComponent<CameraControlScript>();
     }
 
     private void Start()
     {
-        roomPosition = room.roomPosition;
-        roomSides = new Vector2(room.roomPosition.x - room.roomSize.x / 2f, room.roomPosition.x + room.roomSize.x / 2f);
-        roomHeight = new Vector2(room.roomPosition.y - room.roomSize.y / 2f, room.roomPosition.y + room.roomSize.y / 2f);
-        roomDepth = new Vector2(room.roomPosition.z - room.roomSize.z / 2f, room.roomPosition.z + room.roomSize.z / 2f);
-    }
-    private void Update()
-    {
-        if (room.type == "Level")
-        {
-            if (!cameraControl.inRoom)
-                StartCoroutine("Disappear", 0f);
-            else
-                StartCoroutine("Appear", 0);
-        }
+        roomCollider = GetComponent<Collider>();
+        roomPosition = roomCollider.transform.position;
+        roomSides = new Vector2(roomCollider.transform.position.x - roomCollider.bounds.size.x / 2f, roomCollider.transform.position.x + roomCollider.bounds.size.x / 2f);
+        roomHeight = new Vector2(roomCollider.transform.position.y - roomCollider.bounds.size.y / 2f, roomCollider.transform.position.y + roomCollider.bounds.size.y / 2f);
+        roomDepth = new Vector2(roomCollider.transform.position.z - roomCollider.bounds.size.z / 2f, roomCollider.transform.position.z + roomCollider.bounds.size.z / 2f);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            if (room.type == "Level")
+            if (transform.tag == "LevelCollider")
             {
                 cameraControl.levelHorBoundaries = new Vector2(roomSides.x, roomSides.y);
                 cameraControl.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
                 cameraControl.levelDepthBoundaries = new Vector2(roomDepth.x, + roomDepth.y);
-                cameraControl.camDepthBoundaries.x = roomDepth.x - cameraControl.miniCamToEdgeDist;
             }
             else
             {
-                cameraControl.roomPosition = room.roomPosition;
-                if (room.isARoom)
+                cameraControl.roomPosition = roomPosition;
+                if (transform.tag == "RoomCollider")
                 {
-                    StartCoroutine(cameraControl.RoomSwitch(room));
+                    StartCoroutine(cameraControl.RoomSwitch(roomSides, roomHeight, roomDepth));
                     StartCoroutine("Disappear", 0f);
                 }
-                if (room.type == "Stair")
+                if (transform.tag == "StairCollider")
                 {
-                    StartCoroutine(cameraControl.StairSwitch(room));
+                    StartCoroutine(cameraControl.StairSwitch(roomSides, roomHeight, roomDepth));
                     cameraControl.onStairs = true;
-                }  
-                if(room.type == "Coridor" && !cameraControl.inRoom)
-                    StartCoroutine(cameraControl.CoridorSwitch(room));
+                }
+                if (transform.tag == "CorridorCollider")
+                {
+                    cameraControl.inCorridor = true;
+                    if(!cameraControl.inRoom)
+                    StartCoroutine(cameraControl.CoridorSwitch(roomDepth));                 
+                }
             }
         }
     }
@@ -72,17 +66,24 @@ public class RoomCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            if (room.type == "Coridor")
+            if (cameraControl.inRoom != roomSwitch)
             {
-                if (cameraControl.inRoom != roomSwitch)
+                roomSwitch = cameraControl.inRoom;
+                if (!cameraControl.inRoom)
                 {
-                    roomSwitch = cameraControl.inRoom;
-                    if (!cameraControl.inRoom)
+                    if (transform.tag == "CorridorCollider")
                     {
-                        StartCoroutine(cameraControl.CoridorSwitch(room));
-                        StopCoroutine(cameraControl.CoridorSwitch(room));
+                        StartCoroutine(cameraControl.CoridorSwitch(roomDepth));
+                        StopCoroutine(cameraControl.CoridorSwitch(roomDepth));
                     }
                 }
+            }
+            if (transform.tag == "LevelCollider")
+            {
+                if (!cameraControl.inRoom)
+                    StartCoroutine("Disappear", 0f);
+                else
+                    StartCoroutine("Appear", 0);
             }
         }
     }
@@ -92,16 +93,19 @@ public class RoomCollider : MonoBehaviour
         if (other.tag == "Player")
         {
             StartCoroutine("Appear", 0);
-            if (room.type == "Level")
+            if (transform.tag == "LevelCollider")
             {
                 cameraControl.levelHorBoundaries = Vector2.zero;
                 cameraControl.levelVerBoundaries = Vector2.zero;
                 cameraControl.levelDepthBoundaries = Vector2.zero;
             }
-            if (room.isARoom)
+
+            if (transform.tag == "RoomCollider")
                 cameraControl.inRoom = false;
-            if (room.type == "Stair")
+            if (transform.tag == "StairCollider")
                 cameraControl.onStairs = false;
+            if (transform.tag == "CorridorCollider")
+                cameraControl.inCorridor = false;
         }
     }
 
