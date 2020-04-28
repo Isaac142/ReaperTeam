@@ -46,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject) // character can not jump if it's holding heavy objects.
                 Jump();
         }
 
@@ -254,6 +253,7 @@ public class PlayerMovement : MonoBehaviour
     #region Jump
     void Jump()
     {
+            if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject) // character can not jump if it's holding heavy objects.
         controller.AddForce(new Vector3(0, jumpForce, 0),ForceMode.Impulse);
     }
     #endregion
@@ -277,11 +277,15 @@ public class PlayerMovement : MonoBehaviour
     #region Collecting
     void Collect()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
-            if (hit.transform.tag != "Untagged")
+        //if (Physics.Raycast(ray, out hit))
+        //{
+        Vector3 topPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center + Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 0.5f) / 2f;
+        Vector3 bottomPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center - Vector3.up * (controller.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
+        float radius = controller.GetComponent<CapsuleCollider>().radius;
+        if (Physics.CapsuleCast(topPoint, bottomPoint, radius, controller.transform.right, out hit, collectableDist))
+        { if (hit.transform.tag != "Untagged")
             {
                 if (Vector3.Distance(transform.position, hit.transform.position) <= collectableDist) //calculate if the collectable is with in the collectable distance.
                 {

@@ -10,36 +10,44 @@ public class EnemyTrap : MonoBehaviour
     public GameObject lure;
     public Transform enemyGoal;
     public Animator trapDoor;
-    public string lureName;
     public float activeTime = 3f;
     private bool lureIn = false;
-
+    private bool catched = false;
 
     // Start is called before the first frame update
     void Start()
     {
         lureIn = false;
     }
+    private void Update()
+    {
+        if (catched)
+        {
+            lure.GetComponent<ItemMovement>().canHold = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == lureName)
-            lureIn = true;      
+        if (other.tag == "Lure")
+            lureIn = true;
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Enemy" && lureIn)
+        if (other.tag == "Enemy")
         {
-            if (Vector3.Distance(other.transform.position, enemyGoal.transform.position) <= 3f)
-            {
-                trapDoor.SetTrigger("Close");
-                if (soul != null)
+            if (lureIn)
+            { if (Vector3.Distance(other.transform.position, enemyGoal.transform.position) <= 3f)
                 {
-                    soul.gameObject.tag = "Soul";
-                    soul.transform.parent = null;
+                    trapDoor.SetTrigger("Close");
+                    if (soul != null)
+                    {
+                        soul.gameObject.tag = "Soul";
+                        soul.transform.parent = null;
+                    }
+                    catched = true;
                 }
-                enemy.transform.GetChild(0).gameObject.SetActive(false);
-                enemy.isStopped = true;
             }
         }
     }
@@ -51,11 +59,13 @@ public class EnemyTrap : MonoBehaviour
             if(lureIn)
                 StartCoroutine("GoalSet");
         }
+        if (other.tag == "Lure")
+            lureIn = false;
     }
 
     IEnumerator GoalSet()
     {
         yield return new WaitForSeconds(activeTime);
-        enemy.SetDestination(enemyGoal.position);
+        enemy.SetDestination(enemyGoal.transform.position);
     }
 }

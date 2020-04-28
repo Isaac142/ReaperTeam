@@ -211,7 +211,7 @@ public class SinkControl : MonoBehaviour
 
         if (player != null)
         {
-            if (playerIn && waterLine.y >= player.transform.position.y + 1) //player will dead if water level is above it.
+            if (playerIn && waterLine.y >= player.transform.position.y + player.GetComponent<CapsuleCollider>().height/2f) //player will dead if water level is above it.
                 GameManager.Instance.dead = true;
         }
 

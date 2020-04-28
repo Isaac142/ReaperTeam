@@ -169,9 +169,23 @@ public class ItemMovement : MonoBehaviour
             }
         }
 
-        if (objectRB != null) //dynamic events
+        if (isHolding)
         {
-            if (isHolding)
+            if (!isLigther)
+            {
+                if (GameManager.Instance.scytheEquiped) //equip scythe releases heavy object
+                {
+                    isHolding = false;
+                    GameManager.Instance.isHolding = false;
+                    GameManager.Instance.canHold = true;
+                    GameManager.Instance.holdingLightObject = false;
+                    player.GetComponent<PlayerMovement>().speedFactor += mass;
+                    player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
+                    transform.parent = null;
+                }
+            }
+
+            if (objectRB != null) //dynamic events
             {
                 objectRB.isKinematic = false;
                 objectRB.mass = 0f;
@@ -208,16 +222,9 @@ public class ItemMovement : MonoBehaviour
                         objectRB.mass = mass;
                     }
 
-                    if (GameManager.Instance.scytheEquiped) //equip scythe releases heavy object
+                    if (GameManager.Instance.scytheEquiped)
                     {
                         DeleteCollider();
-                        isHolding = false;
-                        GameManager.Instance.isHolding = false;
-                        GameManager.Instance.canHold = true;
-                        GameManager.Instance.holdingLightObject = false;
-                        player.GetComponent<PlayerMovement>().speedFactor += mass;
-                        player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
-                        transform.parent = null;
                         objectRB.constraints = RigidbodyConstraints.None;
                         objectRB.mass = mass;
                     }
@@ -288,8 +295,8 @@ public class ItemMovement : MonoBehaviour
         placeHolder.transform.position = transform.position;
         placeHolder.transform.parent = player.transform;
         objectRB.GetComponent<Collider>().isTrigger = true;
-        BoxCollider collider = (BoxCollider)placeHolder.AddComponent(typeof(BoxCollider));
-        collider.size = objectRB.GetComponent<BoxCollider>().bounds.size;
+        Collider collider = (BoxCollider)placeHolder.AddComponent(typeof(BoxCollider));
+        collider = objectRB.GetComponent<Collider>();
     }
 
     void DeleteCollider()

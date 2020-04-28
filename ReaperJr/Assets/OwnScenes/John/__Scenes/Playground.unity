@@ -120,7 +120,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 5bf742d97c38c8849b94c743f06b3d61, type: 2}
 --- !u!1 &21431514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,11 +1412,17 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0, y: 0, z: 0}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0, y: 0, z: 0}
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
+  iniDistance: 0
+  CurrDist: 0
 --- !u!208 &237820371
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -3339,7 +3345,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!65 &647282307
 BoxCollider:
@@ -3868,11 +3874,17 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0, y: 0, z: 0}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0, y: 0, z: 0}
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
+  iniDistance: 0
+  CurrDist: 0
 --- !u!208 &760712333
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -4482,6 +4494,36 @@ Transform:
   m_Father: {fileID: 485303363}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &965883706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 965883707}
+  m_Layer: 0
+  m_Name: PatrolPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &965883707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965883706}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 18.61, y: 0, z: 11.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1274847313}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1007676142
 GameObject:
   m_ObjectHideFlags: 0
@@ -4927,7 +4969,6 @@ MonoBehaviour:
   scytheEquiped: 1
   isTeleported: 0
   onSpecialGround: 0
-  changedRoom: 0
   maxTimerInSeconds: 300
   warningTimeInSeconds: 60
   rewardTime: 10
@@ -5976,12 +6017,12 @@ MonoBehaviour:
   player: {fileID: 1451170097}
   awareDistance: 10
   patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  patrolSpeed: 3
-  chasingSpeed: 3
+  - {fileID: 1830018731}
+  - {fileID: 1880872543}
+  - {fileID: 965883707}
+  - {fileID: 1280963687}
+  patrolSpeed: 4
+  chasingSpeed: 5
 --- !u!136 &1274847310
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6056,8 +6097,42 @@ Transform:
   m_Children:
   - {fileID: 1082126098}
   - {fileID: 769446660}
+  - {fileID: 1830018731}
+  - {fileID: 1880872543}
+  - {fileID: 965883707}
+  - {fileID: 1280963687}
   m_Father: {fileID: 485303363}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1280963686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1280963687}
+  m_Layer: 0
+  m_Name: PatrolPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1280963687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280963686}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.95, y: 0, z: 11.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1274847313}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1317949786
 GameObject:
@@ -8356,6 +8431,36 @@ Transform:
   m_Father: {fileID: 21431515}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1830018730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1830018731}
+  m_Layer: 0
+  m_Name: PatrolPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1830018731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830018730}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.7, y: 0, z: -16}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1274847313}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1845931656
 GameObject:
   m_ObjectHideFlags: 0
@@ -8800,6 +8905,36 @@ Transform:
   - {fileID: 1015741657}
   m_Father: {fileID: 485303363}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1880872542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1880872543}
+  m_Layer: 0
+  m_Name: PatrolPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1880872543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880872542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 18.61, y: 0, z: -17.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1274847313}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1893635179
 GameObject:

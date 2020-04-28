@@ -29,16 +29,12 @@ public class RoomCollider : MonoBehaviour
     }
     private void Update()
     {
-        if (room.type == "Level") 
+        if (room.type == "Level")
         {
-            if (cameraControl.inRoom != roomSwitch)
-            {
-                roomSwitch = cameraControl.inRoom;
-                if (!cameraControl.inRoom)
-                    StartCoroutine("Disappear", 0.5f);
-                else
-                    StartCoroutine("Appear",0);
-            }
+            if (!cameraControl.inRoom)
+                StartCoroutine("Disappear", 0f);
+            else
+                StartCoroutine("Appear", 0);
         }
     }
 
@@ -66,6 +62,8 @@ public class RoomCollider : MonoBehaviour
                     StartCoroutine(cameraControl.StairSwitch(room));
                     cameraControl.onStairs = true;
                 }  
+                if(room.type == "Coridor" && !cameraControl.inRoom)
+                    StartCoroutine(cameraControl.CoridorSwitch(room));
             }
         }
     }
@@ -74,14 +72,16 @@ public class RoomCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            if (room.isARoom && !cameraControl.inRoom)
-                cameraControl.inRoom = true;
-            else
+            if (room.type == "Coridor")
             {
-                if (!cameraControl.inRoom)
+                if (cameraControl.inRoom != roomSwitch)
                 {
-                    StartCoroutine(cameraControl.CoridorSwitch(room));
-                    StopCoroutine(cameraControl.CoridorSwitch(room));
+                    roomSwitch = cameraControl.inRoom;
+                    if (!cameraControl.inRoom)
+                    {
+                        StartCoroutine(cameraControl.CoridorSwitch(room));
+                        StopCoroutine(cameraControl.CoridorSwitch(room));
+                    }
                 }
             }
         }
@@ -90,17 +90,19 @@ public class RoomCollider : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
-                StartCoroutine("Appear",0);
-        if(room.type == "Level")
         {
-            cameraControl.levelHorBoundaries = Vector2.zero;
-            cameraControl.levelVerBoundaries = Vector2.zero;
-            cameraControl.levelDepthBoundaries = Vector2.zero;
+            StartCoroutine("Appear", 0);
+            if (room.type == "Level")
+            {
+                cameraControl.levelHorBoundaries = Vector2.zero;
+                cameraControl.levelVerBoundaries = Vector2.zero;
+                cameraControl.levelDepthBoundaries = Vector2.zero;
+            }
+            if (room.isARoom)
+                cameraControl.inRoom = false;
+            if (room.type == "Stair")
+                cameraControl.onStairs = false;
         }
-        if (room.isARoom)
-            cameraControl.inRoom = false;
-        if (room.type == "Stair")
-            cameraControl.onStairs = false;
     }
 
     IEnumerator Disappear(float waitSeconds)
