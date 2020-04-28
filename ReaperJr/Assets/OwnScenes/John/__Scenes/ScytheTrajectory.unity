@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36748781}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -23.31, y: 0.43999994, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.9754, y: 2.9754, z: 2.9754}
   m_Children: []
   m_Father: {fileID: 1456231997}
@@ -1236,14 +1236,13 @@ MonoBehaviour:
   scytheEquiped: 1
   isTeleported: 0
   onSpecialGround: 0
-  changedRoom: 0
   maxTimerInSeconds: 300
   warningTimeInSeconds: 60
   rewardTime: 10
   maxEnergy: 100
   throwEngery: 5
   teleportingEnergy: 20
-  energyReturnFactor: 5
+  energyReturnFactor: 10
   isPaused: 0
   gameOver: 0
 --- !u!4 &1078554503
@@ -1556,6 +1555,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9207516963742841735}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1451170098 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 990441177945185471, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+    type: 3}
+  m_PrefabInstance: {fileID: 9207516963742841735}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1451170096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f74b376d455db4419f97235c228a9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1451170103 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
@@ -1595,11 +1606,17 @@ MonoBehaviour:
   drag: 5
   isLigther: 0
   canHold: 0
+  playerIn: 0
   player: {fileID: 1451170096}
   relasingThreshold: 0.3
   gravityFactor: 7
-  emiColorSet: {x: 0, y: 0, z: 0}
+  pickUpDist: 1
+  emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0, y: 0, z: 0}
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
+  iniDistance: 0
+  CurrDist: 0
 --- !u!4 &1456231997
 Transform:
   m_ObjectHideFlags: 0
@@ -1608,7 +1625,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1456231995}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.85, y: 1.58, z: 0}
+  m_LocalPosition: {x: -10.63, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 36748782}
@@ -1979,7 +1996,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783402306}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3223, y: 0.4523, z: 0.0123}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4.8216, y: 4.8216, z: 4.8216}
   m_Children: []
   m_Father: {fileID: 1456231997}
@@ -2787,5 +2804,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9211806440916211734, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1451170098}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ed7fdcabc92e2b4981b58a20d978a74, type: 3}

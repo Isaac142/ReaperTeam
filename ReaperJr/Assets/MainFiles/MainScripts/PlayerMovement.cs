@@ -28,8 +28,8 @@ public class PlayerMovement : MonoBehaviour
     public float collectableDist = 3f;
     private float speed = 0f;
 
-    private enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT}
-    private FacingDirection facingDirection;
+    public enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT}
+    public FacingDirection facingDirection;
 
 
     //Calling on the CharacterController Component
@@ -43,7 +43,6 @@ public class PlayerMovement : MonoBehaviour
     //Calling the PlayerJumping function
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
                 Jump();
@@ -65,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
             scythe.SetActive(true);
         else
             scythe.SetActive(false);
+
+        //RotatePlayer();
     }
 
     private void FixedUpdate() //prevent character walking into walls.
@@ -346,5 +347,25 @@ public class PlayerMovement : MonoBehaviour
         }
         scytheScript.ResetScythe();
     }
+    #endregion
+
+    #region RotatePlayer(Charged Throw)
+    /*
+    void RotatePlayer()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Debug.Log("Rotating player");
+            if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x)
+            {
+                transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+            else
+            {
+                transform.eulerAngles = Vector3.zero;
+            }
+        }
+    }
+    */
     #endregion
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Trajectory : MonoBehaviour
 {
+    public PlayerMovement player;
+
     Vector2 Direction;
 
     private bool touchStart = false;
@@ -46,7 +48,7 @@ public class Trajectory : MonoBehaviour
             forceAtPlayer = startPos - endPos;
             for (int i = 0; i < number; i++)
             {
-                Vector2 tempPos = calculatePosition(i * 0.05f);
+                Vector2 tempPos = calculatePosition(i * 0.02f);
                 Vector3 newPos = Vector3.zero;
                 newPos.x = tempPos.x;
                 newPos.y = tempPos.y;
@@ -95,9 +97,16 @@ public class Trajectory : MonoBehaviour
     
     private Vector2 calculatePosition(float elapsedTime)
     {
-        return new Vector2(endPos.x, endPos.y) + //X0
-                new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor) * elapsedTime + //ut
-                0.5f * Physics2D.gravity * elapsedTime * elapsedTime;
+        if (player.facingDirection == PlayerMovement.FacingDirection.RIGHT || player.facingDirection == PlayerMovement.FacingDirection.FRONTRIGHT || player.facingDirection == PlayerMovement.FacingDirection.BACKRIGHT)
+        {
+            return new Vector2(endPos.x, endPos.y) + new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor) * elapsedTime + 0.5f * Physics2D.gravity * elapsedTime * elapsedTime;
+        }
+        else if (player.facingDirection == PlayerMovement.FacingDirection.LEFT || player.facingDirection == PlayerMovement.FacingDirection.FRONTLEFT || player.facingDirection == PlayerMovement.FacingDirection.BACKLEFT)
+        {
+            return new Vector2(endPos.x, endPos.y) + new Vector2(forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor) * elapsedTime + 0.5f * Physics2D.gravity * elapsedTime * elapsedTime;
+        }
+        else
+            return Vector2.zero;
     }
     
 }
