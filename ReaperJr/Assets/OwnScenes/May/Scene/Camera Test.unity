@@ -457,12 +457,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &356359302 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1393668285753549251, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
-    type: 3}
-  m_PrefabInstance: {fileID: 1857240649}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &383523797
 GameObject:
   m_ObjectHideFlags: 0
@@ -1494,6 +1488,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &802042070 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
+    type: 3}
+  m_PrefabInstance: {fileID: 1857240649}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &844017955
 GameObject:
   m_ObjectHideFlags: 0
@@ -3070,7 +3070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba7406ae7f27e04d8a4bd247749cac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 356359302}
+  player: {fileID: 802042070}
   scythe: {fileID: 563603683}
   chaseThreshold: 0.5
   camToPlayerDist: {x: 12, y: 20}
@@ -3087,7 +3087,6 @@ MonoBehaviour:
   bottomRot: {x: 19, y: 0, z: 0}
   stairRotFactor: 0
   followSpeed: {x: 3, y: 3}
-  swithRoomDelayTime: 1
   inRoom: 0
   onStairs: 0
   inCorridor: 0

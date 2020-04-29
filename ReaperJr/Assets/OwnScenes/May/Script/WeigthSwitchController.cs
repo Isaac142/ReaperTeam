@@ -7,7 +7,7 @@ public class WeigthSwitchController : MonoBehaviour
     public Animator controlledObject;
     public string entreAction, exitAction;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         controlledObject.SetTrigger(entreAction);
         controlledObject.ResetTrigger(exitAction);

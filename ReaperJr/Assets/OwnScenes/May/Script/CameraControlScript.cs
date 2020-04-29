@@ -9,8 +9,8 @@ public class CameraControlScript : MonoBehaviour
     public float chaseThreshold = 0.5f;
     private Vector3 playerPos = Vector3.zero;
     private Vector3 scythePos = Vector3.zero;
-    private Vector3 offset = Vector3.zero;
-    private float betweenDIst = 0f;
+    private Vector3 offset = Vector3.zero; //offset between player and scythe
+    private float betweenDist = 0f; //distance between player and scythe
 
     private Vector3 toPlayerDist = Vector3.zero; //intended distance between player can camera.
     private Vector3[] screenConcersInWorld = new Vector3[4]; // 4 screen corners in order: topL, BottomL, TopR, BottomR
@@ -27,8 +27,7 @@ public class CameraControlScript : MonoBehaviour
     public Vector2 camHeight = Vector2.zero;
     private Vector2 camHorBoundaries = Vector2.zero; //min, max
     private Vector2 camVerBoundaries = Vector2.zero;
-    [HideInInspector]
-    public Vector2 camDepthBoundaries = Vector2.zero;
+    private Vector2 camDepthBoundaries = Vector2.zero;
     [HideInInspector]
     public Vector2 levelHorBoundaries = Vector2.zero, levelVerBoundaries = Vector2.zero, levelDepthBoundaries = Vector2.zero;
     [HideInInspector]
@@ -37,13 +36,12 @@ public class CameraControlScript : MonoBehaviour
     public Vector3 camRotation = Vector3.zero; //default rotation
     public Vector3 topRot = Vector3.zero;  //rotation when camera reach the y max.
     public Vector3 bottomRot = Vector3.zero; //rotation when camera reach the y min.
-    public float stairRotFactor = 0f;
+    public float stairRotFactor = 0f; //adjust rotation on stairs
     
     [VectorLabels("Move" , "Tilt")]
     public Vector2 followSpeed = new Vector2(2.5f, 2f); // how fast camera moves to follow player. x = movement speed, y = tilting speed.
-    public float swithRoomDelayTime = 1f; //waith time to load new boundaries.
        
-    //[HideInInspector]
+    [HideInInspector]
     public bool inRoom = false, onStairs = false, inCorridor = false;
     private bool checkEntre;
 
@@ -72,9 +70,9 @@ public class CameraControlScript : MonoBehaviour
     {
         playerPos = player.position;
         scythePos = scythe.position;
-        betweenDIst = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe
+        betweenDist = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe
 
-        if (betweenDIst > chaseThreshold) //camera chasing scythe if distance over threshold
+        if (betweenDist > chaseThreshold) //camera chasing scythe if distance over threshold
             offset = new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f);
         else
             offset = Vector3.zero;
@@ -113,7 +111,7 @@ public class CameraControlScript : MonoBehaviour
 
         if (onStairs)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation.x * -1f, camRotation.y, camRotation.z), followSpeed.y * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation.x * -1f + stairRotFactor, camRotation.y, camRotation.z), followSpeed.y * Time.deltaTime);
             if(playerPos.y <= roomPosition.y)
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime);
         }
