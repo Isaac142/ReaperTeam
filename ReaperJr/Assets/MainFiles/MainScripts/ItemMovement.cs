@@ -23,17 +23,16 @@ public class ItemMovement : MonoBehaviour
     public float gravityFactor = 7f;
     public float pickUpDist = 1f;
 
-    public Vector3 emiColorCanHold = Vector3.zero;
-    public Vector3 emiColorHold = Vector3.zero;
-    public Vector3 emiColorPlayerIn = Vector3.zero;
+    [VectorLabels("R", "B", "G")]
+    public Vector3 emiColorPlayerIn = Vector3.zero, emiColorCanHold = Vector3.zero, emiColorHold = Vector3.zero; //emissionc colour settings
     public Vector3 colliderSize = Vector3.zero;
-    
+
     private Rigidbody objectRB;
     private GameObject placeHolder;
 
-    public float iniDistance; //initial distance between character and object when the object is held. use for heavy object
-    public float CurrDist; //current distance between character and object as the character is holding object. use for heavy object.
-    
+    private float iniDistance; //initial distance between character and object when the object is held. use for heavy object
+    private float CurrDist; //current distance between character and object as the character is holding object. use for heavy object.
+
 
     bool IsFlat() //test if the object is flat on ground.
     {
@@ -61,23 +60,16 @@ public class ItemMovement : MonoBehaviour
             objectRB.mass = mass;
             objectRB.drag = drag;
             objectRB.isKinematic = false;
-        }        
+        }
     }
 
     private void FixedUpdate()
     {
-        if (objectRB != null) //let object with rigid body fall naturally
+        if (objectRB != null && !objectRB.isKinematic) //let object with rigid body fall naturally
         {
-            if (!objectRB.isKinematic)
-            {
-                objectRB.velocity += Vector3.up * Physics.gravity.y * (gravityFactor - 1) * Time.deltaTime;
-
-                if (!isHolding)
-                {
-                    if (IsFlat() && IsGrounded())
-                        objectRB.isKinematic = true;
-                }
-            }
+            objectRB.velocity += Vector3.up * Physics.gravity.y * (gravityFactor - 1) * Time.deltaTime;
+            if (!isHolding && IsFlat() && IsGrounded())
+                objectRB.isKinematic = true;
         }
     }
 
@@ -87,12 +79,7 @@ public class ItemMovement : MonoBehaviour
             return;
 
         if (!isHolding && objectRB != null)
-        {
-            if (IsFlat() && IsGrounded())
-                objectRB.isKinematic = true;
-            else
-                objectRB.isKinematic = false;
-        }
+            objectRB.isKinematic = (IsFlat() && IsGrounded()) ? true : false;
 
         CanHold();
 
@@ -101,11 +88,11 @@ public class ItemMovement : MonoBehaviour
         {
             GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
             if (playerIn)
-                GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorPlayerIn.x, emiColorPlayerIn.y, emiColorPlayerIn.z));
+                GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorPlayerIn.x / 255f, emiColorPlayerIn.y / 255f, emiColorPlayerIn.z / 255f));
             if (canHold)
-                GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorCanHold.x, emiColorCanHold.y, emiColorCanHold.z));
+                GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorCanHold.x / 255f, emiColorCanHold.y / 255f, emiColorCanHold.z / 255f));
             if (isHolding)
-                GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorHold.x, emiColorHold.y, emiColorHold.z));
+                GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColorHold.x / 255f, emiColorHold.y / 255f, emiColorHold.z / 255f));
         }
         #endregion
 
@@ -127,7 +114,7 @@ public class ItemMovement : MonoBehaviour
             else
                 return;
 
-        if (isHolding)
+            if (isHolding)
             {
                 player.GetComponent<PlayerMovement>().speedFactor -= mass;
                 player.GetComponent<Rigidbody>().mass += mass;
@@ -135,7 +122,7 @@ public class ItemMovement : MonoBehaviour
 
                 if (isLigther)
                 {
-                    transform.position = new Vector3(transform.position.x, player.transform.position.y + GetComponent<Collider>().bounds.size.y / 2, transform.position.z); //can change to hand position
+                    transform.position = new Vector3(transform.position.x, player.transform.position.y + GetComponent<Collider>().bounds.size.y, transform.position.z); //can change to hand position
                     transform.eulerAngles = Vector3.zero;
                     GameManager.Instance.holdingLightObject = true;
                 }
@@ -238,41 +225,27 @@ public class ItemMovement : MonoBehaviour
         bool onTop = false;
         bool inFront = false;
         CapsuleCollider playerCollider = player.GetComponent<CapsuleCollider>();
-
         RaycastHit ver;
-        if(Physics.Raycast(player.transform.position, Vector3.down, out ver))
-        {
-            if (ver.collider.transform.position == transform.position)
-                onTop = true;
-            else
-                onTop = false;
-        }
+        if (Physics.Raycast(player.transform.position, Vector3.down, out ver))
+            onTop = (ver.collider.transform.position == transform.position) ? true : false;
 
         RaycastHit hor;
         //if (Physics.Raycast(player.transform.position, player.transform.right, out hor, pickUpDist))
         Vector3 topPoint = player.transform.position + player.GetComponent<CapsuleCollider>().center + Vector3.up * (player.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
         Vector3 bottomPoint = player.transform.position + player.GetComponent<CapsuleCollider>().center - Vector3.up * (player.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
         float radius = player.GetComponent<CapsuleCollider>().radius - 0.05f;
-        if(Physics.CapsuleCast(topPoint,bottomPoint, radius, player.transform.right, out hor, pickUpDist))
-        {
-            if (hor.transform == transform)
-                inFront = true;
-            else
-                inFront = false;
-        }
+        if (Physics.CapsuleCast(topPoint, bottomPoint, radius, player.transform.right, out hor, pickUpDist))
+            inFront = (hor.transform == transform) ? true : false;
 
         if (GameManager.Instance.canHold)
         {
-            if (!onTop && inFront)
-                canHold = true;
-            else
-                canHold = false;
+            canHold = (!onTop && inFront) ? true : false;
         }
         else
             canHold = false;
     }
 
-    void ConstrainSetUp () //testing the local upward axis and set up constrains.
+    void ConstrainSetUp() //testing the local upward axis and set up constrains.
     {
         float localDirX = 0f;
         float localDirY = 0f;
@@ -286,7 +259,7 @@ public class ItemMovement : MonoBehaviour
         if (localDirY > localDirX && localDirY > localDirZ)
             objectRB.constraints = RigidbodyConstraints.FreezeRotationY;
         if (localDirZ > localDirY && localDirZ > localDirX)
-            objectRB.constraints = RigidbodyConstraints.FreezeRotationZ; 
+            objectRB.constraints = RigidbodyConstraints.FreezeRotationZ;
     }
 
     void CreateCollider()
@@ -295,8 +268,21 @@ public class ItemMovement : MonoBehaviour
         placeHolder.transform.position = transform.position;
         placeHolder.transform.parent = player.transform;
         objectRB.GetComponent<Collider>().isTrigger = true;
-        Collider collider = (BoxCollider)placeHolder.AddComponent(typeof(BoxCollider));
-        collider = objectRB.GetComponent<Collider>();
+        Collider collider = CopyComponent<Collider>(objectRB.transform.GetComponent<Collider>(), placeHolder);
+        colliderSize = collider.bounds.size;
+        placeHolder.transform.localScale = objectRB.transform.localScale;
+    }
+
+    T CopyComponent<T>(T original, GameObject destination) where T : Component //code from: https://answers.unity.com/questions/458207/copy-a-component-at-runtime.html?_ga=2.140673330.1201919783.1588314976-45500112.1566373877
+    {
+        System.Type type = original.GetType();
+        Component copy = destination.AddComponent(type);
+        System.Reflection.FieldInfo[] fields = type.GetFields();
+        foreach (System.Reflection.FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+        return copy as T;
     }
 
     void DeleteCollider()

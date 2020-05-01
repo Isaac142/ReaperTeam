@@ -25,6 +25,7 @@ public class SinkControl : MonoBehaviour
     private bool plugClickable = false;
     public bool filmOn = false;
     private bool switchClickable = false;
+    private bool switchFilmOn = false;
 
     public bool fillWater = false;
     public bool playerIn = false;
@@ -47,7 +48,7 @@ public class SinkControl : MonoBehaviour
         waterLevel.SetActive(false);
         fillTimeRemind = fillDuration;
         drainTimerRemind = drainDuration;
-        if(soulInTab != null)
+        if (soulInTab != null)
         {
             soulAnme = soulInTab.GetComponent<Animator>();
             soulInTab.GetComponent<Rigidbody>().isKinematic = true;
@@ -94,7 +95,7 @@ public class SinkControl : MonoBehaviour
                         if (switchClickable)
                         {
                             if (hit.transform.tag == "Switch" && hit.transform.name == "FilmSwitch")
-                                filmOn = !filmOn;
+                                switchFilmOn = !switchFilmOn;
                         }
                     }
                     else
@@ -177,7 +178,7 @@ public class SinkControl : MonoBehaviour
         #endregion
 
         #region ProtectiveFilmSwitch
-        if(waterLine.y >= protectFilm.transform.GetChild(0).position.y && tabOn == true)
+        if (waterLine.y >= protectFilm.transform.GetChild(0).position.y)
         {
             filmOn = false;
         }
@@ -193,7 +194,7 @@ public class SinkControl : MonoBehaviour
             switchClickable = false;
         }
 
-        if (filmOn)
+        if (filmOn || switchFilmOn)
         {
             protectFilm.transform.GetChild(0).gameObject.SetActive(true);
 
@@ -211,7 +212,7 @@ public class SinkControl : MonoBehaviour
 
         if (player != null)
         {
-            if (playerIn && waterLine.y >= player.transform.position.y + player.GetComponent<CapsuleCollider>().height/2f) //player will dead if water level is above it.
+            if (playerIn && waterLine.y >= player.transform.position.y + player.GetComponent<CapsuleCollider>().height / 2f) //player will dead if water level is above it.
                 GameManager.Instance.dead = true;
         }
 
@@ -268,7 +269,7 @@ public class SinkControl : MonoBehaviour
         if (other.tag == "Player")
         {
             tabClickable = false;
-            plugClickable = false;            
+            plugClickable = false;
             switchClickable = false;
             player = null;
         }

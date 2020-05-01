@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class ThrowableScythe : MonoBehaviour
 {
-
-
     #region Variables
 
     public float chargeSpeed = 0.1f;
@@ -40,14 +38,12 @@ public class ThrowableScythe : MonoBehaviour
     void Update()
     {
         if (!isThrown)
-        {
             scythe.transform.position = target.position;
-        }
 
         if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery)
             canThrow = true;
 
-        if (Input.GetMouseButton(0) && GameManager.Instance.scytheEquiped)
+        if (Input.GetMouseButton(0) && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
         {
             normalThrowTimer += Time.deltaTime;
             if (chargeValue < max)
@@ -58,9 +54,8 @@ public class ThrowableScythe : MonoBehaviour
                     chargeValue = max;
                 }
             }
-
         }
-        if (Input.GetMouseButtonUp(0) && canThrow && GameManager.Instance.scytheEquiped)
+        if (Input.GetMouseButtonUp(0) && canThrow && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
         {
             if(transform.position.x < Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
             {

@@ -15,12 +15,12 @@ public class EnemyFlee : MonoBehaviour
     private Vector3 runDirection;
     bool RunDirTest(Vector3 newPos, out Vector3 result)
     {
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(newPos, out hit, 1.0f, NavMesh.AllAreas))
-            {
-                result = hit.position;
-                return true;
-            }
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(newPos, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            result = hit.position;
+            return true;
+        }
         result = Vector3.zero;
         return false;
     }
@@ -53,7 +53,7 @@ public class EnemyFlee : MonoBehaviour
         {
             agent.destination = fleePoint[fleePointIndex].position;
             fleePointIndex++;
-            fleePointIndex %= fleePoint.Count; //cycling index number.
+            fleePointIndex %= fleePoint.Count;
         }
     }
 }

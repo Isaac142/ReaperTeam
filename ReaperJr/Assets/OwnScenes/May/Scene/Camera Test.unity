@@ -3077,15 +3077,14 @@ MonoBehaviour:
   miniCamToEdgeDist: 8
   camHorClampFactor: {x: 2, y: 2}
   camHeight: {x: 8, y: 12}
-  camDepthBoundaries: {x: 0, y: 0}
   levelHorBoundaries: {x: 0, y: 0}
   levelVerBoundaries: {x: 0, y: 0}
   levelDepthBoundaries: {x: 0, y: 0}
   roomPosition: {x: 0, y: 0, z: 0}
-  camRotation: {x: 12, y: 0, z: 0}
+  camRotation: {x: 5, y: 0, z: 0}
   topRot: {x: 22, y: 0, z: 0}
   bottomRot: {x: 19, y: 0, z: 0}
-  stairRotFactor: 0
+  stairRotFactor: -7
   followSpeed: {x: 3, y: 3}
   inRoom: 0
   onStairs: 0
@@ -3242,12 +3241,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
+  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
   emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
   colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
 --- !u!208 &1804433498
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -3382,14 +3379,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterControl: {fileID: 0}
   playerMass: 1
   dead: 0
+  isPaused: 0
+  gameOver: 0
   isHolding: 0
   canHold: 1
   holdingLightObject: 0
   scytheEquiped: 1
-  isTeleported: 0
+  onCD: 0
   onSpecialGround: 0
+  maxSafeFallDist: 5
   maxTimerInSeconds: 300
   warningTimeInSeconds: 60
   rewardTime: 10
@@ -3397,8 +3398,7 @@ MonoBehaviour:
   throwEngery: 5
   teleportingEnergy: 20
   energyReturnFactor: 1
-  isPaused: 0
-  gameOver: 0
+  coolDown: 5
 --- !u!1001 &1857240649
 PrefabInstance:
   m_ObjectHideFlags: 0

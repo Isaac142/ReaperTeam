@@ -10,25 +10,19 @@ public class FakeSoulCollider : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach(GameObject dummy in dummies)
-        {
+        foreach (GameObject dummy in dummies)
             enemyPartrolScripts.Add(dummy.transform.GetComponentInChildren<EnemyPatrol>());
-        }
 
-        foreach(EnemyPatrol script in enemyPartrolScripts)
-        {
+        foreach (EnemyPatrol script in enemyPartrolScripts)
             script.enabled = false;
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
-            foreach(EnemyPatrol script in enemyPartrolScripts)
-            {
+            foreach (EnemyPatrol script in enemyPartrolScripts)
                 script.enabled = true;
-            }
         }
     }
 
@@ -37,9 +31,7 @@ public class FakeSoulCollider : MonoBehaviour
         if (other.tag == "Player")
         {
             foreach (EnemyPatrol script in enemyPartrolScripts)
-            {
                 script.enabled = false;
-            }
         }
     }
 }

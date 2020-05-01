@@ -5747,12 +5747,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
-  emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
-  emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
+  emiColorPlayerIn: {x: 154, y: 125, z: 11}
+  emiColorCanHold: {x: 35, y: 118, z: 22}
+  emiColorHold: {x: 255, y: 68, z: 0}
   colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
 --- !u!54 &218784070
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5798,15 +5796,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterControl: {fileID: 0}
   playerMass: 1
   dead: 0
+  isPaused: 0
+  gameOver: 0
   isHolding: 0
   canHold: 0
   holdingLightObject: 0
   scytheEquiped: 1
-  isTeleported: 0
+  onCD: 0
   onSpecialGround: 0
-  changedRoom: 0
+  maxSafeFallDist: 10
   maxTimerInSeconds: 300
   warningTimeInSeconds: 30
   rewardTime: 10
@@ -5814,8 +5815,7 @@ MonoBehaviour:
   throwEngery: 5
   teleportingEnergy: 20
   energyReturnFactor: 1
-  isPaused: 0
-  gameOver: 0
+  coolDown: 5
 --- !u!4 &218959780
 Transform:
   m_ObjectHideFlags: 0
@@ -5981,6 +5981,43 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 248558227}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &249644877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 249644878}
+  m_Layer: 5
+  m_Name: Scythe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &249644878
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249644877}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2097879160}
+  - {fileID: 1793141189}
+  m_Father: {fileID: 279174955}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 120, y: -120}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &260215088
 GameObject:
   m_ObjectHideFlags: 0
@@ -6244,9 +6281,9 @@ Canvas:
   m_GameObject: {fileID: 279174950}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 2028565121}
+  m_PlaneDistance: 5
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -6268,6 +6305,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1143301206}
+  - {fileID: 249644878}
   - {fileID: 1109308299}
   - {fileID: 1990781684}
   - {fileID: 1230338677}
@@ -7353,12 +7391,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
-  emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
-  emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
+  emiColorPlayerIn: {x: 154, y: 125, z: 11}
+  emiColorCanHold: {x: 35, y: 118, z: 22}
+  emiColorHold: {x: 255, y: 68, z: 0}
   colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
 --- !u!208 &525278802
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -13831,15 +13867,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterControl: {fileID: 0}
   playerMass: 1
   dead: 0
+  isPaused: 0
+  gameOver: 0
   isHolding: 0
   canHold: 0
   holdingLightObject: 0
   scytheEquiped: 1
-  isTeleported: 0
+  onCD: 0
   onSpecialGround: 0
-  changedRoom: 0
+  maxSafeFallDist: 5
   maxTimerInSeconds: 0
   warningTimeInSeconds: 0
   rewardTime: 10
@@ -13847,8 +13886,7 @@ MonoBehaviour:
   throwEngery: 5
   teleportingEnergy: 20
   energyReturnFactor: 0.1
-  isPaused: 0
-  gameOver: 0
+  coolDown: 5
 --- !u!65 &1034727610
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14164,17 +14202,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109308298}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00011999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1800688150}
   - {fileID: 955893207}
   m_Father: {fileID: 279174955}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -100}
+  m_AnchoredPosition: {x: 367, y: -120}
   m_SizeDelta: {x: 350, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1109308300
@@ -14223,7 +14261,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.528
+  m_Value: 0.52
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14269,12 +14307,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
-  emiColorCanHold: {x: 0.44313726, y: 0.101960786, z: 0.5294118}
-  emiColorHold: {x: 0.52156866, y: 0, z: 0}
-  emiColorPlayerIn: {x: 0.90588236, y: 0.3137255, z: 0.3137255}
+  emiColorPlayerIn: {x: 133, y: 26, z: 135}
+  emiColorCanHold: {x: 255, y: 81, z: 146}
+  emiColorHold: {x: 255, y: 43, z: 63}
   colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
 --- !u!208 &1117910893
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -14793,12 +14829,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
-  emiColorCanHold: {x: 0.6039216, y: 0.8064516, z: 0.043137256}
-  emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  emiColorPlayerIn: {x: 0.14117648, y: 0.4745098, z: 0.023529412}
+  emiColorPlayerIn: {x: 154, y: 125, z: 11}
+  emiColorCanHold: {x: 35, y: 118, z: 22}
+  emiColorHold: {x: 255, y: 68, z: 0}
   colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
 --- !u!208 &1174440749
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -15174,7 +15208,7 @@ RectTransform:
   - {fileID: 362464148}
   - {fileID: 395644800}
   m_Father: {fileID: 279174955}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -16841,15 +16875,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterControl: {fileID: 0}
   playerMass: 1
   dead: 0
+  isPaused: 0
+  gameOver: 0
   isHolding: 0
   canHold: 0
   holdingLightObject: 0
   scytheEquiped: 1
-  isTeleported: 0
+  onCD: 0
   onSpecialGround: 0
-  changedRoom: 0
+  maxSafeFallDist: 5
   maxTimerInSeconds: 0
   warningTimeInSeconds: 0
   rewardTime: 10
@@ -16857,8 +16894,80 @@ MonoBehaviour:
   throwEngery: 5
   teleportingEnergy: 20
   energyReturnFactor: 0.1
-  isPaused: 0
-  gameOver: 0
+  coolDown: 5
+--- !u!1 &1793141188
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1793141189}
+  - component: {fileID: 1793141191}
+  - component: {fileID: 1793141190}
+  m_Layer: 5
+  m_Name: CDTimer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1793141189
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793141188}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 249644878}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 150, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1793141190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793141188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.52156866}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 48e74a6b3b32bc2439f86282c1b9306a, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 1
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1793141191
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793141188}
+  m_CullTransparentMesh: 0
 --- !u!1 &1800688149
 GameObject:
   m_ObjectHideFlags: 0
@@ -17798,7 +17907,7 @@ RectTransform:
   - {fileID: 57129118}
   - {fileID: 729111587}
   m_Father: {fileID: 279174955}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -18261,6 +18370,79 @@ CapsuleCollider:
   m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2097879159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2097879160}
+  - component: {fileID: 2097879162}
+  - component: {fileID: 2097879161}
+  m_Layer: 5
+  m_Name: CDBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2097879160
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097879159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 249644878}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 150, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2097879161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097879159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9607844, g: 0, b: 0.9294118, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 48e74a6b3b32bc2439f86282c1b9306a, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2097879162
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097879159}
+  m_CullTransparentMesh: 0
 --- !u!1 &2105445639
 GameObject:
   m_ObjectHideFlags: 0
@@ -18483,7 +18665,7 @@ PrefabInstance:
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.15
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 9207516964035639822, guid: 3ed7fdcabc92e2b4981b58a20d978a74,
         type: 3}

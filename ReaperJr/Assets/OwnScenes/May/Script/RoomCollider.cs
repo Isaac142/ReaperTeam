@@ -15,9 +15,20 @@ public class RoomCollider : MonoBehaviour
     public Vector2 roomSides = Vector2.zero, roomHeight = Vector2.zero, roomDepth = Vector2.zero;
     private bool roomSwitch;
 
+    private enum RoomType { LEVEL, ROOM, STAIR, CORRIDOR }
+    private RoomType roomType;
+
     private void Awake()
     {
         cameraControl = Camera.main.GetComponent<CameraControlScript>();
+        if (transform.tag == "LevelCollider")
+            roomType = RoomType.LEVEL;
+        if (transform.tag == "RoomCollider")
+            roomType = RoomType.ROOM;
+        if (transform.tag == "StairCollider")
+            roomType = RoomType.STAIR;
+        if (transform.tag == "CorridorCollider")
+            roomType = RoomType.CORRIDOR;
     }
 
     private void Start()
@@ -33,31 +44,29 @@ public class RoomCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            if (transform.tag == "LevelCollider")
+            switch (roomType)
             {
+                case RoomType.LEVEL:
                 cameraControl.levelHorBoundaries = new Vector2(roomSides.x, roomSides.y);
                 cameraControl.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
                 cameraControl.levelDepthBoundaries = new Vector2(roomDepth.x, + roomDepth.y);
-            }
-            else
-            {
+                break;
+            case RoomType.ROOM:
                 cameraControl.roomPosition = roomPosition;
-                if (transform.tag == "RoomCollider")
-                {
-                    StartCoroutine(cameraControl.RoomSwitch(roomSides, roomHeight, roomDepth));
-                    StartCoroutine("Disappear", 0f);
-                }
-                if (transform.tag == "StairCollider")
-                {
-                    StartCoroutine(cameraControl.StairSwitch(roomSides, roomHeight, roomDepth));
-                    cameraControl.onStairs = true;
-                }
-                if (transform.tag == "CorridorCollider")
-                {
-                    cameraControl.inCorridor = true;
-                    if(!cameraControl.inRoom)
-                    StartCoroutine(cameraControl.CoridorSwitch(roomDepth));                 
-                }
+                StartCoroutine(cameraControl.RoomSwitch(roomSides, roomHeight, roomDepth));
+                StartCoroutine("Disappear", 0f);
+                break;
+            case RoomType.STAIR:
+                cameraControl.roomPosition = roomPosition;
+                StartCoroutine(cameraControl.StairSwitch(roomSides, roomHeight, roomDepth));
+                cameraControl.onStairs = true;
+                break;
+            case RoomType.CORRIDOR:
+                cameraControl.roomPosition = roomPosition;
+                cameraControl.inCorridor = true;
+                if (!cameraControl.inRoom)
+                    StartCoroutine(cameraControl.CorridorSwitch(roomDepth));
+                break;
             }
         }
     }
@@ -73,8 +82,8 @@ public class RoomCollider : MonoBehaviour
                 {
                     if (transform.tag == "CorridorCollider")
                     {
-                        StartCoroutine(cameraControl.CoridorSwitch(roomDepth));
-                        StopCoroutine(cameraControl.CoridorSwitch(roomDepth));
+                        StartCoroutine(cameraControl.CorridorSwitch(roomDepth));
+                        StopCoroutine(cameraControl.CorridorSwitch(roomDepth));
                     }
                 }
             }
@@ -93,19 +102,18 @@ public class RoomCollider : MonoBehaviour
         if (other.tag == "Player")
         {
             StartCoroutine("Appear", 0);
-            if (transform.tag == "LevelCollider")
+            switch(roomType)
             {
-                cameraControl.levelHorBoundaries = Vector2.zero;
-                cameraControl.levelVerBoundaries = Vector2.zero;
-                cameraControl.levelDepthBoundaries = Vector2.zero;
+                case RoomType.ROOM:
+                    cameraControl.inRoom = false;
+                    break;
+                case RoomType.STAIR:
+                    cameraControl.onStairs = false;
+                    break;
+                case RoomType.CORRIDOR:
+                    cameraControl.inCorridor = false;
+                    break;
             }
-
-            if (transform.tag == "RoomCollider")
-                cameraControl.inRoom = false;
-            if (transform.tag == "StairCollider")
-                cameraControl.onStairs = false;
-            if (transform.tag == "CorridorCollider")
-                cameraControl.inCorridor = false;
         }
     }
 

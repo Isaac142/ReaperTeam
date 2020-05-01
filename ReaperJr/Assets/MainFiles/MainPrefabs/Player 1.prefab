@@ -149,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1393668285753549263}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 9207516964035639822}
@@ -302,7 +302,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9207516963809348282}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.3}
+  m_LocalPosition: {x: 0, y: 0.5, z: -0.3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 745557320}
@@ -361,7 +361,7 @@ CapsuleCollider:
   m_Radius: 0.25
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &2153150415476659423
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -390,15 +390,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f74b376d455db4419f97235c228a9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scythe: {fileID: 4441905539609307933}
   jumpForce: 20
-  distanceGround: 0.55
+  distanceGround: 0.1
+  isJumping: 0
+  isCrouching: 0
   isGrounded: 0
   speedFactor: 7
   addForce: 600
   gModifier: 5
-  scythe: {fileID: 4441905539609307933}
+  jumpBufferDist: 0.8
+  cayoteTime: 0.05
   timeToMove: 0.1
   collectableDist: 3
+  fallDist: 0
+  facingDirection: 0
 --- !u!114 &6651269460899519704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,7 +448,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9207516964471374457}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.3}
+  m_LocalPosition: {x: 0, y: 0.5, z: -0.3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 9207516964035639822}
@@ -463,6 +469,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4858482940080530, guid: a73e42c905450a940a34474ea309dc1e, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 990441177945185471}
     - target: {fileID: 4783801818636405938, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_Layer
@@ -501,7 +511,7 @@ PrefabInstance:
     - target: {fileID: 4783801819413185183, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4783801819413185183, guid: a73e42c905450a940a34474ea309dc1e,
         type: 3}

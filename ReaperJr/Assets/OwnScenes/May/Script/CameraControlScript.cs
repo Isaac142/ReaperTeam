@@ -72,24 +72,20 @@ public class CameraControlScript : MonoBehaviour
         scythePos = scythe.position;
         betweenDist = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe
 
-        if (betweenDist > chaseThreshold) //camera chasing scythe if distance over threshold
-            offset = new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f);
-        else
-            offset = Vector3.zero;
+       offset = (betweenDist > chaseThreshold)? //camera chasing scythe if distance over threshold
+            new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f) : Vector3.zero;
 
         if (inRoom) //if player is in room, camera follow rules
         {
-                if (playerPos.z - transform.position.z > camToPlayerDist.y) //if the distance between camera and player over max value, camera chasing player at the max distance
-                    toPlayerDist = new Vector3(0f, camHeight.x, -camToPlayerDist.y);
-                else
-                    toPlayerDist = new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); //camera stays at the z- minimun clamp vale.
+            //if the distance between camera and player over max value, camera chasing player at the max distance
+            toPlayerDist = (playerPos.z - transform.position.z > camToPlayerDist.y)? 
+                new Vector3(0f, transform.position.y, -camToPlayerDist.y) : new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); //camera stays at the z- minimun clamp vale.
         }
         if (onStairs)
         {
-            if (playerPos.y <= roomPosition.y)
-                toPlayerDist = Vector3.Lerp(new Vector3(0f, 0f, -camToPlayerDist.x), new Vector3(0, camHeight.x, -camToPlayerDist.x), followSpeed.x * Time.deltaTime);
-            else
-                toPlayerDist = new Vector3(0f, 0f, -toPlayerDist.x);          
+            toPlayerDist = (playerPos.y >= roomPosition.y) ?
+               new Vector3(0f, camHeight.y, -toPlayerDist.x) 
+             : Vector3.Lerp(new Vector3(0f, camHeight.y, -camToPlayerDist.x), new Vector3(0, camHeight.x, -camToPlayerDist.x), followSpeed.x * Time.deltaTime);
         }
         else
             toPlayerDist = new Vector3(0f, camHeight.x, -camToPlayerDist.x); // if player is out room, camera chasing player at minimun camera to player distance
@@ -101,8 +97,7 @@ public class CameraControlScript : MonoBehaviour
                 camDepthBoundaries.x = levelDepthBoundaries.x - miniCamToEdgeDist;
             camHorBoundaries = new Vector2(levelHorBoundaries.x + worldSpaceScreenSize.x / 2f + camHorClampFactor.x, levelHorBoundaries.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
             camVerBoundaries = new Vector2(levelVerBoundaries.x + camHeight.x, levelVerBoundaries.x + camHeight.y);
-            camDepthBoundaries = new Vector2(camDepthBoundaries.x, levelDepthBoundaries.y - miniCamToEdgeDist);
-           
+            camDepthBoundaries = new Vector2(camDepthBoundaries.x, levelDepthBoundaries.y - miniCamToEdgeDist);           
         }
 
         transform.position = Vector3.Lerp(transform.position, playerPos + toPlayerDist + offset, followSpeed.x * Time.deltaTime); //camera movement
@@ -111,17 +106,16 @@ public class CameraControlScript : MonoBehaviour
 
         if (onStairs)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation.x * -1f + stairRotFactor, camRotation.y, camRotation.z), followSpeed.y * Time.deltaTime);
-            if(playerPos.y <= roomPosition.y)
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime);
+            transform.rotation = (playerPos.y <= roomPosition.y) ?
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
+                Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime);
         }
         else
         {
-            if (playerPos.z - transform.position.z <= camToPlayerDist.x) //when player closer to camera than minimum value, tilt down camera for better view.
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime);
-            else if (playerPos.y >= camHeight.x) //if player higher than minimum camera height, camera tilt down to view ground.
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(topRot), followSpeed.y * Time.deltaTime);
-            else
+            transform.rotation = (playerPos.z - transform.position.z <= camToPlayerDist.x) ? //when player closer to camera than minimum value, tilt down camera for better view.
+                Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
+                (playerPos.y >= camHeight.x) ? //if player higher than minimum camera height, camera tilt down to view ground.
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(topRot), followSpeed.y * Time.deltaTime) :
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime);
         }
     }
@@ -144,7 +138,7 @@ public class CameraControlScript : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator CoridorSwitch(Vector2 roomDepth)
+    public IEnumerator CorridorSwitch(Vector2 roomDepth)
     {
         //set up minimun camera z value, others will be follow the level boundary rules.
         //this set up only require room colliders when z-clamp changes.
@@ -157,11 +151,12 @@ public class CameraControlScript : MonoBehaviour
         camHorBoundaries = new Vector2(roomSides.x + worldSpaceScreenSize.x / 2f + camHorClampFactor.x, roomSides.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
         if (camHorBoundaries.x > camHorBoundaries.y) //if the room is too narrow, camera stays at the middle of the room
         {
-            camHorBoundaries.x = camHorBoundaries.y;
-            camHorBoundaries.y = roomPosition.x;
+            camHorBoundaries.x = roomSides.x;
+            camHorBoundaries.y = roomSides.y;
         }
-        camVerBoundaries = new Vector2(roomHeight.x + camHeight.x, roomHeight.y / 2f + camHeight.x);
-        camDepthBoundaries = new Vector2(roomDepth.x - 2f * miniCamToEdgeDist, roomDepth.y - camToPlayerDist.y);
+
+        camVerBoundaries = new Vector2(roomHeight.x + camHeight.x, roomHeight.y - camHeight.x);
+        camDepthBoundaries = new Vector2(roomDepth.x - miniCamToEdgeDist, roomDepth.y - camToPlayerDist.y);
         yield return null;
     }
 }

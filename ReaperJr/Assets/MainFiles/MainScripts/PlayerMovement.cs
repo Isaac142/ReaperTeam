@@ -5,30 +5,34 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody controller;
+    public GameObject scythe;
 
-    //public float speed = 1f;
-    private ThrowableScythe scytheScript; // added by May, used to control teleporting
+    private ThrowableScythe scytheScript;
     public float jumpForce = 20f;
     public float distanceGround;
-
-    public bool isGrounded;
-
-    public float speedFactor = 7f;
-    public float addForce = 600f; //added by May
-    public float gModifier = 5f; // gravity modifier when character is in air
-
-    private bool isDiagonal;
-    private bool isVertical;
-    private bool isHorizontal;
-    private bool facingF = false, facingR = false, facingL = false, facingB = false;
-
-    public GameObject scythe;
+    [HideInInspector]
+    public bool isJumping = false, isCrouching = false, isGrounded = false;
+    public float speedFactor = 7f, addForce = 600f, gModifier = 5f; // gravity modifier when character is in air
+    public float jumpBufferDist = 0.8f, cayoteTime = 0.05f;
+    private float distToGround = 0f, lastPos = 0f, timeInAir = 0f;
     public float timeToMove;
-
     public float collectableDist = 3f;
-    private float speed = 0f;
 
-    public enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT}
+    private float speed = 0f;
+    private float recordYPos = 0f;
+    [HideInInspector]
+    public float fallDist = 0f;
+
+    private bool isDiagonal = false, isVertical = false, isHorizontal = false, facingF = false, facingR = false, facingL = false, facingB = false;
+    private bool groundedCheck = false;
+
+    private CapsuleCollider bodyCollider;
+    private Transform bodyMesh;
+    private Vector3 bodyCentre = Vector3.zero, bodyScale = Vector3.zero, bodyPos = Vector3.zero; //bodyScale and bodyPos will be replaced by animation
+    private float bodyHeight = 0f;
+    [HideInInspector]
+    public enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT }
+    [HideInInspector]
     public FacingDirection facingDirection;
 
 
@@ -38,41 +42,59 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<Rigidbody>();
         controller.mass = GameManager.Instance.playerMass;
         scytheScript = GetComponent<ThrowableScythe>();
+
+        bodyCollider = GetComponent<CapsuleCollider>();
+        bodyCentre = bodyCollider.center;
+        bodyHeight = bodyCollider.height;
+
+        //replaced by animation later.
+        bodyMesh = transform.GetChild(0);
+        bodyScale = bodyMesh.localScale;
+        bodyPos = bodyMesh.localPosition;
     }
 
     //Calling the PlayerJumping function
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
         {
+            distToGround = 0f;
+            isJumping = true;
+            if (isGrounded)
                 Jump();
+        }    
+
+        if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true)
+        {
+            if (GameManager.Instance.Energy >= GameManager.Instance.teleportingEnergy)
+            {
+                StartCoroutine(TeleportToScythe());
+                GameManager.Instance.Energy -= GameManager.Instance.teleportingEnergy;
+                GameManager.Instance.onCD = true;
+            }
         }
 
-        if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true && GameManager.Instance.Energy >= GameManager.Instance.teleportingEnergy)
-        {
-            StartCoroutine(TeleportToScythe());
-            GameManager.Instance.Energy -= GameManager.Instance.teleportingEnergy;
-        }
-
-        if(Input.GetMouseButtonDown(1))
-        {
+        if (Input.GetMouseButtonDown(1))
             Collect();
-        }
 
         EquipScythe();
+
         if (GameManager.Instance.scytheEquiped)
             scythe.SetActive(true);
         else
             scythe.SetActive(false);
 
-        //RotatePlayer();
+        isCrouching = Input.GetKey(KeyCode.LeftShift) ? true : false; //crouching
     }
 
     private void FixedUpdate() //prevent character walking into walls.
     {
         Grounded();
+        FallDistCalculate();
+        JumpBufferCayoteTime();
         Movement();
         DirectionSwitch();
+        Crouch();
     }
 
     #region FacingDirectionSwitch
@@ -101,14 +123,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
             facingDirection = FacingDirection.BACKRIGHT;
-        
-            facingB = false;
-            facingF = false;
-            facingL = false;
-            facingR = false;
-            isHorizontal = false;
-            isVertical = false;
-            isDiagonal = true;
+
+        facingB = false;
+        facingF = false;
+        facingL = false;
+        facingR = false;
+        isHorizontal = false;
+        isVertical = false;
+        isDiagonal = true;
 
         if (transform.eulerAngles == new Vector3(0, 270, 0))
         {
@@ -136,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
             facingL = true;
             isHorizontal = true;
             isDiagonal = false;
-        }        
+        }
     }
     #endregion
 
@@ -254,8 +276,37 @@ public class PlayerMovement : MonoBehaviour
     #region Jump
     void Jump()
     {
-            if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject) // character can not jump if it's holding heavy objects.
-        controller.AddForce(new Vector3(0, jumpForce, 0),ForceMode.Impulse);
+        //float timeToLand = 0f;
+        if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject) // character can not jump if it's holding heavy objects.
+        {
+            controller.velocity = Vector3.up * jumpForce; //using velocity instead of addforce to ensure each jump reaches the same height.
+            isJumping = false;
+            distToGround = 0;
+        }
+    }
+    #endregion
+
+    #region Crouch
+    void Crouch()
+    {
+        if (isCrouching)
+        {
+            bodyCollider.center = new Vector3(0f, bodyCentre.y / 2f, 0f);
+            bodyCollider.height = bodyHeight / 2f;
+
+            //visual, replace by animation
+            bodyMesh.localScale = new Vector3(bodyScale.x, bodyScale.y / 2f, bodyScale.z);
+            bodyMesh.localPosition = new Vector3(bodyPos.x, bodyPos.y / 2f, bodyPos.z);
+        }
+        else
+        {
+            bodyCollider.center = bodyCentre;
+            bodyCollider.height = bodyHeight;
+
+            //visual, replace by animation
+            bodyMesh.localScale = bodyScale;
+            bodyMesh.localPosition = bodyPos;
+        }
     }
     #endregion
 
@@ -263,15 +314,15 @@ public class PlayerMovement : MonoBehaviour
     void Grounded()
     {
         Vector3 dir = new Vector3(0, -1, 0);
-        if (Physics.Raycast(transform.position, dir, distanceGround))
+        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), dir, distanceGround))
         {
             isGrounded = true;
         }
         else
         {
             isGrounded = false;
-            controller.velocity += Vector3.up * Physics.gravity.y * (gModifier - 1) * Time.deltaTime; //modifying gravity
-        }        
+            controller.AddForce(Physics.gravity * gModifier);
+        }
     }
     #endregion
 
@@ -286,7 +337,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 bottomPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center - Vector3.up * (controller.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
         float radius = controller.GetComponent<CapsuleCollider>().radius;
         if (Physics.CapsuleCast(topPoint, bottomPoint, radius, controller.transform.right, out hit, collectableDist))
-        { if (hit.transform.tag != "Untagged")
+        {
+            if (hit.transform.tag != "Untagged")
             {
                 if (Vector3.Distance(transform.position, hit.transform.position) <= collectableDist) //calculate if the collectable is with in the collectable distance.
                 {
@@ -304,7 +356,7 @@ public class PlayerMovement : MonoBehaviour
                         //do something --> collected amount, visual clue...
                     }
 
-                    if(hit.transform.tag == "HiddenItem")
+                    if (hit.transform.tag == "HiddenItem")
                     {
                         GameManager.Instance.Timer += GameManager.Instance.rewardTime;
                         Destroy(hit.transform.gameObject);
@@ -322,9 +374,7 @@ public class PlayerMovement : MonoBehaviour
         if (!scytheScript.isThrown)
         {
             if (Input.GetAxis("Mouse ScrollWheel") != 0)
-            {
                 GameManager.Instance.scytheEquiped = !GameManager.Instance.scytheEquiped;
-            }
         }
         else return;
     }
@@ -346,6 +396,58 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         scytheScript.ResetScythe();
+    }
+    #endregion
+
+    #region JumpBuffering&CayoteTime
+    void JumpBufferCayoteTime()
+    {
+        if (isJumping) //jump buffering
+            distToGround += Mathf.Abs(lastPos - transform.position.y);
+        lastPos = transform.position.y;
+
+        if (!isJumping && !isGrounded) // cayote time
+                timeInAir += Time.deltaTime;
+
+        if (!isGrounded && isJumping)
+        {
+            if (timeInAir < cayoteTime)
+                Jump();
+        }
+
+        if (isGrounded)
+        {
+            timeInAir = 0f;
+            if (isJumping && distToGround <= jumpBufferDist && isGrounded)
+                Jump();
+            else
+                isJumping = false;
+        }
+    }
+    #endregion
+
+    #region FallDistanceCalculation
+    void FallDistCalculate()
+    {
+        bool groundedCheck = false;
+        if(!isGrounded)
+        {
+            if (recordYPos > transform.position.y)
+                fallDist += recordYPos - transform.position.y;
+        }
+        recordYPos = transform.position.y;
+
+        if (isGrounded != groundedCheck)
+        {
+            groundedCheck = isGrounded;
+            if (isGrounded)
+            {
+                if (fallDist >= GameManager.Instance.maxSafeFallDist)
+                    GameManager.Instance.dead = true;
+
+                fallDist = 0f;
+            }
+        }
     }
     #endregion
 

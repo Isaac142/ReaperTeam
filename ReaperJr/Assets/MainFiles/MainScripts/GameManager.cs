@@ -6,18 +6,22 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public PlayerMovement characterControl;
     // character rigidbody reference
     public float playerMass = 1f;
-    public bool dead = false;
-    public bool isHolding = false;
-    public bool canHold = true;
-    public bool holdingLightObject = false;
-    public bool scytheEquiped = true;
-    public bool isTeleported = false;
+    [HideInInspector] //game states
+    public bool dead = false, isPaused = false, gameOver = false;
+    [HideInInspector] //holding object states
+    public bool isHolding = false, canHold = true, holdingLightObject = false;
+    [HideInInspector] //scythe and its ability state
+    public bool scytheEquiped = true, onCD = false;
+    [HideInInspector] //grounding states
     public bool onSpecialGround = false;
 
+    public float maxSafeFallDist = 5f;
+
     public float maxTimerInSeconds = 5 * 60f;
-    public float warningTimeInSeconds =  60f;
+    public float warningTimeInSeconds = 60f;
     public float rewardTime = 10f;
     private float _timer;
     public float Timer
@@ -37,8 +41,14 @@ public class GameManager : MonoBehaviour
         set { _energy = value; }
     }
 
-    public bool isPaused = false;
-    public bool gameOver = false;
+    public float coolDown = 5f;
+
+    private float _cDTimer;
+    public float CDTimer
+    {
+        get { return _cDTimer; }
+        set { _cDTimer = value; }
+    }
 
 
     private void Awake()
@@ -52,8 +62,8 @@ public class GameManager : MonoBehaviour
             Destroy(this);
     }
 
-        // Start is called before the first frame update
-        void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         dead = false;
         isPaused = false;
@@ -64,6 +74,8 @@ public class GameManager : MonoBehaviour
         onSpecialGround = false;
         _timer = maxTimerInSeconds;
         _energy = maxEnergy;
+        _cDTimer = coolDown;
+        onCD = false;
     }
 
     // Update is called once per frame
@@ -92,14 +104,25 @@ public class GameManager : MonoBehaviour
             _timer = 0;
         }
 
-        if(_energy < 0)
+        if (_energy < 0)
         {
             _energy = 0;
-        } 
-        
-        if(Input.GetKeyDown(KeyCode.Escape))
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPaused = !isPaused;
+        }
+
+        if (onCD)
+        {
+            _cDTimer -= Time.deltaTime;
+        }
+
+        if (_cDTimer <= 0f)
+        {
+            onCD = false;
+            _cDTimer = coolDown;
         }
     }
 }

@@ -12,13 +12,7 @@ public class ChildProtectorInSink : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         sinkController = GetComponentInParent<SinkControl>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
