@@ -314,7 +314,7 @@ public class PlayerMovement : MonoBehaviour
     void Grounded()
     {
         Vector3 dir = new Vector3(0, -1, 0);
-        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), dir, distanceGround))
+        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + bodyCentre.y, transform.position.z), dir, distanceGround))
         {
             isGrounded = true;
         }
