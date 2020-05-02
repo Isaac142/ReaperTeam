@@ -12,6 +12,8 @@ public class UpdateUI : MonoBehaviour
     public GameObject gameOverPanel;
 
     public Slider energyBar;
+    public Image abilityCD;
+    public GameObject[] masks;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +23,9 @@ public class UpdateUI : MonoBehaviour
 
         pausePanel.SetActive(false);
         gameOverPanel.SetActive(false);
+
+        foreach (GameObject pic in masks)
+            pic.SetActive(false);
     }
 
     // Update is called once per frame
@@ -44,6 +49,19 @@ public class UpdateUI : MonoBehaviour
 
         energyBar.value = GameManager.Instance.Energy;
 
+        if(GameManager.Instance.scytheEquiped)
+        {
+            foreach (GameObject pic in masks)
+                pic.SetActive(false);
+        }
+        else
+        {
+            foreach (GameObject pic in masks)
+                pic.SetActive(true);
+        }
+
+        abilityCD.fillAmount = GameManager.Instance.CDTimer / GameManager.Instance.coolDown;
+
         if (GameManager.Instance.isPaused)
         {
             Time.timeScale = 0;
@@ -54,7 +72,6 @@ public class UpdateUI : MonoBehaviour
             pausePanel.SetActive(false);
             Time.timeScale = 1;
         }
-
 
         if (GameManager.Instance.gameOver)
             gameOverPanel.SetActive(true);

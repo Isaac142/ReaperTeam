@@ -116,10 +116,10 @@ public class GameManager : MonoBehaviour
 
         if (onCD)
         {
-            _cDTimer -= Time.deltaTime;
+            _cDTimer += Time.deltaTime;
         }
 
-        if (_cDTimer <= 0f)
+        if (_cDTimer >= coolDown)
         {
             onCD = false;
             _cDTimer = coolDown;

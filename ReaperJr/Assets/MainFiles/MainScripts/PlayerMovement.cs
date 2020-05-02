@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(TeleportToScythe());
                 GameManager.Instance.Energy -= GameManager.Instance.teleportingEnergy;
                 GameManager.Instance.onCD = true;
+                GameManager.Instance.CDTimer = 0;
             }
         }
 
