@@ -6,6 +6,8 @@ public class FallingObjects : MonoBehaviour
 {
     Rigidbody rb;
 
+    public GameObject block;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -17,6 +19,9 @@ public class FallingObjects : MonoBehaviour
         {
             rb.isKinematic = false;
             Debug.Log(" LOOK OUT!! ");
+            BlockDestroy();
+            Debug.Log(" activating destroy box ");
+           
         }
 
         if (other.gameObject.tag == "Soul")
@@ -36,6 +41,12 @@ public class FallingObjects : MonoBehaviour
         }
         
 
+    }
+    IEnumerator BlockDestroy()
+    {
+        yield return new WaitForSeconds(3);
+        block.gameObject.SetActive(false);
+        Debug.Log(" Destroying block in 3... 2... 1...");
     }
 
 }
