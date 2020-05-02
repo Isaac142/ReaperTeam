@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 20f;
     public float distanceGround;
     [HideInInspector]
-    public bool isJumping = false, isCrouching = false, isGrounded = false;
+    public bool isJumping = false, isCrouching = false, isGrounded = false, movable = true;
     public float speedFactor = 7f, addForce = 600f, gModifier = 5f; // gravity modifier when character is in air
     public float jumpBufferDist = 0.8f, cayoteTime = 0.05f;
     private float distToGround = 0f, lastPos = 0f, timeInAir = 0f;
@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     //Calling on the CharacterController Component
     void Start()
     {
+        Debug.DrawRay(transform.position, transform.right, Color.red);
         controller = GetComponent<Rigidbody>();
         controller.mass = GameManager.Instance.playerMass;
         scytheScript = GetComponent<ThrowableScythe>();
@@ -93,7 +94,8 @@ public class PlayerMovement : MonoBehaviour
         Grounded();
         FallDistCalculate();
         JumpBufferCayoteTime();
-        Movement();
+        if(movable)
+            Movement();
         DirectionSwitch();
         Crouch();
     }
@@ -334,9 +336,9 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
         //if (Physics.Raycast(ray, out hit))
         //{
-        Vector3 topPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center + Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 0.5f) / 2f;
-        Vector3 bottomPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center - Vector3.up * (controller.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
-        float radius = controller.GetComponent<CapsuleCollider>().radius;
+        Vector3 topPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center + Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 1f);
+        Vector3 bottomPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center - Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 0.5f);
+        float radius = controller.GetComponent<CapsuleCollider>().radius * 4f;
         if (Physics.CapsuleCast(topPoint, bottomPoint, radius, controller.transform.right, out hit, collectableDist))
         {
             if (hit.transform.tag != "Untagged")

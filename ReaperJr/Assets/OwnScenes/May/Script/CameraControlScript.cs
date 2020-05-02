@@ -41,7 +41,7 @@ public class CameraControlScript : MonoBehaviour
     [VectorLabels("Move" , "Tilt")]
     public Vector2 followSpeed = new Vector2(2.5f, 2f); // how fast camera moves to follow player. x = movement speed, y = tilting speed.
        
-    [HideInInspector]
+    //[HideInInspector]
     public bool inRoom = false, onStairs = false, inCorridor = false;
     private bool checkEntre;
 

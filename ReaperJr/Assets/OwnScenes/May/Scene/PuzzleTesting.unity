@@ -5750,7 +5750,7 @@ MonoBehaviour:
   emiColorPlayerIn: {x: 154, y: 125, z: 11}
   emiColorCanHold: {x: 35, y: 118, z: 22}
   emiColorHold: {x: 255, y: 68, z: 0}
-  colliderSize: {x: 0, y: 0, z: 0}
+  stableObject: 0
 --- !u!54 &218784070
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6233,6 +6233,8 @@ MonoBehaviour:
   pausePanel: {fileID: 1990781681}
   gameOverPanel: {fileID: 1230338674}
   energyBar: {fileID: 1109308300}
+  abilityCD: {fileID: 0}
+  masks: []
 --- !u!114 &279174952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7394,7 +7396,7 @@ MonoBehaviour:
   emiColorPlayerIn: {x: 154, y: 125, z: 11}
   emiColorCanHold: {x: 35, y: 118, z: 22}
   emiColorHold: {x: 255, y: 68, z: 0}
-  colliderSize: {x: 0, y: 0, z: 0}
+  stableObject: 0
 --- !u!208 &525278802
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -8591,7 +8593,7 @@ GameObject:
   - component: {fileID: 908710712}
   - component: {fileID: 908710713}
   m_Layer: 2
-  m_Name: Tab
+  m_Name: Tub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14064,7 +14066,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1051395218}
   m_Layer: 0
-  m_Name: TabSwitch
+  m_Name: TapSwitch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14310,7 +14312,7 @@ MonoBehaviour:
   emiColorPlayerIn: {x: 133, y: 26, z: 135}
   emiColorCanHold: {x: 255, y: 81, z: 146}
   emiColorHold: {x: 255, y: 43, z: 63}
-  colliderSize: {x: 0, y: 0, z: 0}
+  stableObject: 0
 --- !u!208 &1117910893
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -14832,7 +14834,7 @@ MonoBehaviour:
   emiColorPlayerIn: {x: 154, y: 125, z: 11}
   emiColorCanHold: {x: 35, y: 118, z: 22}
   emiColorHold: {x: 255, y: 68, z: 0}
-  colliderSize: {x: 0, y: 0, z: 0}
+  stableObject: 0
 --- !u!208 &1174440749
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -15234,7 +15236,7 @@ GameObject:
   - component: {fileID: 1260470112}
   - component: {fileID: 1260470111}
   m_Layer: 0
-  m_Name: Tab
+  m_Name: Tap
   m_TagString: Switch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17962,7 +17964,7 @@ GameObject:
   - component: {fileID: 2002539275}
   - component: {fileID: 2002539274}
   m_Layer: 0
-  m_Name: Tab
+  m_Name: Tap
   m_TagString: Switch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

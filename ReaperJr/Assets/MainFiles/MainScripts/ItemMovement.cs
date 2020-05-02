@@ -25,7 +25,7 @@ public class ItemMovement : MonoBehaviour
 
     [VectorLabels("R", "B", "G")]
     public Vector3 emiColorPlayerIn = Vector3.zero, emiColorCanHold = Vector3.zero, emiColorHold = Vector3.zero; //emissionc colour settings
-    public Vector3 colliderSize = Vector3.zero;
+    private Vector3 colliderSize = Vector3.zero;
 
     private Rigidbody objectRB;
     private GameObject placeHolder;
@@ -33,6 +33,7 @@ public class ItemMovement : MonoBehaviour
     private float iniDistance; //initial distance between character and object when the object is held. use for heavy object
     private float CurrDist; //current distance between character and object as the character is holding object. use for heavy object.
 
+    public bool stableObject = false;
 
     bool IsFlat() //test if the object is flat on ground.
     {
@@ -60,6 +61,8 @@ public class ItemMovement : MonoBehaviour
             objectRB.mass = mass;
             objectRB.drag = drag;
             objectRB.isKinematic = false;
+            if (stableObject)
+                objectRB.isKinematic = true;
         }
     }
 
@@ -100,6 +103,7 @@ public class ItemMovement : MonoBehaviour
         {
             if (canHold && !GameManager.Instance.scytheEquiped) //preventing player standing on object and try to hold it.
             {
+                player.GetComponent<PlayerMovement>().movable = (player.GetComponent<PlayerMovement>().isGrounded) ? true : false;
                 isHolding = true;
                 GameManager.Instance.canHold = false;
                 GameManager.Instance.isHolding = true;
@@ -110,12 +114,15 @@ public class ItemMovement : MonoBehaviour
                 isHolding = false;
                 GameManager.Instance.canHold = true;
                 GameManager.Instance.isHolding = false;
+                player.GetComponent<PlayerMovement>().movable = true;
             }
             else
                 return;
 
             if (isHolding)
             {
+                if (transform.parent != null)
+                    transform.parent = null;
                 player.GetComponent<PlayerMovement>().speedFactor -= mass;
                 player.GetComponent<Rigidbody>().mass += mass;
                 gameObject.transform.parent = player.transform;
@@ -270,6 +277,7 @@ public class ItemMovement : MonoBehaviour
         objectRB.GetComponent<Collider>().isTrigger = true;
         Collider collider = CopyComponent<Collider>(objectRB.transform.GetComponent<Collider>(), placeHolder);
         colliderSize = collider.bounds.size;
+        colliderSize = GetComponent<Collider>().bounds.size;
         placeHolder.transform.localScale = objectRB.transform.localScale;
     }
 

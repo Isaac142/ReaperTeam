@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SinkControl : MonoBehaviour
 {
-    public GameObject tabSwitch;
+    public GameObject tapSwitch;
     public ParticleSystem flowWater;
     public GameObject waterLevel;
     public GameObject protectFilm;
@@ -19,8 +19,8 @@ public class SinkControl : MonoBehaviour
     private Vector3 oriWaterLine;
     private Vector3 waterLine;
 
-    private bool tabOn = false;
-    private bool tabClickable = false;
+    private bool tapOn = false;
+    private bool tapClickable = false;
     private bool plugIn = true;
     private bool plugClickable = false;
     public bool filmOn = false;
@@ -41,8 +41,8 @@ public class SinkControl : MonoBehaviour
     void Start()
     {
         flowWater.Stop();
-        tabClickable = false;
-        tabOn = false;
+        tapClickable = false;
+        tapOn = false;
         oriWaterLine = waterLevel.transform.position;
         waterLine = oriWaterLine;
         waterLevel.SetActive(false);
@@ -68,13 +68,14 @@ public class SinkControl : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
+                    Debug.Log(hit.transform.name);
                     if (Vector3.Distance(hit.transform.position, player.transform.position) <= clickDist)
                     {
-                        if (tabClickable)
+                        if (tapClickable)
                         {
-                            if (hit.transform.tag == "Switch" && hit.transform.name == "Tab")
+                            if (hit.transform.tag == "Switch" && hit.transform.name == "Tap")
                             {
-                                tabOn = !tabOn;
+                                tapOn = !tapOn;
 
                                 if (soulInTab != null)
                                 {
@@ -98,8 +99,6 @@ public class SinkControl : MonoBehaviour
                                 switchFilmOn = !switchFilmOn;
                         }
                     }
-                    else
-                        return;
                 }
             }
         }
@@ -113,8 +112,8 @@ public class SinkControl : MonoBehaviour
         else
             waterLevel.SetActive(false);
 
-        #region TabSwitch
-        if (tabOn)
+        #region TapSwitch
+        if (tapOn)
         {
             flowWater.Play();
             StartCoroutine("WaterLevelControl", raisingFactor);
@@ -129,16 +128,16 @@ public class SinkControl : MonoBehaviour
 
         if (waterLine.y >= maxWaterLevel) //water level clamp
         {
-            tabClickable = false;
-            tabOn = false;
+            tapClickable = false;
+            tapOn = false;
             waterLine.y = maxWaterLevel;
         }
         else
-            tabClickable = true;
+            tapClickable = true;
 
         if (fillTimeRemind <= 0f)
         {
-            tabOn = false;
+            tapOn = false;
             fillTimeRemind = fillDuration;
         }
         #endregion
@@ -212,22 +211,22 @@ public class SinkControl : MonoBehaviour
 
         if (player != null)
         {
-            if (playerIn && waterLine.y >= player.transform.position.y + player.GetComponent<CapsuleCollider>().height / 2f) //player will dead if water level is above it.
+            if (playerIn && waterLine.y >= player.transform.position.y + player.GetComponent<CapsuleCollider>().height) //player will dead if water level is above it.
                 GameManager.Instance.dead = true;
         }
 
         #region EmissionSwitch
-        if (tabSwitch.transform.GetChild(0).GetComponent<Renderer>() != null & tabSwitch.transform.GetChild(1).GetComponent<Renderer>() != null)
+        if (tapSwitch.transform.GetChild(0).GetComponent<Renderer>() != null & tapSwitch.transform.GetChild(1).GetComponent<Renderer>() != null)
         {
-            if (tabClickable)
+            if (tapClickable)
             {
-                tabSwitch.transform.GetChild(0).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-                tabSwitch.transform.GetChild(1).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+                tapSwitch.transform.GetChild(0).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+                tapSwitch.transform.GetChild(1).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
             }
             else
             {
-                tabSwitch.transform.GetChild(0).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
-                tabSwitch.transform.GetChild(1).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+                tapSwitch.transform.GetChild(0).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+                tapSwitch.transform.GetChild(1).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
             }
         }
 
@@ -257,10 +256,9 @@ public class SinkControl : MonoBehaviour
             if (player == null)
                 player = other.gameObject;
 
-            tabClickable = true;
+            tapClickable = true;
             plugClickable = true;
             switchClickable = false;
-            player = other.gameObject;
         }
     }
 
@@ -268,7 +266,7 @@ public class SinkControl : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            tabClickable = false;
+            tapClickable = false;
             plugClickable = false;
             switchClickable = false;
             player = null;
