@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class ChildProtectorInSink : MonoBehaviour
 {
-    private SinkControl sinkController;
+    public SinkControl sinkController;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.GetChild(0).gameObject.SetActive(false);
         sinkController = GetComponentInParent<SinkControl>();
     }
     

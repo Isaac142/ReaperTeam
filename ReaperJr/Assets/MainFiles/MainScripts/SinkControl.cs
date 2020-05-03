@@ -38,11 +38,12 @@ public class SinkControl : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         flowWater.Stop();
         tapClickable = false;
         tapOn = false;
+        plugIn = false;
         oriWaterLine = waterLevel.transform.position;
         waterLine = oriWaterLine;
         waterLevel.SetActive(false);
@@ -216,7 +217,7 @@ public class SinkControl : MonoBehaviour
         }
 
         #region EmissionSwitch
-        if (tapSwitch.transform.GetChild(0).GetComponent<Renderer>() != null & tapSwitch.transform.GetChild(1).GetComponent<Renderer>() != null)
+        if (tapSwitch.transform.GetChild(0).GetComponent<Renderer>() != null && tapSwitch.transform.GetChild(1).GetComponent<Renderer>() != null)
         {
             if (tapClickable)
             {
@@ -258,7 +259,7 @@ public class SinkControl : MonoBehaviour
 
             tapClickable = true;
             plugClickable = true;
-            switchClickable = false;
+            switchClickable = true;
         }
     }
 
@@ -269,7 +270,6 @@ public class SinkControl : MonoBehaviour
             tapClickable = false;
             plugClickable = false;
             switchClickable = false;
-            player = null;
         }
     }
 

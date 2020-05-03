@@ -35,8 +35,4 @@ public class FloatingObject : MonoBehaviour
             rb.AddForceAtPosition(floatForce, transform.position);
         }
     }
-    void FixedUpdate()
-    {
-        
-    }
 }
