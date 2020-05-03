@@ -60,7 +60,7 @@ public class UpdateUI : MonoBehaviour
                 pic.SetActive(true);
         }
 
-        abilityCD.fillAmount = GameManager.Instance.CDTimer / GameManager.Instance.coolDown;
+        //abilityCD.fillAmount = GameManager.Instance.CDTimer / GameManager.Instance.coolDown;
 
         if (GameManager.Instance.isPaused)
         {

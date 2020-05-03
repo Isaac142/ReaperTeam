@@ -1494,6 +1494,8 @@ MonoBehaviour:
   pausePanel: {fileID: 1662078568}
   gameOverPanel: {fileID: 135186480}
   energyBar: {fileID: 900247980}
+  abilityCD: {fileID: 1853395446}
+  masks: []
 --- !u!114 &376662188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1570,7 +1572,7 @@ RectTransform:
   - {fileID: 1662078571}
   - {fileID: 135186483}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2202,7 +2204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ca94ca51d216b46bc0c7901b781a8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tabSwitch: {fileID: 1262122273}
+  tapSwitch: {fileID: 0}
   flowWater: {fileID: 1455446745}
   waterLevel: {fileID: 1809249854}
   protectFilm: {fileID: 968319380}
@@ -3415,7 +3417,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &881319551
 GameObject:
@@ -4290,7 +4292,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 5, y: 0, z: 0}
 --- !u!114 &1040856936
 MonoBehaviour:
@@ -4502,12 +4504,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
+  emiColorPlayerIn: {x: 0.1, y: 0.1, z: 0.1}
   emiColorCanHold: {x: 0.5, y: 0.5, z: 0.5}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  emiColorPlayerIn: {x: 0.1, y: 0.1, z: 0.1}
-  colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
+  stableObject: 0
 --- !u!208 &1173190086
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -4612,7 +4612,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 215835551}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176589231}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f74b376d455db4419f97235c228a9d0, type: 3}
@@ -4716,12 +4716,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
+  emiColorPlayerIn: {x: 0.1, y: 0.1, z: 0.1}
   emiColorCanHold: {x: 0.5, y: 0.5, z: 0.5}
   emiColorHold: {x: 0.6039216, y: 0.22745098, z: 0.043137256}
-  emiColorPlayerIn: {x: 0.1, y: 0.1, z: 0.1}
-  colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
+  stableObject: 0
 --- !u!208 &1207258378
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -4907,14 +4905,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterControl: {fileID: 0}
   playerMass: 1
   dead: 0
+  isPaused: 0
+  gameOver: 0
   isHolding: 0
   canHold: 0
   holdingLightObject: 0
   scytheEquiped: 1
-  isTeleported: 0
+  onCD: 0
   onSpecialGround: 0
+  maxSafeFallDist: 5
   maxTimerInSeconds: 300
   warningTimeInSeconds: 30
   rewardTime: 10
@@ -4922,8 +4924,7 @@ MonoBehaviour:
   throwEngery: 5
   teleportingEnergy: 20
   energyReturnFactor: 1
-  isPaused: 0
-  gameOver: 0
+  coolDown: 5
 --- !u!4 &1266289449
 Transform:
   m_ObjectHideFlags: 0
@@ -4936,7 +4937,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1273751433
 GameObject:
@@ -5436,12 +5437,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
   emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0.3882353, y: 0.007843138, z: 0.44}
-  emiColorPlayerIn: {x: 0, y: 0, z: 0}
-  colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
+  stableObject: 0
 --- !u!208 &1431205307
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -10929,12 +10928,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
   emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0.3882353, y: 0.007843138, z: 0.44}
-  emiColorPlayerIn: {x: 0, y: 0, z: 0}
-  colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
+  stableObject: 0
 --- !u!65 &1663323460
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16596,7 +16593,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 48.664, y: 0, z: 0}
 --- !u!1 &1790202449
 GameObject:
@@ -17344,12 +17341,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
+  emiColorPlayerIn: {x: 0, y: 0.59607846, z: 0}
   emiColorCanHold: {x: 0.5960785, y: 0.5450981, z: 0}
   emiColorHold: {x: 0.59607846, y: 0.4862745, z: 0}
-  emiColorPlayerIn: {x: 0, y: 0.59607846, z: 0}
-  colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
+  stableObject: 0
 --- !u!54 &2039318834
 Rigidbody:
   m_ObjectHideFlags: 0
