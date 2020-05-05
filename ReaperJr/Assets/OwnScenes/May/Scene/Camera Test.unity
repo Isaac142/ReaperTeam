@@ -2636,7 +2636,7 @@ GameObject:
   - component: {fileID: 1473549775}
   m_Layer: 0
   m_Name: StairCollider
-  m_TagString: Untagged
+  m_TagString: RoomCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3158,6 +3158,11 @@ MonoBehaviour:
   inRoom: 0
   onStairs: 0
   inCorridor: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1041
+  rendererMode: 2
+  transparentFactor: 0.5
 --- !u!1 &1760768326
 GameObject:
   m_ObjectHideFlags: 0

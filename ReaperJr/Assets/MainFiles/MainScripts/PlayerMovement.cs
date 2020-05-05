@@ -423,13 +423,15 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
         }
 
-        if (isGrounded)
+        if (isGrounded && isJumping)
         {
-            timeInAir = 0f;
             if (isJumping && distToGround <= jumpBufferDist && isGrounded)
                 Jump();
             else
+            {
                 isJumping = false;
+                timeInAir = 0f;
+            }
         }
     }
     #endregion

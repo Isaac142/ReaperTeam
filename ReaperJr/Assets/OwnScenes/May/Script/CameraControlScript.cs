@@ -41,9 +41,16 @@ public class CameraControlScript : MonoBehaviour
     [VectorLabels("Move" , "Tilt")]
     public Vector2 followSpeed = new Vector2(2.5f, 2f); // how fast camera moves to follow player. x = movement speed, y = tilting speed.
        
-    //[HideInInspector]
+    [HideInInspector]
     public bool inRoom = false, onStairs = false, inCorridor = false;
     private bool checkEntre;
+
+    private List<GameObject> objInFront = new List<GameObject>(), objInFrontLast = new List<GameObject>();
+    private RaycastHit[] hits;
+    public LayerMask layerMask = 0;
+    public float rendererMode = 2f;
+    public float transparentFactor = 0.5f;
+    private Color color;
 
     private void Awake()
     {
@@ -68,6 +75,22 @@ public class CameraControlScript : MonoBehaviour
 
     private void FixedUpdate()
     {
+        #region TurnToTransparent
+        objInFront = new List<GameObject>();
+        ObjectInFront(objInFront);
+        foreach (GameObject obj in objInFront)
+        {
+            Fade(obj);
+        }
+
+        foreach (GameObject obj in objInFrontLast)
+        {
+            if (!objInFront.Contains(obj))
+                ReturnColor(obj);
+        }
+        objInFrontLast = objInFront;
+        #endregion
+
         playerPos = player.position;
         scythePos = scythe.position;
         betweenDist = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe
@@ -158,5 +181,52 @@ public class CameraControlScript : MonoBehaviour
         camVerBoundaries = new Vector2(roomHeight.x + camHeight.x, roomHeight.y - camHeight.x);
         camDepthBoundaries = new Vector2(roomDepth.x - miniCamToEdgeDist, roomDepth.y - camToPlayerDist.y);
         yield return null;
+    }
+
+    void ObjectInFront(List<GameObject> obj)
+    {
+        Vector3 direction = new Vector3(player.position.x, player.position.y + player.GetComponent<CapsuleCollider>().center.y, player.position.z) - transform.position;
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        hits = Physics.RaycastAll(transform.position, direction, distance, layerMask);
+        Debug.DrawRay(transform.position, direction);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.transform.GetComponent<Renderer>() != null)
+            {
+                if (!obj.Contains(hit.transform.gameObject))
+                    obj.Add(hit.transform.gameObject);
+            }
+        }
+    }
+
+    void Fade(GameObject obj)
+    {
+        Renderer rend = obj.GetComponent<Renderer>();
+        color = rend.material.color;
+        rend.material.SetFloat("_Mode", rendererMode);
+        rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        rend.material.SetInt("_ZWrite", 0);
+        rend.material.DisableKeyword("_ALPHATEST_ON");
+        rend.material.EnableKeyword("_ALPHABLEND_ON");
+        rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        rend.material.renderQueue = 3000;
+        rend.material.SetColor("_Color", new Color(color.r, color.g, color.b, transparentFactor));
+    }
+
+    void ReturnColor(GameObject obj)
+    {
+        Renderer rend = obj.GetComponent<Renderer>();
+        color = rend.material.color;
+        rend.material.SetFloat("_Mode", 0);
+        rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+        rend.material.SetInt("_ZWrite", 1);
+        rend.material.DisableKeyword("_ALPHATEST_ON");
+        rend.material.DisableKeyword("_ALPHABLEND_ON");
+        rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        rend.material.renderQueue = -1;
+        rend.material.SetColor("_Color", new Color(color.r, color.g, color.b, 1f));
     }
 }
