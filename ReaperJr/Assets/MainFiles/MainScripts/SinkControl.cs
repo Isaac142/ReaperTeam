@@ -61,7 +61,7 @@ public class SinkControl : MonoBehaviour
     void Update()
     {
         #region ClickEvent
-        if (!GameManager.Instance.scytheEquiped && player != null)
+        if (!GameManager.Instance.scytheEquiped)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -69,7 +69,6 @@ public class SinkControl : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log(hit.transform.name);
                     if (Vector3.Distance(hit.transform.position, player.transform.position) <= clickDist)
                     {
                         if (tapClickable)
@@ -148,17 +147,11 @@ public class SinkControl : MonoBehaviour
         {
             StartCoroutine("WaterLevelControl", -2 * raisingFactor);
             drainTimerRemind -= Time.deltaTime; //auto turn off timer
-
-            if (plugSwitch.GetComponent<Renderer>() != null)
-                plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(143f / 255f, 185f / 255f, 74f / 255));
         }
         else
         {
             StopCoroutine("WaterLevelControl");
-            drainTimerRemind = drainDuration;
-
-            if (plugSwitch.GetComponent<Renderer>() != null)
-                plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
+            drainTimerRemind = drainDuration;          
         }
 
         if (waterLine.y <= oriWaterLine.y) //water level clamp
@@ -195,19 +188,9 @@ public class SinkControl : MonoBehaviour
         }
 
         if (filmOn || switchFilmOn)
-        {
             protectFilm.transform.GetChild(0).gameObject.SetActive(true);
-
-            if (protectFilm.GetComponent<Renderer>() != null)
-                protectFilm.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(130f / 255f, 10f / 255f, 117f / 255));
-        }
         else
-        {
             protectFilm.transform.GetChild(0).gameObject.SetActive(false);
-
-            if (protectFilm.GetComponent<Renderer>() != null)
-                protectFilm.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
-        }
         #endregion
 
         if (player != null)
@@ -237,6 +220,11 @@ public class SinkControl : MonoBehaviour
                 plugSwitch.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
             else
                 plugSwitch.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+
+            if(plugIn)
+                plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
+            else
+                plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(143f / 255f, 185f / 255f, 74f / 255));
         }
 
         if (filmSwitch.GetComponent<Renderer>() != null)
@@ -245,6 +233,11 @@ public class SinkControl : MonoBehaviour
                 filmSwitch.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
             else
                 filmSwitch.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+
+            if(switchFilmOn)
+                filmSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(130f / 255f, 10f / 255f, 117f / 255));
+            else
+                filmSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
         }
 
         #endregion
