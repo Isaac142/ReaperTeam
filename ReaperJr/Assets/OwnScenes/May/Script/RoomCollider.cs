@@ -20,6 +20,7 @@ public class RoomCollider : MonoBehaviour
 
     private void Awake()
     {
+        transform.GetComponent<Collider>().isTrigger = true;
         cameraControl = Camera.main.GetComponent<CameraControlScript>();
         if (transform.tag == "LevelCollider")
             roomType = RoomType.LEVEL;
