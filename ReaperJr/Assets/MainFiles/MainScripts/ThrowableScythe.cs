@@ -5,6 +5,9 @@ using UnityEngine;
 public class ThrowableScythe : MonoBehaviour
 {
     #region Variables
+    [SerializeField] private Transform forceTransform;
+
+    public PlayerMovement player;
 
     public float chargeSpeed = 0.1f;
     const float min = 0f, max = 1f;
@@ -25,12 +28,16 @@ public class ThrowableScythe : MonoBehaviour
     bool isPlayerHolding;
 
     public bool isThrown = false;
+
+    public SpriteMask chargeBar;
     #endregion
 
     private void Start()
     {
         canThrow = true;
         isPlayerHolding = true;
+
+        //chargeBar.alphaCutoff = 1;
     }
 
     #region Update
@@ -53,6 +60,11 @@ public class ThrowableScythe : MonoBehaviour
                 {
                     chargeValue = max;
                 }
+                /*
+                float percentage = chargeValue / max;
+                chargeBar.alphaCutoff = max - percentage;
+                Debug.Log(percentage);
+                */
             }
         }
         if (Input.GetMouseButtonUp(0) && canThrow && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
@@ -142,18 +154,19 @@ public class ThrowableScythe : MonoBehaviour
             scythe.isKinematic = false;
             // Add force to the forward axis of the camera
             // We used TransformDirection to conver the axis from local to world
-            if (throwLeft)
+            if (player.facingDirection == PlayerMovement.FacingDirection.LEFT)
             {
-                //scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.left) * throwForce, ForceMode.Impulse);
+                scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.left) * throwForce, ForceMode.Impulse);
                 scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
             }
-            else
+            else if (player.facingDirection == PlayerMovement.FacingDirection.RIGHT)
             {
-                //scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
+                scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
                 scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
             }
             canThrow = false;
             isThrown = true;
+            //chargeBar.alphaCutoff = 1;
         }
             
     }
@@ -212,6 +225,7 @@ public class ThrowableScythe : MonoBehaviour
     }
     #endregion
 
+    #region Reset Rotation
     IEnumerator ResetRotation()
     {
         Vector3 startRotation = scythe.transform.eulerAngles;
@@ -223,4 +237,5 @@ public class ThrowableScythe : MonoBehaviour
             yield return null;
         }
     }
+    #endregion
 }

@@ -60,7 +60,7 @@ public class Bird : MonoBehaviour {
     
     public void Launch(float force) {
         Vector2 dir = (UtilsClass.GetMouseWorldPosition() - transform.position).normalized * -1f;
-        transform.GetComponent<Rigidbody2D>().velocity = dir * force;
+        transform.GetComponent<Rigidbody>().velocity = dir * force;
         HideForce();
     }
 

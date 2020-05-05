@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region Variables
     Rigidbody controller;
     public GameObject scythe;
 
@@ -34,8 +35,9 @@ public class PlayerMovement : MonoBehaviour
     public enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT }
     [HideInInspector]
     public FacingDirection facingDirection;
+    #endregion
 
-
+    #region Start
     //Calling on the CharacterController Component
     void Start()
     {
@@ -53,7 +55,9 @@ public class PlayerMovement : MonoBehaviour
         bodyScale = bodyMesh.localScale;
         bodyPos = bodyMesh.localPosition;
     }
+    #endregion
 
+    #region Update
     //Calling the PlayerJumping function
     void Update()
     {
@@ -99,6 +103,7 @@ public class PlayerMovement : MonoBehaviour
         DirectionSwitch();
         Crouch();
     }
+    #endregion
 
     #region FacingDirectionSwitch
     void DirectionSwitch()
