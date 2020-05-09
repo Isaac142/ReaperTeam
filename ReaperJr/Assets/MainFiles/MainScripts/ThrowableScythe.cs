@@ -60,11 +60,11 @@ public class ThrowableScythe : MonoBehaviour
                 {
                     chargeValue = max;
                 }
-                /*
+                
                 float percentage = chargeValue / max;
                 chargeBar.alphaCutoff = max - percentage;
                 Debug.Log(percentage);
-                */
+                
             }
         }
         if (Input.GetMouseButtonUp(0) && canThrow && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
@@ -164,9 +164,13 @@ public class ThrowableScythe : MonoBehaviour
                 scythe.AddForce(Camera.main.transform.TransformDirection(Vector3.right) * throwForce, ForceMode.Impulse);
                 scythe.AddTorque(scythe.transform.TransformDirection(Vector3.back) * 100, ForceMode.Impulse);
             }
+            else if (player.facingDirection == PlayerMovement.FacingDirection.FRONT || player.facingDirection == PlayerMovement.FacingDirection.BACK)
+            {
+                
+            }
             canThrow = false;
             isThrown = true;
-            //chargeBar.alphaCutoff = 1;
+            chargeBar.alphaCutoff = 1;
         }
             
     }
