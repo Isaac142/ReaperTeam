@@ -32,6 +32,7 @@ public class Trajectory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Input.GetMouseButtonDown(0))
         { //click
             startPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.z));
@@ -41,13 +42,15 @@ public class Trajectory : MonoBehaviour
             }
 
         }
+        */
+
         if (Input.GetMouseButton(0))
         { //drag
             touchStart = true;
-            endPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.z));
-            forceAtPlayer = startPos - endPos;
+            startPos = Vector2.zero;
             for (int i = 0; i < number; i++)
             {
+                trajectoryDots[i] = Instantiate(trajectoryDot, gameObject.transform);
                 Vector2 tempPos = calculatePosition(i * 0.02f);
                 Vector3 newPos = Vector3.zero;
                 newPos.x = tempPos.x;
