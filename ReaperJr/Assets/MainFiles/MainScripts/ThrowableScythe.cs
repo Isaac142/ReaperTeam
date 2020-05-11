@@ -24,6 +24,7 @@ public class ThrowableScythe : MonoBehaviour
     private bool isReturning = false;           // Is the scythe returning? To update the calculations in the Update method
     private float time = 0.0f;                  // Timer to link to the Bezier formual, Beginnning = 0, End = 1
     bool canThrow;
+    bool stopThrow;
     bool throwLeft;
     bool isPlayerHolding;
 
@@ -37,7 +38,7 @@ public class ThrowableScythe : MonoBehaviour
         canThrow = true;
         isPlayerHolding = true;
 
-        //chargeBar.alphaCutoff = 1;
+        chargeBar.alphaCutoff = 1;
     }
 
     #region Update
@@ -69,7 +70,7 @@ public class ThrowableScythe : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0) && canThrow && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
         {
-            if(transform.position.x < Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
+            if (transform.position.x < Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
             {
                 throwLeft = true;
             }
@@ -137,13 +138,14 @@ public class ThrowableScythe : MonoBehaviour
     {
         Debug.Log("This much power: " + power);
         ThrowScythe();
+        canThrow = false;
     }
     #endregion
 
     #region Throw scythe
     void ThrowScythe()
     {
-        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery && isPlayerHolding) 
+        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery && isPlayerHolding)
         {
             isPlayerHolding = false;
             // The scythe isn't returning
@@ -166,9 +168,15 @@ public class ThrowableScythe : MonoBehaviour
             }
             else if (player.facingDirection == PlayerMovement.FacingDirection.FRONT || player.facingDirection == PlayerMovement.FacingDirection.BACK)
             {
-                
+                canThrow = false;
+                stopThrow = true;
             }
-            canThrow = false;
+            else
+            {
+                canThrow = true;
+                stopThrow = false;
+            }
+            //canThrow = false;
             isThrown = true;
             chargeBar.alphaCutoff = 1;
         }
