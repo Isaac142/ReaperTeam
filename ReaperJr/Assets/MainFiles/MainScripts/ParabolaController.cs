@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ParabolaController : MonoBehaviour
 {
+    private PlayerMovement player;
     /// <summary>
     /// Animation Speed
     /// </summary>
@@ -36,11 +37,13 @@ public class ParabolaController : MonoBehaviour
     //draw
     protected ParabolaFly parabolaFly;
 
+    public float parabolaScale = 1;
+
     void OnDrawGizmos()
     {
         if (gizmo == null)
         {
-            gizmo = new ParabolaFly(ParabolaRoot.transform);
+            gizmo = new ParabolaFly(ParabolaRoot.transform, this);
         }
 
         gizmo.RefreshTransforms(1f);
@@ -65,8 +68,9 @@ public class ParabolaController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        player = GetComponentInParent<PlayerMovement>();
 
-        parabolaFly = new ParabolaFly(ParabolaRoot.transform);
+        parabolaFly = new ParabolaFly(ParabolaRoot.transform, this);
 
         if (Autostart)
         {
@@ -159,15 +163,15 @@ public class ParabolaController : MonoBehaviour
 
     public class ParabolaFly
     {
-
+        public ParabolaController parent;
         public Transform[] Points;
         protected Parabola3D[] parabolas;
         protected float[] partDuration;
         protected float completeDuration;
 
-        public ParabolaFly(Transform ParabolaRoot)
+        public ParabolaFly(Transform ParabolaRoot, ParabolaController parent)
         {
-
+            this.parent = parent;
             List<Component> components = new List<Component>(ParabolaRoot.GetComponentsInChildren(typeof(Transform)));
             List<Transform> transforms = components.ConvertAll(c => (Transform)c);
 
@@ -250,12 +254,21 @@ public class ParabolaController : MonoBehaviour
                 {
                     if (parabolas[i] == null)
                         parabolas[i] = new Parabola3D();
-
-                    parabolas[i].Set(Points[i * 2].position, Points[i * 2 + 1].position, Points[i * 2 + 2].position);
-                    partDuration[i] = parabolas[i].Length / speed;
-                    completeDuration += partDuration[i];
+                    if (parent.player)
+                    {
+                        int direction = parent.player.facingDirection == PlayerMovement.FacingDirection.LEFT ? -1 : 1;
+                        Vector3 scale = new Vector3(parent.parabolaScale * direction, 1, 1);
+                        parabolas[i].Set(Points[i * 2].position, Points[i * 2 + 1].position + scale, Points[i * 2 + 2].position + scale);
+                        partDuration[i] = parabolas[i].Length / speed;
+                        completeDuration += partDuration[i];
+                    }
+                    else
+                    {
+                        parabolas[i].Set(Points[i * 2].position, Points[i * 2 + 1].position, Points[i * 2 + 2].position);
+                        partDuration[i] = parabolas[i].Length / speed;
+                        completeDuration += partDuration[i];
+                    }
                 }
-
 
             }
 
