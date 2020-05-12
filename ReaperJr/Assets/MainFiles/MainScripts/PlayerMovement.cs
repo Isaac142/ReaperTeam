@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
         }    
 
-        if (Input.GetMouseButtonDown(1) && scytheScript.isThrown == true)
+        if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true)
         {
             if (GameManager.Instance.Energy >= GameManager.Instance.teleportingEnergy)
             {

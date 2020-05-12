@@ -116,12 +116,10 @@ MonoBehaviour:
   relasingThreshold: 0.3
   gravityFactor: 7
   pickUpDist: 1
+  emiColorPlayerIn: {x: 0, y: 0, z: 0}
   emiColorCanHold: {x: 0, y: 0, z: 0}
   emiColorHold: {x: 0, y: 0, z: 0}
-  emiColorPlayerIn: {x: 0, y: 0, z: 0}
-  colliderSize: {x: 0, y: 0, z: 0}
-  iniDistance: 0
-  CurrDist: 0
+  stableObject: 0
 --- !u!54 &1402129632868756571
 Rigidbody:
   m_ObjectHideFlags: 0
