@@ -12,7 +12,7 @@ public class ThrowableScythe : MonoBehaviour
     public float chargeSpeed = 0.1f;
     const float min = 0f, max = 1f;
     float throwPower = 100f;
-    public float chargeValue;
+    //public float chargeValue;
 
     float normalThrowTimer = 0f, normalThrowThreshold = 0.5f;
 
@@ -53,17 +53,21 @@ public class ThrowableScythe : MonoBehaviour
 
         if (Input.GetMouseButton(0) && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
         {
+            ParabolaController controller = scythe.GetComponent<ParabolaController>();
+            controller.parabolaScale = 1 + normalThrowTimer * 7f;
             normalThrowTimer += Time.deltaTime;
-            if (chargeValue < max)
+            normalThrowTimer = Mathf.Clamp(normalThrowTimer, min, max);
+            //if (chargeValue < max)
             {
+                /*
                 chargeValue += chargeSpeed * Time.deltaTime;
                 if (chargeValue > max)
                 {
                     chargeValue = max;
                 }
-                
-                float percentage = chargeValue / max;
-                chargeBar.alphaCutoff = max - percentage;
+                */
+                float percentage = normalThrowTimer / max;
+                chargeBar.alphaCutoff = 1 - percentage;
                 Debug.Log(percentage);
                 
             }
@@ -79,18 +83,25 @@ public class ThrowableScythe : MonoBehaviour
                 throwLeft = false;
             }
             canThrow = false;
-            if (normalThrowTimer < normalThrowThreshold)
-            {
-                ThrowScythe();
-                scythe.GetComponent<ParabolaController>().FollowParabola();
-            }
 
-            if (chargeValue > 0.2f)
-            {
-                Fire(chargeValue * throwPower);
-            }
-            chargeValue = min;
-            normalThrowTimer = 0f;
+            //if (normalThrowTimer < normalThrowThreshold)
+            //{
+            //    ThrowScythe();
+            //    ParabolaController controller = scythe.GetComponent<ParabolaController>();
+
+            //    controller.FollowParabola();
+            //    Debug.Log(normalThrowTimer);
+
+            //}
+
+            //if (normalThrowTimer > 0.2f)
+            //{
+            //    Fire(normalThrowTimer * throwPower);
+            //}
+            ThrowScythe();
+            Fire(normalThrowTimer * throwPower);
+            normalThrowTimer = min;
+            
             GameManager.Instance.Energy -= GameManager.Instance.throwEngery;
         }
 
@@ -138,6 +149,9 @@ public class ThrowableScythe : MonoBehaviour
     {
         Debug.Log("This much power: " + power);
         ThrowScythe();
+        ParabolaController controller = scythe.GetComponent<ParabolaController>();
+        controller.RefreshTransforms(1);
+        controller.FollowParabola();
         canThrow = false;
     }
     #endregion
