@@ -6,6 +6,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public Camera main;
+    public Camera second;
+    public bool isViewingAll;
+
     public PlayerMovement characterControl;
     // character rigidbody reference
     public float playerMass = 1f;
@@ -123,6 +127,25 @@ public class GameManager : MonoBehaviour
         {
             onCD = false;
             _cDTimer = coolDown;
+        }
+
+        if (Input.GetKeyDown(KeyCode.V) && !isViewingAll)
+        {
+            isViewingAll = true;
+        }
+        if (Input.GetKeyUp(KeyCode.V) && isViewingAll)
+        {
+            isViewingAll = false;
+        }
+        if (isViewingAll)
+        {
+            main.gameObject.SetActive(false);
+            second.gameObject.SetActive(true);
+        }
+        if (!isViewingAll)
+        {
+            main.gameObject.SetActive(true);
+            second.gameObject.SetActive(false);
         }
     }
 }

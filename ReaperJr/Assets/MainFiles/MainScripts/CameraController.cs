@@ -71,25 +71,25 @@ public class CameraController : MonoBehaviour
         //    }
         //    //transform.position = Vector3.Lerp(transform.position, new Vector3(tarPos.x, tarPos.y, 0) + cameraPos + offset, speed * Time.deltaTime);
         //}
-        if (Input.GetKeyDown(KeyCode.V) && !isViewingAll)
-        {
-            isViewingAll = true;
-        }
-        if (Input.GetKeyUp(KeyCode.V) && isViewingAll)
-        {
-            isViewingAll = false;
-        }
-        if(isViewingAll)
-        {
-            cameraPos = new Vector3(-15, 12, -30);
-            main.gameObject.SetActive(false);
-            secondary.gameObject.SetActive(true);
-        }
-        if(!isViewingAll)
-        {
-            cameraPos = new Vector3(0, 5, -12);
-            main.gameObject.SetActive(true);
-            secondary.gameObject.SetActive(false);
-        }
+        //if (Input.GetKeyDown(KeyCode.V) && !isViewingAll)
+        //{
+        //    isViewingAll = true;
+        //}
+        //if (Input.GetKeyUp(KeyCode.V) && isViewingAll)
+        //{
+        //    isViewingAll = false;
+        //}
+        //if(isViewingAll)
+        //{
+        //    cameraPos = new Vector3(-15, 12, -30);
+        //    main.gameObject.SetActive(false);
+        //    secondary.gameObject.SetActive(true);
+        //}
+        //if(!isViewingAll)
+        //{
+        //    cameraPos = new Vector3(0, 5, -12);
+        //    main.gameObject.SetActive(true);
+        //    secondary.gameObject.SetActive(false);
+        //}
     }
 }
