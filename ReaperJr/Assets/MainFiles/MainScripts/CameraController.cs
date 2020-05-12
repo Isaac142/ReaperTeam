@@ -20,11 +20,17 @@ public class CameraController : MonoBehaviour
 
     public float speed = 1f;
 
+    public bool isViewingAll;
+
+    public Camera main;
+    public Camera secondary;
+
     // Start is called before the first frame update
     void Start()
     {
         transform.position = cameraPos;
         transform.eulerAngles = cameraRot;
+        isViewingAll = false;
     }
 
     // Update is called once per frame
@@ -43,5 +49,27 @@ public class CameraController : MonoBehaviour
 
 
         transform.position = Vector3.Lerp(transform.position, new Vector3(tarPos.x, tarPos.y, 0) + cameraPos + offset, speed * Time.deltaTime);
+
+        if(Input.GetKeyDown(KeyCode.V))
+            {
+            isViewingAll = true;
+            if(isViewingAll)
+            {
+                cameraPos = new Vector3(-15, 12, -30);
+                main.gameObject.SetActive(false);
+                secondary.gameObject.SetActive(true);
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.V))
+        {
+            isViewingAll = false;
+            if (!isViewingAll)
+            {
+                cameraPos = new Vector3(0, 5, -12);
+                main.gameObject.SetActive(true);
+                secondary.gameObject.SetActive(false);
+            }
+            //transform.position = Vector3.Lerp(transform.position, new Vector3(tarPos.x, tarPos.y, 0) + cameraPos + offset, speed * Time.deltaTime);
+        }
     }
 }
