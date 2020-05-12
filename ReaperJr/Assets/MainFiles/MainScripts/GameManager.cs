@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public Texture2D cursor;
     public Camera main;
     public Camera second;
     public bool isViewingAll;
@@ -64,6 +65,9 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(this);
+
+        if(cursor != null)
+            Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
     }
 
     // Start is called before the first frame update
