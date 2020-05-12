@@ -13,10 +13,8 @@ public class ItemMovement : MonoBehaviour
 {
     public float mass = 1f; //object's mass
     public float drag = 5f; //object's rigidbody's sliperness on ground
-    public bool isLigther = false;
-    public bool canHold = false;
-    public bool playerIn = false;
-    private bool isHolding = false;
+    [HideInInspector]
+    public bool isLigther = false, canHold = false, playerIn = false, isHolding = false;
 
     public GameObject player;
     public float relasingThreshold = 0.3f; //when curren - iniDistance > releasingThreshold, object is released.

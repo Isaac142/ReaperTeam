@@ -150,8 +150,9 @@ public class CameraControlScript : MonoBehaviour
         camHorBoundaries = new Vector2(roomSides.x +  worldSpaceScreenSize.x/2f + camHorClampFactor.x, roomSides.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
         if (camHorBoundaries.x > camHorBoundaries.y) //if the room is too narrow, camera stays at the middle of the room
         {
-            camHorBoundaries.x = camHorBoundaries.y;
-            camHorBoundaries.y = roomPosition.x;
+            camHorBoundaries.x = roomSides.x;
+            camHorBoundaries.y = roomSides.y;
+            toPlayerDist = new Vector3(roomPosition.x - player.position.x, transform.position.y, -camToPlayerDist.y);
         }
         camVerBoundaries = new Vector2(roomHeight.x + camHeight.x, roomHeight.x + camHeight.y);
 
@@ -176,6 +177,7 @@ public class CameraControlScript : MonoBehaviour
         {
             camHorBoundaries.x = roomSides.x;
             camHorBoundaries.y = roomSides.y;
+            toPlayerDist = new Vector3(roomPosition.x - player.position.x, transform.position.y, -camToPlayerDist.y);
         }
 
         camVerBoundaries = new Vector2(roomHeight.x + camHeight.x, roomHeight.y - camHeight.x);

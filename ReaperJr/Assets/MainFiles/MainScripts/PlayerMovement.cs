@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector]
     public bool isJumping = false, isCrouching = false, isGrounded = false, movable = true;
     public float speedFactor = 7f, addForce = 600f, gModifier = 5f; // gravity modifier when character is in air
-    public float jumpBufferDist = 0.8f, cayoteTime = 0.05f;
+    public float jumpBufferTime = 0.2f, cayoteTime = 0.05f;
     private float distToGround = 0f, lastPos = 0f, timeInAir = 0f;
     public float timeToMove;
     public float collectableDist = 3f;
@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     public enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT }
     [HideInInspector]
     public FacingDirection facingDirection;
+    
+    private float timeToGround = 0;
     #endregion
 
     #region Start
@@ -410,27 +412,28 @@ public class PlayerMovement : MonoBehaviour
     #region JumpBuffering&CayoteTime
     void JumpBufferCayoteTime()
     {
-        if (isJumping) //jump buffering
-            distToGround += Mathf.Abs(lastPos - transform.position.y);
-        lastPos = transform.position.y;
-
         if (!isJumping && !isGrounded) // cayote time
                 timeInAir += Time.deltaTime;
 
         if (!isGrounded && isJumping)
         {
+            timeToGround += Time.deltaTime;
             if (timeInAir < cayoteTime)
                 Jump();
         }
 
         if (isGrounded && isJumping)
         {
-            if (isJumping && distToGround <= jumpBufferDist && isGrounded)
+            if (timeToGround >0f && timeToGround <= jumpBufferTime)
+            {
                 Jump();
+                timeToGround = 0f;
+            }
             else
             {
                 isJumping = false;
                 timeInAir = 0f;
+                timeToGround = 0f;
             }
         }
     }

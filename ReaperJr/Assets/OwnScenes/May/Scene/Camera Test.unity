@@ -1359,6 +1359,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669814280}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &700204742 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5637661797183390610, guid: 7ce9c9f1a38dee0488e9a636055a8384,
+    type: 3}
+  m_PrefabInstance: {fileID: 1658220244}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &765758011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1890,6 +1896,12 @@ Transform:
   m_Father: {fileID: 2077277848}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1135833135 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 891578448732131975, guid: 7ce9c9f1a38dee0488e9a636055a8384,
+    type: 3}
+  m_PrefabInstance: {fileID: 1658220244}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1173798415
 GameObject:
   m_ObjectHideFlags: 0
@@ -3031,18 +3043,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ce9c9f1a38dee0488e9a636055a8384, type: 3}
---- !u!4 &1658220245 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4441905539609307931, guid: 7ce9c9f1a38dee0488e9a636055a8384,
-    type: 3}
-  m_PrefabInstance: {fileID: 1658220244}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1658220246 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9207516964035639822, guid: 7ce9c9f1a38dee0488e9a636055a8384,
-    type: 3}
-  m_PrefabInstance: {fileID: 1658220244}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1683829254
 GameObject:
   m_ObjectHideFlags: 0
@@ -3139,8 +3139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba7406ae7f27e04d8a4bd247749cac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1658220246}
-  scythe: {fileID: 1658220245}
+  player: {fileID: 700204742}
+  scythe: {fileID: 1135833135}
   chaseThreshold: 0.5
   camToPlayerDist: {x: 12, y: 20}
   miniCamToEdgeDist: 8
@@ -3453,6 +3453,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d2f0d668988e840b15db0dfae15116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  main: {fileID: 0}
+  second: {fileID: 0}
+  isViewingAll: 0
   characterControl: {fileID: 0}
   playerMass: 1
   dead: 0

@@ -935,7 +935,7 @@ GameObject:
   - component: {fileID: 80403528}
   - component: {fileID: 80403530}
   - component: {fileID: 80403529}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1873,7 +1873,7 @@ GameObject:
   - component: {fileID: 161382777}
   - component: {fileID: 161382779}
   - component: {fileID: 161382778}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2028,7 +2028,7 @@ GameObject:
   - component: {fileID: 181612089}
   - component: {fileID: 181612088}
   - component: {fileID: 181612087}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Moveable (2)
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -2526,7 +2526,7 @@ GameObject:
   - component: {fileID: 230767403}
   - component: {fileID: 230767405}
   - component: {fileID: 230767404}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8710,7 +8710,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2064766758, guid: 7ce9c9f1a38dee0488e9a636055a8384, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7ce9c9f1a38dee0488e9a636055a8384, type: 3}
 --- !u!1 &768158843
 GameObject:
@@ -15436,11 +15437,11 @@ MonoBehaviour:
   inRoom: 0
   onStairs: 0
   inCorridor: 0
-  objInFront: []
-  objInFrontLast: []
   layerMask:
     serializedVersion: 2
-    m_Bits: 1079
+    m_Bits: 17
+  rendererMode: 2
+  transparentFactor: 0.5
 --- !u!1 &891270270
 GameObject:
   m_ObjectHideFlags: 0
@@ -20240,7 +20241,7 @@ GameObject:
   - component: {fileID: 910865726}
   - component: {fileID: 910865725}
   - component: {fileID: 910865724}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Moveable (3)
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -21343,7 +21344,7 @@ GameObject:
   - component: {fileID: 974566663}
   - component: {fileID: 974566662}
   - component: {fileID: 974566661}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Moveable (4)
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -21624,7 +21625,7 @@ GameObject:
   - component: {fileID: 995608715}
   - component: {fileID: 995608714}
   - component: {fileID: 995608713}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Moveable (5)
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -22100,8 +22101,8 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 5
+  m_Camera: {fileID: 887659968}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -30818,7 +30819,7 @@ GameObject:
   - component: {fileID: 1788940043}
   - component: {fileID: 1788940045}
   - component: {fileID: 1788940044}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
