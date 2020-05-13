@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,11 +24,12 @@ public class GameManager : MonoBehaviour
     [HideInInspector] //grounding states
     public bool onSpecialGround = false;
 
-    public float maxSafeFallDist = 5f;
+    public float maxSafeFallDist = 8f;
 
     public float maxTimerInSeconds = 5 * 60f;
     public float warningTimeInSeconds = 60f;
     public float rewardTime = 10f;
+    public float punishmentTime = 5f;
     private float _timer;
     public float Timer
     {
@@ -55,6 +57,8 @@ public class GameManager : MonoBehaviour
         set { _cDTimer = value; }
     }
 
+    [HideInInspector]
+    public List<Vector3> checkPoints = new List<Vector3>();
 
     private void Awake()
     {
@@ -68,6 +72,8 @@ public class GameManager : MonoBehaviour
 
         if(cursor != null)
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
+
+        checkPoints.Add(characterControl.transform.position);
     }
 
     // Start is called before the first frame update
@@ -91,8 +97,9 @@ public class GameManager : MonoBehaviour
     {
         if (dead)
         {
-            //SceneManager.LoadScene(0);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            _timer -= punishmentTime;
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            characterControl.transform.position = checkPoints[checkPoints.Count - 1];
             dead = false;
         }
 
@@ -151,5 +158,8 @@ public class GameManager : MonoBehaviour
             main.gameObject.SetActive(true);
             second.gameObject.SetActive(false);
         }
+
+        if (checkPoints.Count > 5)
+            checkPoints.Remove(checkPoints[0]);
     }
 }

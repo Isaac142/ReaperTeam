@@ -12,6 +12,7 @@ public class EnemyPatrol : MonoBehaviour
     public List<Transform> patrolPoints;
     public float patrolSpeed = 3f;
     public float chasingSpeed = 3f;
+    public float touchPlayerDist = 1f;
 
     private float toPlayer;
     private int patrolIndex = 0;
@@ -45,7 +46,7 @@ public class EnemyPatrol : MonoBehaviour
                     {
                         if (hit.transform.tag == "Player")
                         {
-                            if (toPlayer > 2f) //preventing enemy pushes character
+                            if (toPlayer > touchPlayerDist) //preventing enemy pushes character
                             {
                                 agent.destination = player.position;
                                 agent.speed = chasingSpeed;
@@ -68,8 +69,7 @@ public class EnemyPatrol : MonoBehaviour
                 if (agent.remainingDistance < 0.5f)
                     NextPatrolPoint();
                 break;
-        }
-             
+        }            
     }
 
     void NextPatrolPoint()

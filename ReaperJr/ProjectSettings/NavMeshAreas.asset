@@ -11,7 +11,11 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: 
+  - name: Small
+    cost: 1
+  - name: Large
+    cost: 1
+  - name: JrDummy
     cost: 1
   - name: 
     cost: 1
@@ -65,15 +69,11 @@ NavMeshProjectSettings:
     cost: 1
   - name: 
     cost: 1
-  - name: 
-    cost: 1
-  - name: 
-    cost: 1
-  m_LastAgentTypeID: -1372625422
+  m_LastAgentTypeID: -902729914
   m_Settings:
   - serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 1.2
+    agentRadius: 0.25
     agentHeight: 1
     agentSlope: 45
     agentClimb: 0.75

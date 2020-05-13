@@ -111,7 +111,7 @@ public class CameraControlScript : MonoBehaviour
              : Vector3.Lerp(new Vector3(0f, camHeight.y, -camToPlayerDist.x), new Vector3(0, camHeight.x, -camToPlayerDist.x), followSpeed.x * Time.deltaTime);
         }
         else
-            toPlayerDist = new Vector3(0f, camHeight.x, -camToPlayerDist.x); // if player is out room, camera chasing player at minimun camera to player distance
+            toPlayerDist = new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); // if player is out room, camera chasing player at minimun camera to player distance
 
         if (!inRoom && !onStairs)
         {

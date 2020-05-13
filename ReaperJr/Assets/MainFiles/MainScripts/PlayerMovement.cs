@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private float distToGround = 0f, lastPos = 0f, timeInAir = 0f;
     public float timeToMove;
     public float collectableDist = 3f;
+    public LayerMask collectableLayer;
 
     private float speed = 0f;
     private float recordYPos = 0f;
@@ -77,8 +78,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(TeleportToScythe());
                 GameManager.Instance.Energy -= GameManager.Instance.teleportingEnergy;
-                //GameManager.Instance.onCD = true;
-                //GameManager.Instance.CDTimer = 0;
+                GameManager.Instance.onCD = true;
+                GameManager.Instance.CDTimer = 0;
             }
         }
 
@@ -339,40 +340,35 @@ public class PlayerMovement : MonoBehaviour
     #region Collecting
     void Collect()
     {
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit))
-        //{
-        Vector3 topPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center + Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 1f);
-        Vector3 bottomPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center - Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 0.5f);
+        RaycastHit[] hits;
         float radius = controller.GetComponent<CapsuleCollider>().radius * 4f;
-        if (Physics.CapsuleCast(topPoint, bottomPoint, radius, controller.transform.right, out hit, collectableDist))
+        Vector3 topPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center + Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 1f) + transform.right * 2 * radius;
+        Vector3 bottomPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center - Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 0.5f) + transform.right * 2 * radius;    
+        hits = Physics.CapsuleCastAll(topPoint, bottomPoint, radius, controller.transform.right, collectableDist, collectableLayer);
+        for(int i = 0; i < hits.Length; i ++)
         {
-            if (hit.transform.tag != "Untagged")
+            if (hits[i].transform.tag != "Untagged")
             {
-                if (Vector3.Distance(transform.position, hit.transform.position) <= collectableDist) //calculate if the collectable is with in the collectable distance.
+                if (hits[i].transform.tag == "Soul")
                 {
-                    if (hit.transform.tag == "Soul")
-                    {
-                        GameManager.Instance.scytheEquiped = true;
-                        Destroy(hit.transform.gameObject);
-                        //do something --> collected amount, visual clue...
-                    }
-
-                    if (hit.transform.tag == "FakeSoul")
-                    {
-                        GameManager.Instance.scytheEquiped = true;
-                        GameManager.Instance.dead = true;
-                        //do something --> collected amount, visual clue...
-                    }
-
-                    if (hit.transform.tag == "HiddenItem")
-                    {
-                        GameManager.Instance.Timer += GameManager.Instance.rewardTime;
-                        Destroy(hit.transform.gameObject);
-                    }
-                    //if there's other collectables
+                    GameManager.Instance.scytheEquiped = true;
+                    Destroy(hits[i].transform.gameObject);
+                    //do something --> collected amount, visual clue...
                 }
+
+                if (hits[i].transform.tag == "FakeSoul")
+                {
+                    GameManager.Instance.scytheEquiped = true;
+                    GameManager.Instance.dead = true;
+                    //do something --> collected amount, visual clue...
+                }
+
+                if (hits[i].transform.tag == "HiddenItem")
+                {
+                    GameManager.Instance.Timer += GameManager.Instance.rewardTime;
+                    Destroy(hits[i].transform.gameObject);
+                }
+                //if there's other collectables
             }
         }
     }

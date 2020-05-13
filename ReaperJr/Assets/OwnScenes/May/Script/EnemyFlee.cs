@@ -13,17 +13,7 @@ public class EnemyFlee : MonoBehaviour
     public int fleePointIndex;
 
     private Vector3 runDirection;
-    bool RunDirTest(Vector3 newPos, out Vector3 result)
-    {
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(newPos, out hit, 1.0f, NavMesh.AllAreas))
-        {
-            result = hit.position;
-            return true;
-        }
-        result = Vector3.zero;
-        return false;
-    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,11 +28,8 @@ public class EnemyFlee : MonoBehaviour
         {
             runDirection = (transform.position - player.transform.position);
             Vector3 newPosition = transform.position + runDirection;
-            Vector3 newPos;
-
-            if (RunDirTest(newPosition, out newPos))
-                agent.SetDestination(newPosition);
-            else
+            agent.SetDestination(newPosition);
+            if (agent.remainingDistance < 0.5f)
                 NextFleePoint();
         }
     }

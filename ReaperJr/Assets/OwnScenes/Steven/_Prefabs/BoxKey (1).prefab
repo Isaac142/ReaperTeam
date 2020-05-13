@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8f6dda1b2ebebb142998b29c0d009d56, type: 2}
+  - {fileID: 2100000, guid: 1add28728d5b3904abf4897b26941570, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,6 +112,7 @@ MonoBehaviour:
   isLigther: 0
   canHold: 0
   playerIn: 0
+  isHolding: 0
   player: {fileID: 0}
   relasingThreshold: 0.3
   gravityFactor: 7

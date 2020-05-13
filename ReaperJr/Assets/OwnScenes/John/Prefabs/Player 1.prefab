@@ -184,10 +184,13 @@ MonoBehaviour:
   speedFactor: 7
   addForce: 600
   gModifier: 5
-  jumpBufferDist: 0.8
+  jumpBufferTime: 0.2
   cayoteTime: 0.05
   timeToMove: 0.1
-  collectableDist: 2
+  collectableDist: 0.5
+  collectableLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   fallDist: 0
   facingDirection: 0
 --- !u!114 &1329390772016827584
@@ -205,7 +208,6 @@ MonoBehaviour:
   forceTransform: {fileID: 5637661796995342978}
   player: {fileID: 4864519302855298215}
   chargeSpeed: 0.5
-  chargeValue: 0
   scythe: {fileID: 8329458111873006338}
   throwForce: 100
   target: {fileID: 3601565156503607969}
@@ -386,35 +388,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 1
   m_SpriteSortPoint: 0
---- !u!114 &5637661795926980201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8329458111873006341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37622e6c01052f1458bca7abf915cb76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Speed: 20
-  ParabolaRoot: {fileID: 5637661795564111197}
-  Autostart: 0
-  Animation: 0
---- !u!114 &3819057849023902006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8329458111873006341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe8ed95144d56f4fb37bf12666bcae5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!1 &5637661796715120444
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +399,6 @@ GameObject:
   - component: {fileID: 5637661796715120445}
   - component: {fileID: 5637661796715120432}
   - component: {fileID: 5637661796715120447}
-  - component: {fileID: 5637661796715120446}
   m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
@@ -495,19 +467,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &5637661796715120446
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5637661796715120444}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5637661796784959042
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,6 +718,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &3819057849023902006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329458111873006341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe8ed95144d56f4fb37bf12666bcae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activated: 0
+--- !u!114 &5637661795926980201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329458111873006341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37622e6c01052f1458bca7abf915cb76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 20
+  ParabolaRoot: {fileID: 5637661795564111197}
+  Autostart: 0
+  Animation: 0
+  parabolaScale: 1
 --- !u!1001 &3601565157367626140
 PrefabInstance:
   m_ObjectHideFlags: 0
