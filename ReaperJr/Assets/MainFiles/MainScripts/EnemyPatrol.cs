@@ -33,6 +33,9 @@ public class EnemyPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.isPaused)
+            return;
+
         toPlayer = Vector3.Distance(player.position, transform.position);
         switch(enemyType)
         {

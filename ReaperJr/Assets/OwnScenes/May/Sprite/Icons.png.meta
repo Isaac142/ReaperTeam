@@ -16,7 +16,7 @@ TextureImporter:
     second: RightClick
   - first:
       213: 5543941588292853863
-    second: Icons_4
+    second: RightClick
   - first:
       213: -5939463070795172742
     second: Menu
@@ -29,6 +29,39 @@ TextureImporter:
   - first:
       213: 3366042427789280657
     second: RightClick
+  - first:
+      213: -5939463070795172742
+    second: MenuBook
+  - first:
+      213: 6725019411808010661
+    second: LeftClick
+  - first:
+      213: -3917391801751258802
+    second: Movement
+  - first:
+      213: 3366042427789280657
+    second: Wheel
+  - first:
+      213: -1863859237976802683
+    second: Shift
+  - first:
+      213: 7576617242518483205
+    second: ESC
+  - first:
+      213: 7374845061861626600
+    second: Menu
+  - first:
+      213: -6931339683150358059
+    second: Ekey
+  - first:
+      213: 3901238138619246455
+    second: BookMark
+  - first:
+      213: -589163328377730442
+    second: Space
+  - first:
+      213: -4380630915542050537
+    second: V key
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -113,11 +146,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Menu
+      name: MenuBook
       rect:
         serializedVersion: 2
         x: 0
-        y: 256
+        y: 765
         width: 256
         height: 256
       alignment: 0
@@ -138,7 +171,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 256
-        y: 256
+        y: 765
         width: 256
         height: 256
       alignment: 0
@@ -155,13 +188,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Wheel
+      name: Movement
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
+        x: 512
+        y: 800
+        width: 340
+        height: 220
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -176,11 +209,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: RightClick
+      name: Wheel
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
+        x: 0
+        y: 509
         width: 256
         height: 256
       alignment: 0
@@ -192,6 +225,174 @@ TextureImporter:
       bones: []
       spriteID: 195064701c596be20800000000000000
       internalID: 3366042427789280657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RightClick
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 507
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 760e5b1608900fc40800000000000000
+      internalID: 5543941588292853863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shift
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 660
+        width: 220
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58aff01f5ed3226e0800000000000000
+      internalID: -1863859237976802683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ESC
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 904
+        width: 120
+        height: 117
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 501f96b4d3d852960800000000000000
+      internalID: 7576617242518483205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Menu
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 8
+        width: 770
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e25ec99286b85660800000000000000
+      internalID: 7374845061861626600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ekey
+      rect:
+        serializedVersion: 2
+        x: 885
+        y: 679
+        width: 120
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d91140384feecf90800000000000000
+      internalID: -6931339683150358059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookMark
+      rect:
+        serializedVersion: 2
+        x: 765
+        y: 378
+        width: 250
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7773b9cda6bf32630800000000000000
+      internalID: 3901238138619246455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 525
+        width: 510
+        height: 115
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67acb59031fd2d7f0800000000000000
+      internalID: -589163328377730442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: V key
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 679
+        width: 120
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7199503546fd433c0800000000000000
+      internalID: -4380630915542050537
       vertices: []
       indices: 
       edges: []

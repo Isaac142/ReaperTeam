@@ -5,15 +5,39 @@ using UnityEngine.UI;
 
 public class UpdateUI : MonoBehaviour
 {
+    public GameObject UIs;
     public Text timerCount;
     public Image timer;
 
     public GameObject pausePanel;
     public GameObject gameOverPanel;
+    public GameObject menu;
+    public GameObject instrunctionPanel;
+    public GameObject controlsPanel;
+    public GameObject uiPanel;
+    public GameObject optionPanel;
+    public GameObject wonPanel;
+    public List<Image> souls = new List<Image>();
+    public List<Image> soulMasks = new List<Image>();
+    public Text totalSoulNo;
 
     public Slider energyBar;
     public Image abilityCD;
     public GameObject[] masks;
+    [HideInInspector]
+    public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
+
+    private string FormatTimeMMSS(float timeInseconds)
+    {
+        float fraction = timeInseconds * 100;
+        return string.Format("{0:00}:{1:00}:{2:00}", Mathf.FloorToInt(timeInseconds / 60), Mathf.FloorToInt(timeInseconds % 60), fraction % 100);
+    }
+
+    private string FormatTimeSSMilS(float timeInseconds)
+    {
+        float fraction = timeInseconds * 100;
+        return string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeInseconds % 60), fraction % 100);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +47,7 @@ public class UpdateUI : MonoBehaviour
 
         pausePanel.SetActive(false);
         gameOverPanel.SetActive(false);
+        menu.SetActive(false);
 
         foreach (GameObject pic in masks)
             pic.SetActive(false);
@@ -62,10 +87,11 @@ public class UpdateUI : MonoBehaviour
 
         abilityCD.fillAmount = GameManager.Instance.CDTimer / GameManager.Instance.coolDown;
 
-        if (GameManager.Instance.isPaused)
+        if (GameManager.Instance.pausePanel)
         {
             Time.timeScale = 0;
             pausePanel.SetActive(true);
+            GameManager.Instance.playerActive = false;
         }
         else
         {
@@ -77,17 +103,25 @@ public class UpdateUI : MonoBehaviour
             gameOverPanel.SetActive(true);
         else
             gameOverPanel.SetActive(false);
-    }
 
-    private string FormatTimeMMSS(float timeInseconds)
-    {
-        float fraction = timeInseconds * 100;
-        return string.Format("{0:00}:{1:00}:{2:00}", Mathf.FloorToInt(timeInseconds / 60), Mathf.FloorToInt(timeInseconds % 60), fraction % 100);
-    }
+        if (GameManager.Instance.menuPanel)
+        {
+            menu.SetActive(true);
+            UIs.SetActive(false);
+            GameManager.Instance.isPaused = true;
+        }
+        else
+        {
+            UIs.SetActive(true);
+            menu.SetActive(false);
+            GameManager.Instance.isPaused = false;
+        }
 
-    private string FormatTimeSSMilS(float timeInseconds)
-    {
-        float fraction = timeInseconds * 100;
-        return string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeInseconds % 60), fraction % 100);
+        if (GameManager.Instance.wonGame)
+            wonPanel.SetActive(true);
+        else
+            wonPanel.SetActive(false);
+
+        totalSoulNo.text = GameManager.Instance.totalSoulNo.ToString();
     }
 }

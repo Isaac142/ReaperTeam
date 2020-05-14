@@ -76,6 +76,9 @@ public class ItemMovement : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.playerActive == false)
+            return;
+
         if (player == null) //if there's no character around, stop reading script here --> optimising performance.
             return;
 

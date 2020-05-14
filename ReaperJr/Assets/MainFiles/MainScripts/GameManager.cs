@@ -16,13 +16,14 @@ public class GameManager : MonoBehaviour
     // character rigidbody reference
     public float playerMass = 1f;
     [HideInInspector] //game states
-    public bool dead = false, isPaused = false, gameOver = false;
+    public bool dead = false, isPaused = false, gameOver = false, wonGame = false, pausePanel = false, menuPanel = false, optionPanel = false, playerActive = true;
     [HideInInspector] //holding object states
     public bool isHolding = false, canHold = true, holdingLightObject = false;
     [HideInInspector] //scythe and its ability state
     public bool scytheEquiped = true, onCD = false;
     [HideInInspector] //grounding states
     public bool onSpecialGround = false;
+    private bool pauseCheck;
 
     public float maxSafeFallDist = 8f;
 
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public List<Vector3> checkPoints = new List<Vector3>();
+    public int totalSoulNo = 0;
 
     private void Awake()
     {
@@ -74,6 +76,7 @@ public class GameManager : MonoBehaviour
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
 
         checkPoints.Add(characterControl.transform.position);
+        
     }
 
     // Start is called before the first frame update
@@ -82,6 +85,7 @@ public class GameManager : MonoBehaviour
         dead = false;
         isPaused = false;
         gameOver = false;
+        wonGame = false;
         holdingLightObject = false;
         isHolding = false;
         canHold = true;
@@ -95,6 +99,22 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //preventing errors when restart game.
+        if (main == null || second == null)
+        {
+            main = Camera.main;
+            foreach(Camera cam in Camera.allCameras)
+            {
+                if (cam.tag == "SecondCam")
+                    second = cam;
+            }
+        }
+
+        if (characterControl == null)
+        {
+            characterControl = FindObjectOfType<PlayerMovement>();
+        }
+
         if (dead)
         {
             _timer -= punishmentTime;
@@ -113,6 +133,14 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (isPaused)
+            playerActive = false;
+        else
+        {
+            if(playerActive == false)
+            StartCoroutine("SetPlayerActive");
+        }
+
         if (_timer <= 0)
         {
             gameOver = true;
@@ -126,7 +154,13 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isPaused = !isPaused;
+            if (menuPanel)
+                menuPanel = false;
+            else
+            {
+                isPaused = !isPaused;
+                pausePanel = !pausePanel;
+            }
         }
 
         if (onCD)
@@ -161,5 +195,16 @@ public class GameManager : MonoBehaviour
 
         if (checkPoints.Count > 5)
             checkPoints.Remove(checkPoints[0]);
+    }
+
+    private void FixedUpdate()
+    {
+        
+    }
+
+    IEnumerator SetPlayerActive()
+    {
+        yield return new WaitForSeconds(0.1f);
+        playerActive = true;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomCollider : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class RoomCollider : MonoBehaviour
     [HideInInspector]
     public Vector2 roomSides = Vector2.zero, roomHeight = Vector2.zero, roomDepth = Vector2.zero;
     private bool roomSwitch;
+    private UpdateUI uiScript;
+
+    public List<GameObject> soul = new List<GameObject>();
+    public List<Sprite> souls = new List<Sprite>();
+    public List<Sprite> soulMasks = new List<Sprite>();
 
     private enum RoomType { LEVEL, ROOM, STAIR, CORRIDOR }
     private RoomType roomType;
@@ -30,6 +36,7 @@ public class RoomCollider : MonoBehaviour
             roomType = RoomType.STAIR;
         if (transform.tag == "CorridorCollider")
             roomType = RoomType.CORRIDOR;
+        uiScript = FindObjectOfType<UpdateUI>();
     }
 
     private void Start()
@@ -39,10 +46,53 @@ public class RoomCollider : MonoBehaviour
         roomSides = new Vector2(roomCollider.transform.position.x - roomCollider.bounds.size.x / 2f, roomCollider.transform.position.x + roomCollider.bounds.size.x / 2f);
         roomHeight = new Vector2(roomCollider.transform.position.y - roomCollider.bounds.size.y / 2f, roomCollider.transform.position.y + roomCollider.bounds.size.y / 2f);
         roomDepth = new Vector2(roomCollider.transform.position.z - roomCollider.bounds.size.z / 2f, roomCollider.transform.position.z + roomCollider.bounds.size.z / 2f);
+        for (int i = 0; i <soul.Count; i ++)
+        {
+            souls.Add(soul[i].GetComponent<SoulType>().soulIcon);
+            soulMasks.Add(soul[i].GetComponent<SoulType>().soulMask);
+        }
+        GameManager.Instance.totalSoulNo += soul.Count;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            foreach (Image soul in uiScript.souls)
+            {
+                soul.sprite = null;
+                soul.enabled = false;
+            }
+            foreach (Image mask in uiScript.soulMasks)
+            {
+                mask.sprite = null;
+                mask.enabled = false;
+            }
+
+            if (soul.Count > 0)
+            {
+                for (int i = 0; i < souls.Count; i++)
+                {
+                    uiScript.souls[i].enabled = true;
+                    uiScript.souls[i].sprite = souls[i];
+                    uiScript.soulMasks[i].sprite = soulMasks[i];
+                    uiScript.soulMasks[i].enabled = false;
+                }
+            }
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
+        if (soul.Count > 0)
+        {
+            for (int i = 0; i < souls.Count; i++)
+            {
+                if (soul[i] == null)
+                    uiScript.soulMasks[i].enabled = true;
+            }
+        }
+
         if (other.tag == "Player")
         {
             switch (roomType)
@@ -60,6 +110,7 @@ public class RoomCollider : MonoBehaviour
                     cameraControl.roomPosition = roomPosition;
                     StartCoroutine(cameraControl.RoomSwitch(roomSides, roomHeight, roomDepth));
                     StartCoroutine("Disappear", 0f);
+
                     break;
                 case RoomType.STAIR:
                     cameraControl.roomPosition = roomPosition;
@@ -80,6 +131,17 @@ public class RoomCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            foreach (Image soul in uiScript.souls)
+            {
+                soul.sprite = null;
+                soul.enabled = false;
+            }
+            foreach (Image mask in uiScript.soulMasks)
+            {
+                mask.sprite = null;
+                mask.enabled = false;
+            }
+
             StartCoroutine("Appear", 0);
             switch(roomType)
             {

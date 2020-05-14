@@ -45,6 +45,9 @@ public class ThrowableScythe : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.playerActive == false)
+            return;
+
         if (!isThrown)
             scythe.transform.position = target.position;
 

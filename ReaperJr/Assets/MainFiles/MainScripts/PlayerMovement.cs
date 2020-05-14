@@ -64,6 +64,9 @@ public class PlayerMovement : MonoBehaviour
     //Calling the PlayerJumping function
     void Update()
     {
+        if (GameManager.Instance.playerActive == false)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
         {
             distToGround = 0f;
@@ -353,6 +356,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     GameManager.Instance.scytheEquiped = true;
                     Destroy(hits[i].transform.gameObject);
+                    GameManager.Instance.totalSoulNo -= 1;
                     //do something --> collected amount, visual clue...
                 }
 
