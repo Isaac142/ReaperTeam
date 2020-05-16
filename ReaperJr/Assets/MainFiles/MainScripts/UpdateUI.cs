@@ -20,6 +20,8 @@ public class UpdateUI : MonoBehaviour
     public List<Image> souls = new List<Image>();
     public List<Image> soulMasks = new List<Image>();
     public Text totalSoulNo;
+    public GameObject infoPanel;
+    public Text itemName, itemType, itemDescription;
 
     public Slider energyBar;
     public Image abilityCD;
@@ -51,11 +53,13 @@ public class UpdateUI : MonoBehaviour
 
         foreach (GameObject pic in masks)
             pic.SetActive(false);
+
+        infoPanel.SetActive(false);   
     }
 
     // Update is called once per frame
     void Update()
-    {      
+    {
         if(GameManager.Instance.Timer < GameManager.Instance.warningTimeInSeconds)
         {
             timerCount.text = FormatTimeSSMilS(GameManager.Instance.Timer);

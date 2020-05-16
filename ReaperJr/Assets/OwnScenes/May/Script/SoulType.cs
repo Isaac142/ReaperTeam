@@ -5,8 +5,8 @@ using UnityEngine;
 public class SoulType : MonoBehaviour
 {
     public Souls soul;
-    public Sprite soulIcon;
-    public Sprite soulMask;
+    [HideInInspector]
+    public Sprite soulIcon, soulMask;
     private enum SoulTypes { BRAVE, HAPPY, SKITTISH}
     private SoulTypes soulTypes;
     public float radius = 3f;
@@ -44,7 +44,14 @@ public class SoulType : MonoBehaviour
                 {
                     GetComponent<Renderer>().material.SetColor("_Color", new Color(color.r, color.b, color.g, 0f));
                     transform.GetChild(0).gameObject.SetActive(false);
-                    SphereCollider collider = gameObject.AddComponent<SphereCollider>();
+                    GameObject detectCollider = new GameObject("Collider");
+                    detectCollider.transform.parent = transform;
+                    detectCollider.transform.position = transform.position;
+                    detectCollider.layer = 2;
+                    detectCollider.transform.localScale = new Vector3(1f, 1f, 1f);
+                    SphereCollider collider = detectCollider.AddComponent<SphereCollider>();
+                    Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+                    rb.isKinematic = true;
                     collider.isTrigger = true;
                     collider.radius = radius;
                     break;
@@ -61,7 +68,7 @@ public class SoulType : MonoBehaviour
                 case SoulTypes.SKITTISH:
                     {
                         GetComponent<Renderer>().material.SetColor("_Color", new Color(color.r, color.b, color.g, color.a));
-                        transform.GetChild(0).gameObject.SetActive(false);
+                        transform.GetChild(0).gameObject.SetActive(true);
                         break;
                     }
             }

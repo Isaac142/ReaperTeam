@@ -13,6 +13,7 @@ public class EnemyTrap : MonoBehaviour
     public float activeTime = 3f;
     private bool lureIn = false;
     private bool catched = false;
+    private bool playerIn = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,20 +26,26 @@ public class EnemyTrap : MonoBehaviour
         {
             lure.GetComponent<ItemMovement>().canHold = false;
         }
+
+        if (lureIn && !playerIn)
+            StartCoroutine("GoalSet");
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Lure")
             lureIn = true;
+        if (other.tag == "Player")
+            playerIn = true;
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Enemy")
         {
-            if (lureIn)
-            { if (Vector3.Distance(other.transform.position, enemyGoal.transform.position) <= 3f)
+            if (lureIn && !playerIn)
+            {
+                if (Vector3.Distance(other.transform.position, enemyGoal.transform.position) < 1f)
                 {
                     trapDoor.SetTrigger("Close");
                     if (soul != null)
@@ -55,10 +62,8 @@ public class EnemyTrap : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if(other.tag == "Player")
-        {
-            if(lureIn)
-                StartCoroutine("GoalSet");
-        }
+            playerIn = false;
+
         if (other.tag == "Lure")
             lureIn = false;
     }

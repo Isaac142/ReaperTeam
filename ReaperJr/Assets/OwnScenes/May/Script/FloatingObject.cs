@@ -6,14 +6,14 @@ using UnityEngine;
 
 public class FloatingObject : MonoBehaviour
 {
-    public Transform water;
+    public Transform water; 
 
     private float waterLevel = 0f;
     public float floatThreshold = 2f;
     public float waterDensity = 0.125f;
     public float downForce = 0f;
 
-    public float forceFactor;
+    private float forceFactor;
     private Vector3 floatForce;
     private Rigidbody rb;
 

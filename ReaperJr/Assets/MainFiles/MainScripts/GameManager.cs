@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public List<Vector3> checkPoints = new List<Vector3>();
     public int totalSoulNo = 0;
+    public Transform bottomReset;
 
     private void Awake()
     {
@@ -76,7 +77,6 @@ public class GameManager : MonoBehaviour
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
 
         checkPoints.Add(characterControl.transform.position);
-        
     }
 
     // Start is called before the first frame update
@@ -121,6 +121,15 @@ public class GameManager : MonoBehaviour
             //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             characterControl.transform.position = checkPoints[checkPoints.Count - 1];
             dead = false;
+        }
+
+        if (bottomReset != null)
+        {
+            if (characterControl.transform.position.y < bottomReset.position.y)
+            {
+                characterControl.transform.position = bottomReset.position;
+                characterControl.fallDist = 0;
+            }
         }
 
         if (!isPaused && _timer > 0) //timer count down and return energy when game is not paused.

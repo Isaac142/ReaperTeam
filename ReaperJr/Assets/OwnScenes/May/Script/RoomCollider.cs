@@ -58,26 +58,31 @@ public class RoomCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            foreach (Image soul in uiScript.souls)
+            switch (roomType)
             {
-                soul.sprite = null;
-                soul.enabled = false;
-            }
-            foreach (Image mask in uiScript.soulMasks)
-            {
-                mask.sprite = null;
-                mask.enabled = false;
-            }
+                case RoomType.ROOM:
+                    foreach (Image soul in uiScript.souls)
+                    {
+                        soul.sprite = null;
+                        soul.enabled = false;
+                    }
+                    foreach (Image mask in uiScript.soulMasks)
+                    {
+                        mask.sprite = null;
+                        mask.enabled = false;
+                    }
 
-            if (soul.Count > 0)
-            {
-                for (int i = 0; i < souls.Count; i++)
-                {
-                    uiScript.souls[i].enabled = true;
-                    uiScript.souls[i].sprite = souls[i];
-                    uiScript.soulMasks[i].sprite = soulMasks[i];
-                    uiScript.soulMasks[i].enabled = false;
-                }
+                    if (soul.Count > 0)
+                    {
+                        for (int i = 0; i < souls.Count; i++)
+                        {
+                            uiScript.souls[i].enabled = true;
+                            uiScript.souls[i].sprite = souls[i];
+                            uiScript.soulMasks[i].sprite = soulMasks[i];
+                            uiScript.soulMasks[i].enabled = false;
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -90,6 +95,8 @@ public class RoomCollider : MonoBehaviour
             {
                 if (soul[i] == null)
                     uiScript.soulMasks[i].enabled = true;
+                if (!uiScript.souls[i].IsActive())
+                    uiScript.soulMasks[i].enabled = false;
             }
         }
 
@@ -131,21 +138,21 @@ public class RoomCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            foreach (Image soul in uiScript.souls)
-            {
-                soul.sprite = null;
-                soul.enabled = false;
-            }
-            foreach (Image mask in uiScript.soulMasks)
-            {
-                mask.sprite = null;
-                mask.enabled = false;
-            }
 
             StartCoroutine("Appear", 0);
             switch(roomType)
             {
                 case RoomType.ROOM:
+                    foreach (Image soul in uiScript.souls)
+                    {
+                        soul.sprite = null;
+                        soul.enabled = false;
+                    }
+                    foreach (Image mask in uiScript.soulMasks)
+                    {
+                        mask.sprite = null;
+                        mask.enabled = false;
+                    }
                     cameraControl.inRoom = false;
                     break;
                 case RoomType.STAIR:
@@ -166,7 +173,10 @@ public class RoomCollider : MonoBehaviour
             barrier.SetActive(false);
 
         foreach (MeshRenderer wall in frontWall)
+        {
             wall.enabled = false;
+            wall.gameObject.layer = 2;
+        }
     }
 
     IEnumerator Appear(float waitSeconds)
@@ -177,6 +187,9 @@ public class RoomCollider : MonoBehaviour
             barrier.SetActive(true);
 
         foreach (MeshRenderer wall in frontWall)
+        {
             wall.enabled = true;
+            wall.gameObject.layer = 0;
+        }
     }
 }

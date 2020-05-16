@@ -13,6 +13,14 @@ public class WonGame : MonoBehaviour
         mark.Stop();
     }
 
+    private void Update()
+    {
+        if (GameManager.Instance.totalSoulNo == 0)
+            mark.Play();
+        else
+            mark.Stop();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")

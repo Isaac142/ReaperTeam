@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public float timeToMove;
     public float collectableDist = 3f;
     public LayerMask collectableLayer;
+    public LayerMask visionTestLayers;
 
     private float speed = 0f;
     private float recordYPos = 0f;
@@ -26,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     public float fallDist = 0f;
 
     private bool isDiagonal = false, isVertical = false, isHorizontal = false, facingF = false, facingR = false, facingL = false, facingB = false;
-    private bool groundedCheck = false;
+    private bool groundedCheck = false, isCrouched = false;
 
     private CapsuleCollider bodyCollider;
     private Transform bodyMesh;
@@ -86,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && !GameManager.Instance.isHolding)
             Collect();
 
         EquipScythe();
@@ -97,6 +98,18 @@ public class PlayerMovement : MonoBehaviour
             scythe.SetActive(false);
 
         isCrouching = Input.GetKey(KeyCode.LeftShift) ? true : false; //crouching
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            isCrouched = true;
+        if(isCrouched && !isCrouching)
+        {
+            if (Physics.Raycast(transform.position, Vector3.up, bodyHeight))
+                isCrouching = true;
+            else
+            {
+                isCrouching = false;
+                isCrouched = false;
+            }
+        }
     }
 
     private void FixedUpdate() //prevent character walking into walls.
@@ -344,35 +357,40 @@ public class PlayerMovement : MonoBehaviour
     void Collect()
     {
         RaycastHit[] hits;
-        float radius = controller.GetComponent<CapsuleCollider>().radius * 4f;
-        Vector3 topPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center + Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 1f) + transform.right * 2 * radius;
-        Vector3 bottomPoint = controller.transform.position + controller.GetComponent<CapsuleCollider>().center - Vector3.up * (controller.GetComponent<CapsuleCollider>().height + 0.5f) + transform.right * 2 * radius;    
-        hits = Physics.CapsuleCastAll(topPoint, bottomPoint, radius, controller.transform.right, collectableDist, collectableLayer);
-        for(int i = 0; i < hits.Length; i ++)
+
+        Vector3 centre = transform.position + Vector3.up * collectableDist + transform.right * collectableDist;
+        hits = Physics.BoxCastAll(centre, new Vector3(collectableDist, collectableDist, collectableDist), transform.right, transform.rotation, 0f, collectableLayer);
+
+        for (int i = 0; i < hits.Length; i ++)
         {
             if (hits[i].transform.tag != "Untagged")
             {
-                if (hits[i].transform.tag == "Soul")
+                if (Physics.Linecast(transform.position, hits[i].transform.position, visionTestLayers))
+                    return;
+                else
                 {
-                    GameManager.Instance.scytheEquiped = true;
-                    Destroy(hits[i].transform.gameObject);
-                    GameManager.Instance.totalSoulNo -= 1;
-                    //do something --> collected amount, visual clue...
-                }
+                    if (hits[i].transform.tag == "Soul")
+                    {
+                        GameManager.Instance.scytheEquiped = true;
+                        Destroy(hits[i].transform.gameObject);
+                        GameManager.Instance.totalSoulNo -= 1;
+                        //do something --> collected amount, visual clue...
+                    }
 
-                if (hits[i].transform.tag == "FakeSoul")
-                {
-                    GameManager.Instance.scytheEquiped = true;
-                    GameManager.Instance.dead = true;
-                    //do something --> collected amount, visual clue...
-                }
+                    if (hits[i].transform.tag == "FakeSoul")
+                    {
+                        GameManager.Instance.scytheEquiped = true;
+                        GameManager.Instance.dead = true;
+                        //do something --> collected amount, visual clue...
+                    }
 
-                if (hits[i].transform.tag == "HiddenItem")
-                {
-                    GameManager.Instance.Timer += GameManager.Instance.rewardTime;
-                    Destroy(hits[i].transform.gameObject);
+                    if (hits[i].transform.tag == "HiddenItem")
+                    {
+                        GameManager.Instance.Timer += GameManager.Instance.rewardTime;
+                        Destroy(hits[i].transform.gameObject);
+                    }
+                    //if there's other collectables
                 }
-                //if there's other collectables
             }
         }
     }

@@ -113,8 +113,7 @@ public class ItemMovement : MonoBehaviour
             else if (isHolding)
             {
                 isHolding = false;
-                GameManager.Instance.canHold = true;
-                GameManager.Instance.isHolding = false;
+                StartCoroutine("ReleaseDelay");
                 player.GetComponent<PlayerMovement>().movable = true;
             }
             else
@@ -130,7 +129,7 @@ public class ItemMovement : MonoBehaviour
 
                 if (isLigther)
                 {
-                    transform.position = new Vector3(transform.position.x, player.transform.position.y + GetComponent<Collider>().bounds.size.y, transform.position.z); //can change to hand position
+                    transform.position = new Vector3(transform.position.x, player.GetComponent<CapsuleCollider>().height/2f + transform.position.y, transform.position.z); //can change to hand position
                     transform.eulerAngles = Vector3.zero;
                     GameManager.Instance.holdingLightObject = true;
                 }
@@ -171,8 +170,7 @@ public class ItemMovement : MonoBehaviour
                 if (GameManager.Instance.scytheEquiped) //equip scythe releases heavy object
                 {
                     isHolding = false;
-                    GameManager.Instance.isHolding = false;
-                    GameManager.Instance.canHold = true;
+                    StartCoroutine("ReleaseDelay");
                     GameManager.Instance.holdingLightObject = false;
                     player.GetComponent<PlayerMovement>().speedFactor += mass;
                     player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
@@ -207,8 +205,7 @@ public class ItemMovement : MonoBehaviour
                     {
                         DeleteCollider();
                         isHolding = false;
-                        GameManager.Instance.isHolding = false;
-                        GameManager.Instance.canHold = true;
+                        StartCoroutine("ReleaseDelay");
                         GameManager.Instance.holdingLightObject = false;
                         player.GetComponent<PlayerMovement>().speedFactor += mass;
                         player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
@@ -301,5 +298,12 @@ public class ItemMovement : MonoBehaviour
             Destroy(placeHolder);
             objectRB.GetComponent<Collider>().isTrigger = false;
         }
+    }
+
+    IEnumerator ReleaseDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.canHold = true;
+        GameManager.Instance.isHolding = false;
     }
 }

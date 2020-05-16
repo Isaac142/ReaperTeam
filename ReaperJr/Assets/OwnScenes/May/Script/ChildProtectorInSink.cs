@@ -6,33 +6,21 @@ public class ChildProtectorInSink : MonoBehaviour
 {
     public SinkControl sinkController;
 
-    // Start is called before the first frame update
+    //start is called before the first frame update
     void Start()
     {
         sinkController = GetComponentInParent<SinkControl>();
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if(other.tag == "Player")
-        {
-            if (sinkController.player == null)
-                sinkController.player = other.gameObject;
-
-            if (!sinkController.fillWater)
-                sinkController.filmOn = true;
-
             sinkController.playerIn = true;
-        }
     }
 
-        private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
-        {
             sinkController.playerIn = false;
-            sinkController.filmOn = false;
-        }
     }
 }

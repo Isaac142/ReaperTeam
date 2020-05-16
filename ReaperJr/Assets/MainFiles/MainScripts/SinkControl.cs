@@ -8,27 +8,30 @@ public class SinkControl : MonoBehaviour
     public ParticleSystem flowWater;
     public GameObject waterLevel;
     public GameObject protectFilm;
-    public GameObject player;
+    public Transform player;
     public GameObject plugSwitch;
     public GameObject filmSwitch;
+    public List<GameObject> bubbles = new List<GameObject>();
 
     public GameObject soulInTab;
+    [VectorLabels("Xaxis", "Yaxis", "Zaxis")]
+    public Vector3 soulMoveDir = Vector3.left;
+    public float soulOutForce = 5f;
     private Animator soulAnme;
 
     public float raisingFactor = 0.3f;
     private Vector3 oriWaterLine;
     private Vector3 waterLine;
 
-    private bool tapOn = false;
+    public bool tapOn = false;
     private bool tapClickable = false;
     private bool plugIn = true;
     private bool plugClickable = false;
-    public bool filmOn = false;
+    [HideInInspector]
+    public bool filmOn = false, fillWater = false, playerIn = false;
+
     private bool switchClickable = false;
     private bool switchFilmOn = false;
-
-    public bool fillWater = false;
-    public bool playerIn = false;
     public float fillDuration = 5f;
     public float drainDuration = 3f;
     public float clickDist = 3f;
@@ -41,14 +44,6 @@ public class SinkControl : MonoBehaviour
     void Awake()
     {
         flowWater.Stop();
-        tapClickable = false;
-        tapOn = false;
-        plugIn = false;
-        oriWaterLine = waterLevel.transform.position;
-        waterLine = oriWaterLine;
-        waterLevel.SetActive(false);
-        fillTimeRemind = fillDuration;
-        drainTimerRemind = drainDuration;
         if (soulInTab != null)
         {
             soulAnme = soulInTab.GetComponent<Animator>();
@@ -57,9 +52,73 @@ public class SinkControl : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        oriWaterLine = waterLevel.transform.position;
+        waterLine = oriWaterLine;
+        protectFilm.SetActive(false);
+        fillTimeRemind = fillDuration;
+        drainTimerRemind = drainDuration;
+
+        if (bubbles.Count > 0)
+        {
+            foreach (GameObject bubble in bubbles)
+                bubble.SetActive(false);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        #region EmissionSwitch
+        if (tapClickable)
+        {
+            tapSwitch.transform.GetChild(0).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+            tapSwitch.transform.GetChild(1).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        }
+        else
+        {
+            tapSwitch.transform.GetChild(0).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+            tapSwitch.transform.GetChild(1).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+        }
+
+        if (plugClickable)
+            plugSwitch.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        else
+            plugSwitch.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+
+        if (plugIn)
+            plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
+        else
+            plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(143f / 255f, 185f / 255f, 74f / 255));
+
+        if (switchClickable)
+            filmSwitch.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        else
+            filmSwitch.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+
+        if (switchFilmOn)
+            filmSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(130f / 255f, 10f / 255f, 117f / 255));
+        else
+            filmSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
+        #endregion
+
+        if (player != null)
+        {
+            tapClickable = true;
+            plugClickable = true;
+        }
+        else
+        {
+            tapClickable = false;
+            plugClickable = false;
+            switchClickable = false;
+            return;
+        }
+
+        if (playerIn && waterLine.y >= player.position.y + player.GetComponent<CapsuleCollider>().height) //player will dead if water level is above it.
+            GameManager.Instance.dead = true;
+
         #region ClickEvent
         if (!GameManager.Instance.scytheEquiped)
         {
@@ -71,10 +130,11 @@ public class SinkControl : MonoBehaviour
                 {
                     if (Vector3.Distance(hit.transform.position, player.transform.position) <= clickDist)
                     {
-                        if (tapClickable)
+                        if (hit.transform.tag == "Switch")
                         {
-                            if (hit.transform.tag == "Switch" && hit.transform.name == "Tap")
+                            if (tapClickable )
                             {
+                                if(hit.transform.name == tapSwitch.name)
                                 tapOn = !tapOn;
 
                                 if (soulInTab != null)
@@ -82,28 +142,26 @@ public class SinkControl : MonoBehaviour
                                     soulInTab.SetActive(true);
                                     soulAnme.SetBool("SoulOut", true);
                                     soulInTab.GetComponent<Rigidbody>().isKinematic = false;
-                                    soulInTab.GetComponent<Rigidbody>().AddForce(soulInTab.transform.right * 5, ForceMode.Impulse);
+                                    soulInTab.GetComponent<Rigidbody>().AddForce(soulMoveDir * soulOutForce, ForceMode.Impulse);
+                                }
+
+                                if (bubbles.Count > 0)
+                                {
+                                    foreach (GameObject bubble in bubbles)
+                                        bubble.SetActive(true);
                                 }
                             }
-                        }
 
-                        if (plugClickable)
-                        {
-                            if (hit.transform.tag == "Switch" && hit.transform.name == "PlugSwitch")
+                            if (plugClickable && hit.transform.name == plugSwitch.name)
                                 plugIn = !plugIn;
-                        }
 
-                        if (switchClickable)
-                        {
-                            if (hit.transform.tag == "Switch" && hit.transform.name == "FilmSwitch")
+                            if (switchClickable && hit.transform.name == filmSwitch.name)
                                 switchFilmOn = !switchFilmOn;
                         }
                     }
                 }
             }
         }
-        else
-            return;
         #endregion
 
         waterLevel.transform.position = waterLine;
@@ -171,13 +229,20 @@ public class SinkControl : MonoBehaviour
         #endregion
 
         #region ProtectiveFilmSwitch
-        if (waterLine.y >= protectFilm.transform.GetChild(0).position.y)
+
+        if (playerIn && !fillWater)
+            filmOn = true;
+        else
+            filmOn = false;
+
+        if (filmOn || switchFilmOn)
+            protectFilm.SetActive(true);
+        else
+            protectFilm.SetActive(false);
+
+        if (waterLine.y >= protectFilm.transform.position.y)
         {
             filmOn = false;
-        }
-
-        if (waterLine.y >= protectFilm.transform.GetChild(0).position.y)  //auto turn off the protective film if water level is higher that it.
-        {
             fillWater = true;
             switchClickable = true;
         }
@@ -186,61 +251,7 @@ public class SinkControl : MonoBehaviour
             fillWater = false;
             switchClickable = false;
         }
-
-        if (filmOn || switchFilmOn)
-            protectFilm.transform.GetChild(0).gameObject.SetActive(true);
-        else
-            protectFilm.transform.GetChild(0).gameObject.SetActive(false);
-        #endregion
-
-        if (player != null)
-        {
-            if (playerIn && waterLine.y >= player.transform.position.y + player.GetComponent<CapsuleCollider>().height) //player will dead if water level is above it.
-                GameManager.Instance.dead = true;
-        }
-
-        #region EmissionSwitch
-        if (tapSwitch.transform.GetChild(0).GetComponent<Renderer>() != null && tapSwitch.transform.GetChild(1).GetComponent<Renderer>() != null)
-        {
-            if (tapClickable)
-            {
-                tapSwitch.transform.GetChild(0).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-                tapSwitch.transform.GetChild(1).GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-            }
-            else
-            {
-                tapSwitch.transform.GetChild(0).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
-                tapSwitch.transform.GetChild(1).GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
-            }
-        }
-
-        if (plugSwitch.GetComponent<Renderer>() != null)
-        {
-            if (plugClickable)
-                plugSwitch.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-            else
-                plugSwitch.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
-
-            if(plugIn)
-                plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
-            else
-                plugSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(143f / 255f, 185f / 255f, 74f / 255));
-        }
-
-        if (filmSwitch.GetComponent<Renderer>() != null)
-        {
-            if (switchClickable)
-                filmSwitch.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-            else
-                filmSwitch.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
-
-            if(switchFilmOn)
-                filmSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(130f / 255f, 10f / 255f, 117f / 255));
-            else
-                filmSwitch.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(101f / 255f, 62f / 255f, 19f / 255));
-        }
-
-        #endregion
+        #endregion    
     }
 
     private void OnTriggerEnter(Collider other)
@@ -248,11 +259,7 @@ public class SinkControl : MonoBehaviour
         if (other.tag == "Player")
         {
             if (player == null)
-                player = other.gameObject;
-
-            tapClickable = true;
-            plugClickable = true;
-            switchClickable = true;
+                player = other.transform;
         }
     }
 
@@ -260,9 +267,7 @@ public class SinkControl : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            tapClickable = false;
-            plugClickable = false;
-            switchClickable = false;
+            player = null;
         }
     }
 
