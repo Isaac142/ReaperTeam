@@ -48,7 +48,7 @@ public class CameraControlScript : MonoBehaviour
     private List<GameObject> objInFront = new List<GameObject>(), objInFrontLast = new List<GameObject>();
     private RaycastHit[] hits;
     public LayerMask layerMask = 0;
-    public float rendererMode = 2f;
+    private float rendererMode = 2f;
     public float transparentFactor = 0.5f;
     private Color color;
 
@@ -72,8 +72,7 @@ public class CameraControlScript : MonoBehaviour
         inRoom = false;
         onStairs = false;
     }
-
-    private void FixedUpdate()
+    private void Update()
     {
         #region TurnToTransparent
         objInFront = new List<GameObject>();
@@ -91,6 +90,11 @@ public class CameraControlScript : MonoBehaviour
         objInFrontLast = objInFront;
         #endregion
 
+
+    }
+
+    private void FixedUpdate()
+    {
         playerPos = player.position;
         scythePos = scythe.position;
         betweenDist = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe

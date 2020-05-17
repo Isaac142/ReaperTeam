@@ -18,7 +18,9 @@ public class RoomCollider : MonoBehaviour
     private UpdateUI uiScript;
 
     public List<GameObject> soul = new List<GameObject>();
+    [HideInInspector]
     public List<Sprite> souls = new List<Sprite>();
+    [HideInInspector]
     public List<Sprite> soulMasks = new List<Sprite>();
 
     private enum RoomType { LEVEL, ROOM, STAIR, CORRIDOR }
@@ -138,7 +140,6 @@ public class RoomCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-
             StartCoroutine("Appear", 0);
             switch(roomType)
             {
