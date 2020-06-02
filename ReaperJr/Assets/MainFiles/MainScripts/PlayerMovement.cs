@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : Singleton<PlayerMovement>
 {
     #region Variables
     Rigidbody controller;
     public GameObject scythe;
+
+    public Vector3 startingPos;
 
     private ThrowableScythe scytheScript;
     public float jumpForce = 20f;
@@ -47,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.DrawRay(transform.position, transform.right, Color.red);
         controller = GetComponent<Rigidbody>();
-        controller.mass = GameManager.Instance.playerMass;
+        controller.mass = _GAME.playerMass;
         scytheScript = GetComponent<ThrowableScythe>();
 
         bodyCollider = GetComponent<CapsuleCollider>();
@@ -58,6 +60,13 @@ public class PlayerMovement : MonoBehaviour
         bodyMesh = transform.GetChild(0);
         bodyScale = bodyMesh.localScale;
         bodyPos = bodyMesh.localPosition;
+
+        startingPos = transform.position;
+    }
+
+    public void Restart()
+    {
+        transform.position = startingPos;
     }
     #endregion
 
@@ -65,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     //Calling the PlayerJumping function
     void Update()
     {
-        if (GameManager.Instance.playerActive == false)
+        if (_GAME.playerActive == false)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
@@ -78,21 +87,21 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true)
         {
-            if (GameManager.Instance.Energy >= GameManager.Instance.teleportingEnergy)
+            if (_GAME.Energy >= _GAME.teleportingEnergy)
             {
                 StartCoroutine(TeleportToScythe());
-                GameManager.Instance.Energy -= GameManager.Instance.teleportingEnergy;
-                GameManager.Instance.onCD = true;
-                GameManager.Instance.CDTimer = 0;
+                _GAME.Energy -= _GAME.teleportingEnergy;
+                _GAME.onCD = true;
+                _GAME.CDTimer = 0;
             }
         }
 
-        if (Input.GetMouseButtonDown(1) && !GameManager.Instance.isHolding)
+        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
             Collect();
 
         EquipScythe();
 
-        if (GameManager.Instance.scytheEquiped)
+        if (_GAME.scytheEquiped)
             scythe.SetActive(true);
         else
             scythe.SetActive(false);
@@ -196,7 +205,7 @@ public class PlayerMovement : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (GameManager.Instance.isHolding && !GameManager.Instance.holdingLightObject)
+        if (_GAME.isHolding && !_GAME.holdingLightObject)
         #region MovingHeavyObject
         {
             speed = speedFactor;
@@ -204,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 transform.eulerAngles = new Vector3(0, 90, 0);
 
-                if (GameManager.Instance.onSpecialGround)
+                if (_GAME.onSpecialGround)
                     controller.AddForce((transform.forward * h - transform.right * v) * speed * addForce * Time.deltaTime);
                 else
                     transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
@@ -214,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 transform.eulerAngles = new Vector3(0, 270, 0);
 
-                if (GameManager.Instance.onSpecialGround)
+                if (_GAME.onSpecialGround)
                     controller.AddForce((-transform.forward * h + transform.right * v) * speed * addForce * Time.deltaTime);
                 else
                     transform.Translate((-transform.right * h - transform.forward * v) * speed * Time.deltaTime);
@@ -224,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 transform.eulerAngles = new Vector3(0, 0, 0);
 
-                if (GameManager.Instance.onSpecialGround)
+                if (_GAME.onSpecialGround)
                     controller.AddForce((transform.forward * v + transform.right * h) * speed * addForce * Time.deltaTime);
                 else
                     transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
@@ -234,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 transform.eulerAngles = new Vector3(0, 180, 0);
 
-                if (GameManager.Instance.onSpecialGround)
+                if (_GAME.onSpecialGround)
                     controller.AddForce((-transform.forward * v - transform.right * h) * speed * addForce * Time.deltaTime);
                 else
                     transform.Translate((transform.right * h + transform.forward * v) * speed * Time.deltaTime);
@@ -291,7 +300,7 @@ public class PlayerMovement : MonoBehaviour
             if (isVertical)
                 speed = v * speedFactor;
 
-            if (GameManager.Instance.onSpecialGround)
+            if (_GAME.onSpecialGround)
                 controller.AddForce(transform.right * speed * addForce * Time.deltaTime);
             else
                 transform.Translate(new Vector3(speed, 0, 0) * Time.deltaTime);
@@ -304,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
     void Jump()
     {
         //float timeToLand = 0f;
-        if (!GameManager.Instance.isHolding || GameManager.Instance.holdingLightObject) // character can not jump if it's holding heavy objects.
+        if (!_GAME.isHolding || _GAME.holdingLightObject) // character can not jump if it's holding heavy objects.
         {
             controller.velocity = Vector3.up * jumpForce; //using velocity instead of addforce to ensure each jump reaches the same height.
             isJumping = false;
@@ -371,22 +380,22 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (hits[i].transform.tag == "Soul")
                     {
-                        GameManager.Instance.scytheEquiped = true;
+                        _GAME.scytheEquiped = true;
                         Destroy(hits[i].transform.gameObject);
-                        GameManager.Instance.totalSoulNo -= 1;
+                        _GAME.totalSoulNo -= 1;
                         //do something --> collected amount, visual clue...
                     }
 
                     if (hits[i].transform.tag == "FakeSoul")
                     {
-                        GameManager.Instance.scytheEquiped = true;
-                        GameManager.Instance.dead = true;
+                        _GAME.scytheEquiped = true;
+                        _GAME.dead = true;
                         //do something --> collected amount, visual clue...
                     }
 
                     if (hits[i].transform.tag == "HiddenItem")
                     {
-                        GameManager.Instance.Timer += GameManager.Instance.rewardTime;
+                        _GAME.Timer += _GAME.rewardTime;
                         Destroy(hits[i].transform.gameObject);
                     }
                     //if there's other collectables
@@ -402,7 +411,7 @@ public class PlayerMovement : MonoBehaviour
         if (!scytheScript.isThrown)
         {
             if (Input.GetAxis("Mouse ScrollWheel") != 0)
-                GameManager.Instance.scytheEquiped = !GameManager.Instance.scytheEquiped;
+                _GAME.scytheEquiped = !_GAME.scytheEquiped;
         }
         else return;
     }
@@ -473,8 +482,8 @@ public class PlayerMovement : MonoBehaviour
             groundedCheck = isGrounded;
             if (isGrounded)
             {
-                if (fallDist >= GameManager.Instance.maxSafeFallDist)
-                    GameManager.Instance.dead = true;
+                if (fallDist >= _GAME.maxSafeFallDist)
+                    _GAME.dead = true;
 
                 fallDist = 0f;
             }

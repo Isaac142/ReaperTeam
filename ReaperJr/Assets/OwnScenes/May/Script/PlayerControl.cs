@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : ReaperJr
 {
     public float forwardForce = 1500;
     public float forwardSpeed = 5f;
@@ -127,7 +127,7 @@ public class PlayerControl : MonoBehaviour
 
                     if (hit.transform.tag == "FakeSoul")
                     {
-                        GameManager.Instance.dead = true;
+                        _GAME.dead = true;
                         //do something --> collected amount, visual clue...
                     }
 

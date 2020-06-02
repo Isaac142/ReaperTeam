@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RoomCollider : MonoBehaviour
+public class RoomCollider : ReaperJr
 {
     Collider roomCollider;
     [HideInInspector]
@@ -53,7 +53,7 @@ public class RoomCollider : MonoBehaviour
             souls.Add(soul[i].GetComponent<SoulType>().soulIcon);
             soulMasks.Add(soul[i].GetComponent<SoulType>().soulMask);
         }
-        GameManager.Instance.totalSoulNo += soul.Count;
+        _GAME.totalSoulNo += soul.Count;
     }
 
     private void OnTriggerEnter(Collider other)

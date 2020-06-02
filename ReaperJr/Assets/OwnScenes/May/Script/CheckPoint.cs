@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPoint : MonoBehaviour
+public class CheckPoint : ReaperJr
 {
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
-            GameManager.Instance.checkPoints.Add(transform.position);
+            _GAME.checkPoints.Add(transform.position);
     }
 }

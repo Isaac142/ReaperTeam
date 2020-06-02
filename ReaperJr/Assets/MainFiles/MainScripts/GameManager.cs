@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager Instance;
+    //public static GameManager Instance;
 
     public Texture2D cursor;
-    public Camera main;
-    public Camera second;
-    public bool isViewingAll;
 
     public PlayerMovement characterControl;
     // character rigidbody reference
@@ -65,13 +63,13 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-            Destroy(this);
+        //if (Instance == null)
+        //{
+        //    Instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else
+        //    Destroy(this);
 
         if(cursor != null)
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
@@ -82,6 +80,14 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Restart();
+    }
+
+    public void Restart()
+    {
+        _PLAYER.Restart();
+        pausePanel = false;
+        menuPanel = false;
         dead = false;
         isPaused = false;
         gameOver = false;
@@ -94,21 +100,23 @@ public class GameManager : MonoBehaviour
         _energy = maxEnergy;
         _cDTimer = coolDown;
         onCD = false;
+        _GAME.totalSoulNo = 0;
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
         //preventing errors when restart game.
-        if (main == null || second == null)
-        {
-            main = Camera.main;
-            foreach(Camera cam in Camera.allCameras)
-            {
-                if (cam.tag == "SecondCam")
-                    second = cam;
-            }
-        }
+        //if (main == null || second == null)
+        //{
+        //    main = Camera.main;
+        //    foreach(Camera cam in Camera.allCameras)
+        //    {
+        //        if (cam.tag == "SecondCam")
+        //            second = cam;
+        //    }
+        //}
 
         if (characterControl == null)
         {
@@ -183,24 +191,40 @@ public class GameManager : MonoBehaviour
             _cDTimer = coolDown;
         }
 
-        if (Input.GetKeyDown(KeyCode.V) && !isViewingAll)
-        {
-            isViewingAll = true;
-        }
-        if (Input.GetKeyUp(KeyCode.V) && isViewingAll)
-        {
-            isViewingAll = false;
-        }
-        if (isViewingAll)
-        {
-            main.gameObject.SetActive(false);
-            second.gameObject.SetActive(true);
-        }
-        if (!isViewingAll)
-        {
-            main.gameObject.SetActive(true);
-            second.gameObject.SetActive(false);
-        }
+        //if (Input.GetKeyDown(KeyCode.V) && !isViewingAll)
+        //{
+        //    isViewingAll = true;
+        //}
+        //if (Input.GetKeyUp(KeyCode.V) && isViewingAll)
+        //{
+        //    isViewingAll = false;
+        //}
+        //if (isViewingAll)
+        //{
+        //    main.gameObject.SetActive(false);
+        //    second.gameObject.SetActive(true);
+        //}
+        //if (!isViewingAll)
+        //{
+        //    main.gameObject.SetActive(true);
+        //    second.gameObject.SetActive(false);
+        //}
+
+
+        //if(Input.GetKeyDown(KeyCode.P))
+        //{
+        //    isViewingAll = !isViewingAll;
+
+        //    if(isViewingAll)
+        //    {
+        //        main.gameObject.transform.DOMove(zoomOutPos, 1);
+        //    }
+        //    else
+        //    {
+        //        main.gameObject.transform.DOMove(Vector3.zero, 1);
+        //    }
+        //}
+
 
         if (checkPoints.Count > 5)
             checkPoints.Remove(checkPoints[0]);

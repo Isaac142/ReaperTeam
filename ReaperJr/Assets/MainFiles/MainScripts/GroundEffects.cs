@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundEffects : MonoBehaviour
+public class GroundEffects : ReaperJr
 {
     //set the collider at ignore raycast layer
 
@@ -32,7 +32,7 @@ public class GroundEffects : MonoBehaviour
             switch (groundEffect)
             {
                 case GroundEffect.SLOW:
-                    GameManager.Instance.onSpecialGround = true;
+                    _GAME.onSpecialGround = true;
 
                     if (other.GetComponent<PlayerMovement>() != null) // useful for current player movement script, this method will not affect jumping.
                     {
@@ -45,7 +45,7 @@ public class GroundEffects : MonoBehaviour
 
                 case GroundEffect.SLIP:
 
-                    GameManager.Instance.onSpecialGround = true;
+                    _GAME.onSpecialGround = true;
                     if (other.GetComponent<Rigidbody>() != null) //prevent bug, if character has no rigid body attached
                         other.GetComponent<Rigidbody>().drag -= dragModify; //used for addForce type of character control
                     break;
@@ -61,7 +61,7 @@ public class GroundEffects : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            GameManager.Instance.onSpecialGround = false;
+            _GAME.onSpecialGround = false;
 
             switch (groundEffect)
             {

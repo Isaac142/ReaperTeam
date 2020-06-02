@@ -9,7 +9,7 @@ using UnityEngine;
  * equip scythe when hold heavy object will relase the object.
  * character CAN NOT jump if holding heavy object.
 */
-public class ItemMovement : MonoBehaviour
+public class ItemMovement : ReaperJr
 {
     public float mass = 1f; //object's mass
     public float drag = 5f; //object's rigidbody's sliperness on ground
@@ -48,7 +48,7 @@ public class ItemMovement : MonoBehaviour
         canHold = false;
         playerIn = false;
 
-        if (mass < GameManager.Instance.playerMass)
+        if (mass < _GAME.playerMass)
             isLigther = true;
         else
             isLigther = false;
@@ -76,7 +76,7 @@ public class ItemMovement : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.playerActive == false)
+        if (_GAME.playerActive == false)
             return;
 
         if (player == null) //if there's no character around, stop reading script here --> optimising performance.
@@ -102,12 +102,12 @@ public class ItemMovement : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1)) //events happen on click event
         {
-            if (canHold && !GameManager.Instance.scytheEquiped) //preventing player standing on object and try to hold it.
+            if (canHold && !_GAME.scytheEquiped) //preventing player standing on object and try to hold it.
             {
                 player.GetComponent<PlayerMovement>().movable = (player.GetComponent<PlayerMovement>().isGrounded) ? true : false;
                 isHolding = true;
-                GameManager.Instance.canHold = false;
-                GameManager.Instance.isHolding = true;
+                _GAME.canHold = false;
+                _GAME.isHolding = true;
             }
 
             else if (isHolding)
@@ -131,10 +131,10 @@ public class ItemMovement : MonoBehaviour
                 {
                     transform.position = new Vector3(transform.position.x, player.GetComponent<CapsuleCollider>().height/2f + transform.position.y, transform.position.z); //can change to hand position
                     transform.eulerAngles = Vector3.zero;
-                    GameManager.Instance.holdingLightObject = true;
+                    _GAME.holdingLightObject = true;
                 }
                 else
-                    GameManager.Instance.holdingLightObject = false;
+                    _GAME.holdingLightObject = false;
 
                 if (objectRB != null)
                 {
@@ -148,9 +148,9 @@ public class ItemMovement : MonoBehaviour
             else
             {
                 player.GetComponent<PlayerMovement>().speedFactor += mass;
-                player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
+                player.GetComponent<Rigidbody>().mass = _GAME.playerMass;
                 transform.parent = null;
-                GameManager.Instance.holdingLightObject = false;
+                _GAME.holdingLightObject = false;
 
                 if (objectRB != null)
                 {
@@ -167,13 +167,13 @@ public class ItemMovement : MonoBehaviour
         {
             if (!isLigther)
             {
-                if (GameManager.Instance.scytheEquiped) //equip scythe releases heavy object
+                if (_GAME.scytheEquiped) //equip scythe releases heavy object
                 {
                     isHolding = false;
                     StartCoroutine("ReleaseDelay");
-                    GameManager.Instance.holdingLightObject = false;
+                    _GAME.holdingLightObject = false;
                     player.GetComponent<PlayerMovement>().speedFactor += mass;
-                    player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
+                    player.GetComponent<Rigidbody>().mass = _GAME.playerMass;
                     transform.parent = null;
                 }
             }
@@ -206,15 +206,15 @@ public class ItemMovement : MonoBehaviour
                         DeleteCollider();
                         isHolding = false;
                         StartCoroutine("ReleaseDelay");
-                        GameManager.Instance.holdingLightObject = false;
+                        _GAME.holdingLightObject = false;
                         player.GetComponent<PlayerMovement>().speedFactor += mass;
-                        player.GetComponent<Rigidbody>().mass = GameManager.Instance.playerMass;
+                        player.GetComponent<Rigidbody>().mass = _GAME.playerMass;
                         transform.parent = null;
                         objectRB.constraints = RigidbodyConstraints.None;
                         objectRB.mass = mass;
                     }
 
-                    if (GameManager.Instance.scytheEquiped)
+                    if (_GAME.scytheEquiped)
                     {
                         DeleteCollider();
                         objectRB.constraints = RigidbodyConstraints.None;
@@ -242,7 +242,7 @@ public class ItemMovement : MonoBehaviour
         if (Physics.CapsuleCast(topPoint, bottomPoint, radius, player.transform.right, out hor, pickUpDist))
             inFront = (hor.transform == transform) ? true : false;
 
-        if (GameManager.Instance.canHold)
+        if (_GAME.canHold)
         {
             canHold = (!onTop && inFront) ? true : false;
         }
@@ -303,7 +303,7 @@ public class ItemMovement : MonoBehaviour
     IEnumerator ReleaseDelay()
     {
         yield return new WaitForSeconds(0.1f);
-        GameManager.Instance.canHold = true;
-        GameManager.Instance.isHolding = false;
+        _GAME.canHold = true;
+        _GAME.isHolding = false;
     }
 }

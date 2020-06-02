@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TouchPlayer : MonoBehaviour
+public class TouchPlayer : ReaperJr
 {
     private EnemyPatrol parentScript;
 
@@ -16,7 +16,7 @@ public class TouchPlayer : MonoBehaviour
         if (parentScript.enabled == true)
         {
             if (other.tag == "Player")
-                GameManager.Instance.dead = true;
+                _GAME.dead = true;
         }
     }
 }

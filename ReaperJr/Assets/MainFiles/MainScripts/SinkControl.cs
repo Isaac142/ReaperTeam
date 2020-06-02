@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SinkControl : MonoBehaviour
+public class SinkControl : ReaperJr
 {
     public GameObject tapSwitch;
     public ParticleSystem flowWater;
@@ -117,10 +117,10 @@ public class SinkControl : MonoBehaviour
         }
 
         if (playerIn && waterLine.y >= player.position.y + player.GetComponent<CapsuleCollider>().height) //player will dead if water level is above it.
-            GameManager.Instance.dead = true;
+            _GAME.dead = true;
 
         #region ClickEvent
-        if (!GameManager.Instance.scytheEquiped)
+        if (!_GAME.scytheEquiped)
         {
             if (Input.GetMouseButtonDown(0))
             {

@@ -1,9 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
-public class CameraControlScript : MonoBehaviour
+public class CameraControlScript : Singleton<CameraControlScript>
 {
+    [Header("Zooming")]
+    public bool isViewingAll;
+
+    public Vector3 zoomOutPos;
+    public float zoomSpeed = 0.5f;
+    public Ease zoomEase;
+
+    [Header("Player")]
     public Transform player;
     public Transform scythe;
     public float chaseThreshold = 0.5f;
@@ -71,6 +80,9 @@ public class CameraControlScript : MonoBehaviour
         levelDepthBoundaries = Vector2.zero;
         inRoom = false;
         onStairs = false;
+
+        player = _PLAYER.gameObject.transform;
+        scythe = _PLAYER.scythe.transform;
     }
     private void Update()
     {
@@ -90,60 +102,76 @@ public class CameraControlScript : MonoBehaviour
         objInFrontLast = objInFront;
         #endregion
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            isViewingAll = !isViewingAll;
 
+            if (isViewingAll)
+            {
+                transform.DOMove(zoomOutPos, zoomSpeed).SetEase(zoomEase);
+            }
+            else
+            {
+               transform.DOMove(Vector3.zero, zoomSpeed).SetEase(zoomEase);
+            }
+        }
     }
 
     private void FixedUpdate()
     {
-        playerPos = player.position;
-        scythePos = scythe.position;
-        betweenDist = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe
 
-       offset = (betweenDist > chaseThreshold)? //camera chasing scythe if distance over threshold
-            new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f) : Vector3.zero;
+        if (!isViewingAll)
+        {
+            playerPos = _PLAYER.gameObject.transform.position;
+            scythePos = scythe.position;
+            betweenDist = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe
 
-        if (inRoom) //if player is in room, camera follow rules
-        {
-            //if the distance between camera and player over max value, camera chasing player at the max distance
-            toPlayerDist = (playerPos.z - transform.position.z > camToPlayerDist.y)? 
-                new Vector3(0f, transform.position.y, -camToPlayerDist.y) : new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); //camera stays at the z- minimun clamp vale.
-        }
-        if (onStairs)
-        {
-            toPlayerDist = (playerPos.y >= roomPosition.y) ?
-               new Vector3(0f, camHeight.y, -toPlayerDist.x) 
-             : Vector3.Lerp(new Vector3(0f, camHeight.y, -camToPlayerDist.x), new Vector3(0, camHeight.x, -camToPlayerDist.x), followSpeed.x * Time.deltaTime);
-        }
-        else
-            toPlayerDist = new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); // if player is out room, camera chasing player at minimun camera to player distance
+            offset = (betweenDist > chaseThreshold) ? //camera chasing scythe if distance over threshold
+                 new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f) : Vector3.zero;
 
-        if (!inRoom && !onStairs)
-        {
-            //set up camera boundaries based on the level boundaries. 
-            if (!inCorridor)
-                camDepthBoundaries.x = levelDepthBoundaries.x - miniCamToEdgeDist;
-            camHorBoundaries = new Vector2(levelHorBoundaries.x + worldSpaceScreenSize.x / 2f + camHorClampFactor.x, levelHorBoundaries.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
-            camVerBoundaries = new Vector2(levelVerBoundaries.x + camHeight.x, levelVerBoundaries.x + camHeight.y);
-            camDepthBoundaries = new Vector2(camDepthBoundaries.x, levelDepthBoundaries.y - miniCamToEdgeDist);           
-        }
+            if (inRoom) //if player is in room, camera follow rules
+            {
+                //if the distance between camera and player over max value, camera chasing player at the max distance
+                toPlayerDist = (playerPos.z - transform.position.z > camToPlayerDist.y) ?
+                    new Vector3(0f, transform.position.y, -camToPlayerDist.y) : new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); //camera stays at the z- minimun clamp vale.
+            }
+            if (onStairs)
+            {
+                toPlayerDist = (playerPos.y >= roomPosition.y) ?
+                   new Vector3(0f, camHeight.y, -toPlayerDist.x)
+                 : Vector3.Lerp(new Vector3(0f, camHeight.y, -camToPlayerDist.x), new Vector3(0, camHeight.x, -camToPlayerDist.x), followSpeed.x * Time.deltaTime);
+            }
+            else
+                toPlayerDist = new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); // if player is out room, camera chasing player at minimun camera to player distance
 
-        transform.position = Vector3.Lerp(transform.position, playerPos + toPlayerDist + offset, followSpeed.x * Time.deltaTime); //camera movement
-        //set up camera boundary clamps
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, camHorBoundaries.x, camHorBoundaries.y), Mathf.Clamp(transform.position.y, camVerBoundaries.x, camVerBoundaries.y), Mathf.Clamp(transform.position.z, camDepthBoundaries.x, camDepthBoundaries.y));
+            if (!inRoom && !onStairs)
+            {
+                //set up camera boundaries based on the level boundaries. 
+                if (!inCorridor)
+                    camDepthBoundaries.x = levelDepthBoundaries.x - miniCamToEdgeDist;
+                camHorBoundaries = new Vector2(levelHorBoundaries.x + worldSpaceScreenSize.x / 2f + camHorClampFactor.x, levelHorBoundaries.y - worldSpaceScreenSize.x / 2f - camHorClampFactor.y);
+                camVerBoundaries = new Vector2(levelVerBoundaries.x + camHeight.x, levelVerBoundaries.x + camHeight.y);
+                camDepthBoundaries = new Vector2(camDepthBoundaries.x, levelDepthBoundaries.y - miniCamToEdgeDist);
+            }
 
-        if (onStairs)
-        {
-            transform.rotation = (playerPos.y <= roomPosition.y) ?
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
-                Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime);
-        }
-        else
-        {
-            transform.rotation = (playerPos.z - transform.position.z <= camToPlayerDist.x) ? //when player closer to camera than minimum value, tilt down camera for better view.
-                Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
-                (playerPos.y >= camHeight.x) ? //if player higher than minimum camera height, camera tilt down to view ground.
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(topRot), followSpeed.y * Time.deltaTime) :
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, playerPos + toPlayerDist + offset, followSpeed.x * Time.deltaTime); //camera movement
+                                                                                                                                      //set up camera boundary clamps
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, camHorBoundaries.x, camHorBoundaries.y), Mathf.Clamp(transform.position.y, camVerBoundaries.x, camVerBoundaries.y), Mathf.Clamp(transform.position.z, camDepthBoundaries.x, camDepthBoundaries.y));
+
+            if (onStairs)
+            {
+                transform.rotation = (playerPos.y <= roomPosition.y) ?
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
+                    Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime);
+            }
+            else
+            {
+                transform.rotation = (playerPos.z - transform.position.z <= camToPlayerDist.x) ? //when player closer to camera than minimum value, tilt down camera for better view.
+                    Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
+                    (playerPos.y >= camHeight.x) ? //if player higher than minimum camera height, camera tilt down to view ground.
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(topRot), followSpeed.y * Time.deltaTime) :
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime);
+            }
         }
     }
 
@@ -156,7 +184,7 @@ public class CameraControlScript : MonoBehaviour
         {
             camHorBoundaries.x = roomSides.x;
             camHorBoundaries.y = roomSides.y;
-            toPlayerDist = new Vector3(roomPosition.x - player.position.x, transform.position.y, -camToPlayerDist.y);
+            toPlayerDist = new Vector3(roomPosition.x - _PLAYER.gameObject.transform.position.x, transform.position.y, -camToPlayerDist.y);
         }
         camVerBoundaries = new Vector2(roomHeight.x + camHeight.x, roomHeight.x + camHeight.y);
 
@@ -181,7 +209,7 @@ public class CameraControlScript : MonoBehaviour
         {
             camHorBoundaries.x = roomSides.x;
             camHorBoundaries.y = roomSides.y;
-            toPlayerDist = new Vector3(roomPosition.x - player.position.x, transform.position.y, -camToPlayerDist.y);
+            toPlayerDist = new Vector3(roomPosition.x - _PLAYER.gameObject.transform.position.x, transform.position.y, -camToPlayerDist.y);
         }
 
         camVerBoundaries = new Vector2(roomHeight.x + camHeight.x, roomHeight.y - camHeight.x);
@@ -191,8 +219,8 @@ public class CameraControlScript : MonoBehaviour
 
     void ObjectInFront(List<GameObject> obj)
     {
-        Vector3 direction = new Vector3(player.position.x, player.position.y + player.GetComponent<CapsuleCollider>().center.y, player.position.z) - transform.position;
-        float distance = Vector3.Distance(transform.position, player.position);
+        Vector3 direction = new Vector3(_PLAYER.gameObject.transform.position.x, _PLAYER.gameObject.transform.position.y + player.GetComponent<CapsuleCollider>().center.y, _PLAYER.gameObject.transform.position.z) - transform.position;
+        float distance = Vector3.Distance(transform.position, _PLAYER.gameObject.transform.position);
 
         hits = Physics.RaycastAll(transform.position, direction, distance, layerMask);
         Debug.DrawRay(transform.position, direction);

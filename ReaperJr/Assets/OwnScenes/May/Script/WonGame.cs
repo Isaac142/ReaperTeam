@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WonGame : MonoBehaviour
+public class WonGame : ReaperJr
 {
     private ParticleSystem mark;
 
@@ -15,7 +15,7 @@ public class WonGame : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.totalSoulNo == 0)
+        if (_GAME.totalSoulNo == 0)
             mark.Play();
         else
             mark.Stop();
@@ -25,8 +25,8 @@ public class WonGame : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            if (GameManager.Instance.totalSoulNo == 0)
-                GameManager.Instance.wonGame = true;
+            if (_GAME.totalSoulNo == 0)
+                _GAME.wonGame = true;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UpdateUI : MonoBehaviour
+public class UpdateUI : ReaperJr
 {
     public GameObject UIs;
     public Text timerCount;
@@ -44,7 +44,7 @@ public class UpdateUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        energyBar.maxValue = GameManager.Instance.maxEnergy;
+        energyBar.maxValue = _GAME.maxEnergy;
         energyBar.minValue = 0f;
 
         pausePanel.SetActive(false);
@@ -60,25 +60,25 @@ public class UpdateUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.Instance.Timer < GameManager.Instance.warningTimeInSeconds)
+        if(_GAME.Timer < _GAME.warningTimeInSeconds)
         {
-            timerCount.text = FormatTimeSSMilS(GameManager.Instance.Timer);
+            timerCount.text = FormatTimeSSMilS(_GAME.Timer);
             timerCount.GetComponent<Text>().color = Color.yellow;
             timerCount.fontSize = 45;
         }
         else
-            timerCount.text = FormatTimeMMSS(GameManager.Instance.Timer);
-        if(GameManager.Instance.Timer/GameManager.Instance.maxTimerInSeconds < GameManager.Instance.warningTimeInSeconds / GameManager.Instance.maxTimerInSeconds)
+            timerCount.text = FormatTimeMMSS(_GAME.Timer);
+        if(_GAME.Timer/_GAME.maxTimerInSeconds < _GAME.warningTimeInSeconds / _GAME.maxTimerInSeconds)
         {
-            timer.fillAmount = timer.fillAmount = GameManager.Instance.Timer / GameManager.Instance.maxTimerInSeconds;
+            timer.fillAmount = timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
             timer.GetComponent<Image>().color = Color.red;
         }
         else
-        timer.fillAmount = GameManager.Instance.Timer / GameManager.Instance.maxTimerInSeconds;
+        timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
 
-        energyBar.value = GameManager.Instance.Energy;
+        energyBar.value = _GAME.Energy;
 
-        if(GameManager.Instance.scytheEquiped)
+        if(_GAME.scytheEquiped)
         {
             foreach (GameObject pic in masks)
                 pic.SetActive(false);
@@ -89,13 +89,13 @@ public class UpdateUI : MonoBehaviour
                 pic.SetActive(true);
         }
 
-        abilityCD.fillAmount = GameManager.Instance.CDTimer / GameManager.Instance.coolDown;
+        abilityCD.fillAmount = _GAME.CDTimer / _GAME.coolDown;
 
-        if (GameManager.Instance.pausePanel)
+        if (_GAME.pausePanel)
         {
             Time.timeScale = 0;
             pausePanel.SetActive(true);
-            GameManager.Instance.playerActive = false;
+            _GAME.playerActive = false;
         }
         else
         {
@@ -103,29 +103,29 @@ public class UpdateUI : MonoBehaviour
             Time.timeScale = 1;
         }
 
-        if (GameManager.Instance.gameOver)
+        if (_GAME.gameOver)
             gameOverPanel.SetActive(true);
         else
             gameOverPanel.SetActive(false);
 
-        if (GameManager.Instance.menuPanel)
+        if (_GAME.menuPanel)
         {
             menu.SetActive(true);
             UIs.SetActive(false);
-            GameManager.Instance.isPaused = true;
+            _GAME.isPaused = true;
         }
         else
         {
             UIs.SetActive(true);
             menu.SetActive(false);
-            GameManager.Instance.isPaused = false;
+            _GAME.isPaused = false;
         }
 
-        if (GameManager.Instance.wonGame)
+        if (_GAME.wonGame)
             wonPanel.SetActive(true);
         else
             wonPanel.SetActive(false);
 
-        totalSoulNo.text = GameManager.Instance.totalSoulNo.ToString();
+        totalSoulNo.text = _GAME.totalSoulNo.ToString();
     }
 }

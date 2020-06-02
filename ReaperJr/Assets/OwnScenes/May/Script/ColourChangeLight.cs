@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColourChangeLight : MonoBehaviour
+public class ColourChangeLight : ReaperJr
 {
     //on ignore raycast layer
 
@@ -31,7 +31,7 @@ public class ColourChangeLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (canClick && !GameManager.Instance.scytheEquiped)
+        if (canClick && !_GAME.scytheEquiped)
         {
             if (Input.GetMouseButtonDown(0) && lightToControl != null)
             {

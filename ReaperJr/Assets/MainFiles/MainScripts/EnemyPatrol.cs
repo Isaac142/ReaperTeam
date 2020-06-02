@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyPatrol : MonoBehaviour
+public class EnemyPatrol : ReaperJr
 {
     public Transform player;
     private NavMeshAgent agent;
@@ -25,15 +25,21 @@ public class EnemyPatrol : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         if (transform.tag == "Enemy")
+        {
             enemyType = EnemyType.ENEMY;
+        }
         if (transform.tag == "Dummy")
+        {
             enemyType = EnemyType.DUMMY;
+        }
+
+        player = _PLAYER.gameObject.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.isPaused)
+        if (_GAME.isPaused)
             return;
 
         toPlayer = Vector3.Distance(player.position, transform.position);

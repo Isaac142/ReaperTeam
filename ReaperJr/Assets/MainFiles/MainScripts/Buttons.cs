@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Buttons : MonoBehaviour
+public class Buttons : ReaperJr
 {
     public UpdateUI uiScript;
 
@@ -15,38 +15,25 @@ public class Buttons : MonoBehaviour
 
     private void OnMouseOver()
     {
-        GameManager.Instance.playerActive = false;
+        _GAME.playerActive = false;
     }
 
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        GameManager.Instance.isPaused = false;
-        GameManager.Instance.Energy = GameManager.Instance.maxEnergy;
-        GameManager.Instance.Timer = GameManager.Instance.maxTimerInSeconds;
-        GameManager.Instance.dead = false;
-        GameManager.Instance.gameOver = false;
-        GameManager.Instance.wonGame = false;
-        GameManager.Instance.holdingLightObject = false;
-        GameManager.Instance.isHolding = false;
-        GameManager.Instance.canHold = true;
-        GameManager.Instance.onSpecialGround = false;
-        GameManager.Instance.pausePanel = false;
-        GameManager.Instance.menuPanel = false;
-        GameManager.Instance.totalSoulNo = 0;
-        Time.timeScale = 1;
+        _GAME.Restart();
     }
 
     public void Return()
     {
-        GameManager.Instance.pausePanel = false;
-        GameManager.Instance.isPaused = false;
-        GameManager.Instance.menuPanel = false;
+        _GAME.pausePanel = false;
+        _GAME.isPaused = false;
+        _GAME.menuPanel = false;
     }
 
     public void Menu()
     {
-        GameManager.Instance.menuPanel = true;
+        _GAME.menuPanel = true;
         uiScript.instrunctionPanel.SetActive(true);
         uiScript.controlsPanel.SetActive(true);
         uiScript.uiPanel.SetActive(false);

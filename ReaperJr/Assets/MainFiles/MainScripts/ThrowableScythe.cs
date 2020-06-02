@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrowableScythe : MonoBehaviour
+public class ThrowableScythe : ReaperJr
 {
     #region Variables
     [SerializeField] private Transform forceTransform;
@@ -45,16 +45,16 @@ public class ThrowableScythe : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.playerActive == false)
+        if (_GAME.playerActive == false)
             return;
 
         if (!isThrown)
             scythe.transform.position = target.position;
 
-        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery)
+        if (_GAME.Energy >= _GAME.throwEngery)
             canThrow = true;
 
-        if (Input.GetMouseButton(0) && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
+        if (Input.GetMouseButton(0) && _GAME.scytheEquiped && !_GAME.onCD)
         {
             ParabolaController controller = scythe.GetComponent<ParabolaController>();
             controller.parabolaScale = 1 + normalThrowTimer * 7f;
@@ -75,7 +75,7 @@ public class ThrowableScythe : MonoBehaviour
                 
             }
         }
-        if (Input.GetMouseButtonUp(0) && canThrow && GameManager.Instance.scytheEquiped && !GameManager.Instance.onCD)
+        if (Input.GetMouseButtonUp(0) && canThrow && _GAME.scytheEquiped && !_GAME.onCD)
         {
             if (transform.position.x < Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
             {
@@ -105,7 +105,7 @@ public class ThrowableScythe : MonoBehaviour
             Fire(normalThrowTimer * throwPower);
             normalThrowTimer = min;
             
-            GameManager.Instance.Energy -= GameManager.Instance.throwEngery;
+            _GAME.Energy -= _GAME.throwEngery;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -162,7 +162,7 @@ public class ThrowableScythe : MonoBehaviour
     #region Throw scythe
     void ThrowScythe()
     {
-        if (GameManager.Instance.Energy >= GameManager.Instance.throwEngery && isPlayerHolding)
+        if (_GAME.Energy >= _GAME.throwEngery && isPlayerHolding)
         {
             isPlayerHolding = false;
             // The scythe isn't returning

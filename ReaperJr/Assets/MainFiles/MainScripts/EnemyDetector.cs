@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDetector : MonoBehaviour
+public class EnemyDetector : ReaperJr
 {
     //on ignore raycast layer
 
