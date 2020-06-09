@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ParabolaController : MonoBehaviour
 {
+    LineRenderer line;
+
     private PlayerMovement player;
     /// <summary>
     /// Animation Speed
@@ -64,10 +66,28 @@ public class ParabolaController : MonoBehaviour
         }
     }
 
+    void DrawLine()
+    {
+        int accur = 50;
+        Vector3 prevPos = gizmo.Points[0].position;
+        for (int c = 1; c <= accur; c++)
+        {
+            float currTime = c * GetDuration() / accur;
+            Vector3 currPos = GetPositionAtTime(currTime);
+            float mag = (currPos - prevPos).magnitude * 2;
+            line.SetPosition(c, prevPos);
+            //Gizmos.color = new Color(mag, 0, 0, 1);
+            //Gizmos.DrawLine(prevPos, currPos);
+            //Gizmos.DrawSphere(currPos, 0.01f);
+            prevPos = currPos;
+        }
+    }
+
 
     // Use this for initialization
     void Start()
     {
+        line = GetComponent<LineRenderer>();
         player = GetComponentInParent<PlayerMovement>();
 
         parabolaFly = new ParabolaFly(ParabolaRoot.transform, this);
@@ -82,6 +102,8 @@ public class ParabolaController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        DrawLine();
+
         nextParbola = false;
 
         if (Animation && parabolaFly != null && animationTime < parabolaFly.GetDuration())
