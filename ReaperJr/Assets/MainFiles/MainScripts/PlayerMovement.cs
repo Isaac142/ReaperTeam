@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMovement : Singleton<PlayerMovement>
 {
     #region Variables
+    public TrajectoryPredictor trajectory;
+
     Rigidbody controller;
     public GameObject scythe;
 
@@ -119,6 +121,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 isCrouched = false;
             }
         }
+
+        trajectory.zDepth = transform.position.z;
     }
 
     private void FixedUpdate() //prevent character walking into walls.
