@@ -66,7 +66,7 @@ public class ParabolaController : MonoBehaviour
         }
     }
 
-    void DrawLine()
+    /*void DrawLine()
     {
         int accur = 50;
         Vector3 prevPos = gizmo.Points[0].position;
@@ -82,7 +82,7 @@ public class ParabolaController : MonoBehaviour
             prevPos = currPos;
         }
     }
-
+    */
 
     // Use this for initialization
     void Start()
@@ -102,7 +102,7 @@ public class ParabolaController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DrawLine();
+        //DrawLine();
 
         nextParbola = false;
 
