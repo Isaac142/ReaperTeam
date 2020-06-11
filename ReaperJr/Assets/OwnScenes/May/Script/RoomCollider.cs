@@ -74,15 +74,12 @@ public class RoomCollider : ReaperJr
                         mask.enabled = false;
                     }
 
-                    if (soul.Count > 0)
+                    for (int i = 0; i < souls.Count; i++)
                     {
-                        for (int i = 0; i < souls.Count; i++)
-                        {
-                            uiScript.souls[i].enabled = true;
-                            uiScript.souls[i].sprite = souls[i];
-                            uiScript.soulMasks[i].sprite = soulMasks[i];
-                            uiScript.soulMasks[i].enabled = false;
-                        }
+                        uiScript.souls[i].enabled = true;
+                        uiScript.souls[i].sprite = souls[i];
+                        uiScript.soulMasks[i].sprite = soulMasks[i];
+                        uiScript.soulMasks[i].enabled = false;
                     }
                     break;
             }
@@ -91,17 +88,6 @@ public class RoomCollider : ReaperJr
 
     private void OnTriggerStay(Collider other)
     {
-        if (soul.Count > 0)
-        {
-            for (int i = 0; i < souls.Count; i++)
-            {
-                if (soul[i] == null)
-                    uiScript.soulMasks[i].enabled = true;
-                if (!uiScript.souls[i].IsActive())
-                    uiScript.soulMasks[i].enabled = false;
-            }
-        }
-
         if (other.tag == "Player")
         {
             switch (roomType)
@@ -115,12 +101,21 @@ public class RoomCollider : ReaperJr
                     else
                         StartCoroutine("Appear", 0);
                     break;
+
                 case RoomType.ROOM:
                     cameraControl.roomPosition = roomPosition;
                     StartCoroutine(cameraControl.RoomSwitch(roomSides, roomHeight, roomDepth));
                     StartCoroutine("Disappear", 0f);
 
+                    for (int i = 0; i < souls.Count; i++)
+                    {
+                        if (soul[i] == null)
+                            uiScript.soulMasks[i].enabled = true;
+                        if (!uiScript.souls[i].IsActive())
+                            uiScript.soulMasks[i].enabled = false;
+                    }
                     break;
+
                 case RoomType.STAIR:
                     cameraControl.roomPosition = roomPosition;
                     StartCoroutine(cameraControl.StairSwitch(roomSides, roomHeight, roomDepth));
