@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7469008456536709309}
   - component: {fileID: 9206357385329584748}
   - component: {fileID: 8713711410371260977}
-  - component: {fileID: 7618820002893741487}
-  - component: {fileID: 7988859448590047420}
+  - component: {fileID: 7587633300406284163}
+  - component: {fileID: 8061945942355554678}
   m_Layer: 0
   m_Name: StoveSwitchTR
   m_TagString: Untagged
@@ -28,11 +28,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225890947421729571}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.39951712, y: 0.0017978596, z: 0.3098549}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2290900358078546196}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9206357385329584748
 MeshFilter:
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225890947421729571}
-  m_Mesh: {fileID: -9046204473988126567, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
+  m_Mesh: {fileID: -1303301006580099343, guid: 561191972302c074abd2731811e3190d, type: 3}
 --- !u!23 &8713711410371260977
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -81,7 +81,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &7618820002893741487
+--- !u!64 &7587633300406284163
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,8 +94,8 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -9046204473988126567, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
---- !u!54 &7988859448590047420
+  m_Mesh: {fileID: -1303301006580099343, guid: 561191972302c074abd2731811e3190d, type: 3}
+--- !u!54 &8061945942355554678
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,8 +122,8 @@ GameObject:
   - component: {fileID: 2713134383285738368}
   - component: {fileID: 3987105836629289844}
   - component: {fileID: 5258858441453946321}
-  - component: {fileID: 9019928429175823117}
-  - component: {fileID: 985393862612524091}
+  - component: {fileID: 7398290904038593640}
+  - component: {fileID: 55644370732665599}
   m_Layer: 0
   m_Name: StoveSwitchBL
   m_TagString: Untagged
@@ -139,7 +139,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1121070359064974304}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.098593384, y: 0.0016150952, z: 0.42007545}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2290900358078546196}
@@ -152,7 +152,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1121070359064974304}
-  m_Mesh: {fileID: -4166556919351678077, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
+  m_Mesh: {fileID: -8229196899769240736, guid: 561191972302c074abd2731811e3190d, type: 3}
 --- !u!23 &5258858441453946321
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -192,7 +192,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &9019928429175823117
+--- !u!64 &7398290904038593640
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,8 +205,8 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -4166556919351678077, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
---- !u!54 &985393862612524091
+  m_Mesh: {fileID: -8229196899769240736, guid: 561191972302c074abd2731811e3190d, type: 3}
+--- !u!54 &55644370732665599
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -245,20 +245,20 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2995369170796851975}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3276952490167458668}
   - {fileID: 2713134383285738368}
   - {fileID: 1324383909497267762}
   - {fileID: 4396627701150170118}
+  - {fileID: 4098412460417569242}
   - {fileID: 7469008456536709309}
   - {fileID: 5180199005582078611}
-  - {fileID: 4098412460417569242}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &3474375860564495881
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,8 +270,8 @@ GameObject:
   - component: {fileID: 3276952490167458668}
   - component: {fileID: 2914903955452192853}
   - component: {fileID: 4929986580664644610}
-  - component: {fileID: 1887981447904798096}
-  - component: {fileID: 1485946884214693913}
+  - component: {fileID: 3446896482212979029}
+  - component: {fileID: 7059450215019318760}
   m_Layer: 0
   m_Name: StoveBody
   m_TagString: Untagged
@@ -287,7 +287,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3474375860564495881}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.0015001689, y: 0.00036570462, z: 0.021996517}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2290900358078546196}
@@ -300,7 +300,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3474375860564495881}
-  m_Mesh: {fileID: 7665994148130970441, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
+  m_Mesh: {fileID: 3908764869070539997, guid: 561191972302c074abd2731811e3190d, type: 3}
 --- !u!23 &4929986580664644610
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -340,7 +340,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1887981447904798096
+--- !u!64 &3446896482212979029
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -353,8 +353,8 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 7665994148130970441, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
---- !u!54 &1485946884214693913
+  m_Mesh: {fileID: 3908764869070539997, guid: 561191972302c074abd2731811e3190d, type: 3}
+--- !u!54 &7059450215019318760
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -381,8 +381,8 @@ GameObject:
   - component: {fileID: 4396627701150170118}
   - component: {fileID: 7624043083804451166}
   - component: {fileID: 7076128299576949107}
-  - component: {fileID: 936517916246886748}
-  - component: {fileID: 5165689132399289958}
+  - component: {fileID: 3249490226660576048}
+  - component: {fileID: 6304036472278146636}
   m_Layer: 0
   m_Name: StoveSwitchCenter
   m_TagString: Untagged
@@ -398,7 +398,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3731102869854358057}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.21833672, y: 0.00174941, z: 0.3267596}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2290900358078546196}
@@ -411,7 +411,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3731102869854358057}
-  m_Mesh: {fileID: -6891012778992518591, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
+  m_Mesh: {fileID: 7698336239435208667, guid: 561191972302c074abd2731811e3190d, type: 3}
 --- !u!23 &7076128299576949107
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -451,7 +451,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &936517916246886748
+--- !u!64 &3249490226660576048
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -464,8 +464,8 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -6891012778992518591, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
---- !u!54 &5165689132399289958
+  m_Mesh: {fileID: 7698336239435208667, guid: 561191972302c074abd2731811e3190d, type: 3}
+--- !u!54 &6304036472278146636
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -492,8 +492,8 @@ GameObject:
   - component: {fileID: 1324383909497267762}
   - component: {fileID: 4118336760142738497}
   - component: {fileID: 2239709486836842416}
-  - component: {fileID: 6642706012437068247}
-  - component: {fileID: 1260343615318575751}
+  - component: {fileID: 2449091216458674495}
+  - component: {fileID: 7378760602387817261}
   m_Layer: 0
   m_Name: StoveSwitchBR
   m_TagString: Untagged
@@ -509,7 +509,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4958528512898270222}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.3402465, y: 0.001718089, z: 0.42007545}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2290900358078546196}
@@ -522,7 +522,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4958528512898270222}
-  m_Mesh: {fileID: 6000705764070242232, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
+  m_Mesh: {fileID: -8357825751109015337, guid: 561191972302c074abd2731811e3190d, type: 3}
 --- !u!23 &2239709486836842416
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -562,7 +562,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &6642706012437068247
+--- !u!64 &2449091216458674495
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -575,8 +575,8 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 6000705764070242232, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
---- !u!54 &1260343615318575751
+  m_Mesh: {fileID: -8357825751109015337, guid: 561191972302c074abd2731811e3190d, type: 3}
+--- !u!54 &7378760602387817261
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -603,8 +603,8 @@ GameObject:
   - component: {fileID: 5180199005582078611}
   - component: {fileID: 770988200189941289}
   - component: {fileID: 3678949261079113976}
-  - component: {fileID: 5427360858830435698}
-  - component: {fileID: 412426754140028289}
+  - component: {fileID: 5819526304908638715}
+  - component: {fileID: 3807339935875853842}
   m_Layer: 0
   m_Name: StoveTop
   m_TagString: Untagged
@@ -620,11 +620,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7965854800964023436}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.22281763, y: 0.016456524, z: 0.051142327}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2290900358078546196}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &770988200189941289
 MeshFilter:
@@ -633,7 +633,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7965854800964023436}
-  m_Mesh: {fileID: 3536695735157589118, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
+  m_Mesh: {fileID: -942581327320267147, guid: 561191972302c074abd2731811e3190d, type: 3}
 --- !u!23 &3678949261079113976
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -673,7 +673,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &5427360858830435698
+--- !u!64 &5819526304908638715
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -686,8 +686,8 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 3536695735157589118, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
---- !u!54 &412426754140028289
+  m_Mesh: {fileID: -942581327320267147, guid: 561191972302c074abd2731811e3190d, type: 3}
+--- !u!54 &3807339935875853842
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -714,8 +714,8 @@ GameObject:
   - component: {fileID: 4098412460417569242}
   - component: {fileID: 4924988734376272504}
   - component: {fileID: 7508624582980624127}
-  - component: {fileID: 7325645978805586966}
-  - component: {fileID: 2329219520065741678}
+  - component: {fileID: 2080226952049821508}
+  - component: {fileID: 372044934316209842}
   m_Layer: 0
   m_Name: StoveSwitchTL
   m_TagString: Untagged
@@ -731,11 +731,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8537480971772133947}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.043713152, y: 0.0029553352, z: 0.3098549}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2290900358078546196}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4924988734376272504
 MeshFilter:
@@ -744,7 +744,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8537480971772133947}
-  m_Mesh: {fileID: -822040204213934805, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
+  m_Mesh: {fileID: 724336191215356586, guid: 561191972302c074abd2731811e3190d, type: 3}
 --- !u!23 &7508624582980624127
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -784,7 +784,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &7325645978805586966
+--- !u!64 &2080226952049821508
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -797,8 +797,8 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -822040204213934805, guid: 6566c9e57c6a7d84097f6c4a8922447f, type: 3}
---- !u!54 &2329219520065741678
+  m_Mesh: {fileID: 724336191215356586, guid: 561191972302c074abd2731811e3190d, type: 3}
+--- !u!54 &372044934316209842
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
