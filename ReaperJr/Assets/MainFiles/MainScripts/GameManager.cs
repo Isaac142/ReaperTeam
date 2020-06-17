@@ -6,6 +6,8 @@ using DG.Tweening;
 
 public class GameManager : Singleton<GameManager>
 {
+    public enum GameState { TITLE, INGAME, PAUSED, GAMEOVER }
+    public GameState gameState;
     //public static GameManager Instance;
 
     public Texture2D cursor;

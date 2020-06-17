@@ -112,7 +112,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
             }
             else
             {
-               transform.DOMove(Vector3.zero, zoomSpeed).SetEase(zoomEase);
+                    transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase);
             }
         }
     }
