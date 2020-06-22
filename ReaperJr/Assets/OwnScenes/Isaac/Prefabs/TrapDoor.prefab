@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 1785622030922869551}
   - component: {fileID: 4558648409212101756}
   - component: {fileID: 4223480381256525354}
+  - component: {fileID: 8948167375312661752}
   m_Layer: 0
   m_Name: TrapDoorFence
   m_TagString: Untagged
@@ -111,6 +112,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &8948167375312661752
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3978145600521705281}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.5, y: 0, z: 4.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6731772348044608734
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +136,10 @@ GameObject:
   - component: {fileID: 5475047934321746215}
   - component: {fileID: 6565685031703733366}
   - component: {fileID: 1646246435933087684}
+  - component: {fileID: 9059380991289690923}
+  - component: {fileID: 4623319827573606386}
+  - component: {fileID: 8294598328843792032}
+  - component: {fileID: 5425909727766847146}
   m_Layer: 0
   m_Name: TrapDoorFrame
   m_TagString: Untagged
@@ -190,3 +208,55 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &9059380991289690923
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731772348044608734}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.23048353, y: 0.5, z: 5}
+  m_Center: {x: -2.3847582, y: 0, z: 0}
+--- !u!65 &4623319827573606386
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731772348044608734}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.23048353, y: 0.5, z: 5}
+  m_Center: {x: 2.384758, y: 0, z: 0}
+--- !u!65 &8294598328843792032
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731772348044608734}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.570185, y: 0.5, z: 0.30140495}
+  m_Center: {x: 0.005134821, y: 0, z: 2.3492975}
+--- !u!65 &5425909727766847146
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731772348044608734}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.570185, y: 0.5, z: 0.30140495}
+  m_Center: {x: 0.005134821, y: 0, z: -2.349298}

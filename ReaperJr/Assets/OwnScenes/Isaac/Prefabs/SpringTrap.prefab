@@ -11,6 +11,11 @@ GameObject:
   - component: {fileID: 7534521409266055580}
   - component: {fileID: 3798499740795028309}
   - component: {fileID: 8227140954311421619}
+  - component: {fileID: 3080520003586188485}
+  - component: {fileID: 8850869901224530584}
+  - component: {fileID: 6116140348523259947}
+  - component: {fileID: 6375132291748308751}
+  - component: {fileID: 1071118510689548700}
   m_Layer: 0
   m_Name: SpringTrapDoorFrame
   m_TagString: Untagged
@@ -79,6 +84,71 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &3080520003586188485
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366823645994458904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 0.23716378}
+  m_Center: {x: 0, y: 0, z: -2.3814182}
+--- !u!65 &8850869901224530584
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366823645994458904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.24544525, y: 0.5, z: 5}
+  m_Center: {x: 2.3772774, y: 0, z: 0}
+--- !u!65 &6116140348523259947
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366823645994458904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 0.24267626}
+  m_Center: {x: 0, y: 0, z: 2.3790963}
+--- !u!65 &6375132291748308751
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366823645994458904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.23763657, y: 0.5, z: 5}
+  m_Center: {x: -2.3684444, y: 0, z: 0}
+--- !u!65 &1071118510689548700
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366823645994458904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.051021576, z: 5}
+  m_Center: {x: 0, y: -0.22448921, z: 0}
 --- !u!1 &2839015963822740491
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +193,7 @@ GameObject:
   - component: {fileID: 6134015388495123051}
   - component: {fileID: 8938728561557138280}
   - component: {fileID: 8833210916301502975}
+  - component: {fileID: 6142898330572738315}
   m_Layer: 0
   m_Name: SpringTrapFloor
   m_TagString: Untagged
@@ -191,6 +262,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &6142898330572738315
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4971867804500833512}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.5, y: 0.03261236, z: 4.5}
+  m_Center: {x: 2.25, y: -0.01630618, z: -2.25}
 --- !u!1 &8357704855507427444
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +286,7 @@ GameObject:
   - component: {fileID: 7121831732096293903}
   - component: {fileID: 3753039825333779208}
   - component: {fileID: 3016481625596981599}
+  - component: {fileID: 610636288038518829}
   m_Layer: 0
   m_Name: Spring
   m_TagString: Untagged
@@ -270,3 +355,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!136 &610636288038518829
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8357704855507427444}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.18663049
+  m_Height: 0.35908124
+  m_Direction: 1
+  m_Center: {x: -0.15916316, y: -0.0004963131, z: -0.0000009536743}

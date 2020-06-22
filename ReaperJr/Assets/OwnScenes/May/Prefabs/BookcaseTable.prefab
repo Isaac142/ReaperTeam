@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 3032208023008010948}
   - component: {fileID: 5252748994682102428}
   - component: {fileID: 6950255115936898247}
-  - component: {fileID: 6319842418843619961}
-  - component: {fileID: 5436864428252873058}
+  - component: {fileID: 4336119632278557955}
   m_Layer: 0
   m_Name: ShelfShort4
   m_TagString: Untagged
@@ -81,8 +80,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &6319842418843619961
-MeshCollider:
+--- !u!65 &4336119632278557955
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -91,26 +90,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7414102401286622442, guid: 6baedfd839ab64e4e8539f1753c2e8a2, type: 3}
---- !u!54 &5436864428252873058
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 122188120548415289}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Size: {x: 0.66986847, y: 0.02999878, z: 0.47003967}
+  m_Center: {x: 0.000034332275, y: -0.00010681152, z: 0.0091665685}
 --- !u!1 &516615265129828731
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,8 +215,7 @@ GameObject:
   - component: {fileID: 8177775984704323629}
   - component: {fileID: 5101187115306939040}
   - component: {fileID: 2595509620316682145}
-  - component: {fileID: 3785224018981501320}
-  - component: {fileID: 3761908896646098486}
+  - component: {fileID: 6564718592454068675}
   m_Layer: 0
   m_Name: ShelfShort2
   m_TagString: Untagged
@@ -303,8 +284,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &3785224018981501320
-MeshCollider:
+--- !u!65 &6564718592454068675
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -313,26 +294,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2018968805690104469, guid: 6baedfd839ab64e4e8539f1753c2e8a2, type: 3}
---- !u!54 &3761908896646098486
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 837867008270627201}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Size: {x: 0.67002106, y: 0.02999878, z: 0.47001594}
+  m_Center: {x: 0.000011444092, y: -0.000091552734, z: 0.000007897615}
 --- !u!1 &3126195716179855720
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,8 +308,7 @@ GameObject:
   - component: {fileID: 4993615776538172776}
   - component: {fileID: 1801319259351544624}
   - component: {fileID: 4051351862722208678}
-  - component: {fileID: 5273605189110854031}
-  - component: {fileID: 1850527769076478829}
+  - component: {fileID: 8935556150717244861}
   m_Layer: 0
   m_Name: ShelfShort1
   m_TagString: Untagged
@@ -414,8 +377,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &5273605189110854031
-MeshCollider:
+--- !u!65 &8935556150717244861
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -424,26 +387,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3394108569413589657, guid: 6baedfd839ab64e4e8539f1753c2e8a2, type: 3}
---- !u!54 &1850527769076478829
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3126195716179855720}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Size: {x: 0.66999817, y: 0.02999878, z: 0.47002357}
+  m_Center: {x: 0.0000076293945, y: -0.000061035156, z: 0.000011712313}
 --- !u!1 &4096900406872582885
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,8 +512,7 @@ GameObject:
   - component: {fileID: 7537978019240905591}
   - component: {fileID: 1414910197844222393}
   - component: {fileID: 3071813723882529056}
-  - component: {fileID: 2568379772991422110}
-  - component: {fileID: 3621619240461949244}
+  - component: {fileID: 5966846624863502925}
   m_Layer: 0
   m_Name: ShelfLong
   m_TagString: Untagged
@@ -636,8 +581,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &2568379772991422110
-MeshCollider:
+--- !u!65 &5966846624863502925
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -646,26 +591,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5978191759575240361, guid: 6baedfd839ab64e4e8539f1753c2e8a2, type: 3}
---- !u!54 &3621619240461949244
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7020265093253365579}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Size: {x: 1.949997, y: 0.02999878, z: 0.5700122}
+  m_Center: {x: 0, y: -0.00016784668, z: 0.000005185604}
 --- !u!1 &8947440995050634176
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,8 +754,7 @@ GameObject:
   - component: {fileID: 4205689688613721725}
   - component: {fileID: 463246317475403270}
   - component: {fileID: 4665857467045641638}
-  - component: {fileID: 7866583634184167514}
-  - component: {fileID: 3392772132352365843}
+  - component: {fileID: 4472627203875528652}
   m_Layer: 0
   m_Name: ShelfShort3
   m_TagString: Untagged
@@ -896,8 +823,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &7866583634184167514
-MeshCollider:
+--- !u!65 &4472627203875528652
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -906,23 +833,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4053637438015563016, guid: 6baedfd839ab64e4e8539f1753c2e8a2, type: 3}
---- !u!54 &3392772132352365843
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9092819091766656673}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Size: {x: 0.66983795, y: 0.02999878, z: 0.4700216}
+  m_Center: {x: 0.000049591064, y: -0.000091552734, z: 0.000008881092}
