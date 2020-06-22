@@ -26,7 +26,7 @@ public class WonGame : ReaperJr
         if(other.tag == "Player")
         {
             if (_GAME.totalSoulNo == 0)
-                _GAME.wonGame = true;
+                _GAME.SetGameState(GameManager.GameState.WON);
         }
     }
 }

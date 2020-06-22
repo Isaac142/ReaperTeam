@@ -15,7 +15,6 @@ public class RoomCollider : ReaperJr
     [HideInInspector]
     public Vector2 roomSides = Vector2.zero, roomHeight = Vector2.zero, roomDepth = Vector2.zero;
     private bool roomSwitch;
-    private UpdateUI uiScript;
 
     public List<GameObject> soul = new List<GameObject>();
     [HideInInspector]
@@ -38,7 +37,6 @@ public class RoomCollider : ReaperJr
             roomType = RoomType.STAIR;
         if (transform.tag == "CorridorCollider")
             roomType = RoomType.CORRIDOR;
-        uiScript = FindObjectOfType<UpdateUI>();
     }
 
     private void Start()
@@ -63,12 +61,12 @@ public class RoomCollider : ReaperJr
             switch (roomType)
             {
                 case RoomType.ROOM:
-                    foreach (Image soul in uiScript.souls)
+                    foreach (Image soul in _UI.souls)
                     {
                         soul.sprite = null;
                         soul.enabled = false;
                     }
-                    foreach (Image mask in uiScript.soulMasks)
+                    foreach (Image mask in _UI.soulMasks)
                     {
                         mask.sprite = null;
                         mask.enabled = false;
@@ -76,10 +74,10 @@ public class RoomCollider : ReaperJr
 
                     for (int i = 0; i < souls.Count; i++)
                     {
-                        uiScript.souls[i].enabled = true;
-                        uiScript.souls[i].sprite = souls[i];
-                        uiScript.soulMasks[i].sprite = soulMasks[i];
-                        uiScript.soulMasks[i].enabled = false;
+                        _UI.souls[i].enabled = true;
+                        _UI.souls[i].sprite = souls[i];
+                        _UI.soulMasks[i].sprite = soulMasks[i];
+                        _UI.soulMasks[i].enabled = false;
                     }
                     break;
             }
@@ -110,9 +108,9 @@ public class RoomCollider : ReaperJr
                     for (int i = 0; i < souls.Count; i++)
                     {
                         if (soul[i] == null)
-                            uiScript.soulMasks[i].enabled = true;
-                        if (!uiScript.souls[i].IsActive())
-                            uiScript.soulMasks[i].enabled = false;
+                            _UI.soulMasks[i].enabled = true;
+                        if (!_UI.souls[i].IsActive())
+                            _UI.soulMasks[i].enabled = false;
                     }
                     break;
 
@@ -139,12 +137,12 @@ public class RoomCollider : ReaperJr
             switch(roomType)
             {
                 case RoomType.ROOM:
-                    foreach (Image soul in uiScript.souls)
+                    foreach (Image soul in _UI.souls)
                     {
                         soul.sprite = null;
                         soul.enabled = false;
                     }
-                    foreach (Image mask in uiScript.soulMasks)
+                    foreach (Image mask in _UI.soulMasks)
                     {
                         mask.sprite = null;
                         mask.enabled = false;

@@ -3,29 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UpdateUI : ReaperJr
+public class UpdateUI : Singleton<UpdateUI>
 {
-    public GameObject UIs;
+    [Header ("In Game UI")]
+    public GameObject UIs;  //in game UI display (timer, scythe icons and souls)
     public Text timerCount;
     public Image timer;
 
-    public GameObject pausePanel;
-    public GameObject gameOverPanel;
-    public GameObject menu;
-    public GameObject instrunctionPanel;
-    public GameObject controlsPanel;
-    public GameObject uiPanel;
-    public GameObject optionPanel;
-    public GameObject wonPanel;
     public List<Image> souls = new List<Image>();
     public List<Image> soulMasks = new List<Image>();
     public Text totalSoulNo;
     public GameObject infoPanel;
     public Text itemName, itemType, itemDescription;
-
+    public GameObject menu;
     public Slider energyBar;
     public Image abilityCD;
-    public GameObject[] masks;
+    public GameObject[] masks;  //scythe icon masks
+
+    [Header ("GameStatePanels")]
+    public GameObject pausePanel;
+    public GameObject gameOverPanel;
+    public GameObject instrunctionPanel;
+    public GameObject controlsPanel;
+    public GameObject uiPanel;
+    public GameObject optionPanel;
+    public GameObject wonPanel;
+
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
 
@@ -47,9 +50,7 @@ public class UpdateUI : ReaperJr
         energyBar.maxValue = _GAME.maxEnergy;
         energyBar.minValue = 0f;
 
-        pausePanel.SetActive(false);
-        gameOverPanel.SetActive(false);
-        menu.SetActive(false);
+        CloseAllPanels();
 
         foreach (GameObject pic in masks)
             pic.SetActive(false);
@@ -60,21 +61,24 @@ public class UpdateUI : ReaperJr
     // Update is called once per frame
     void Update()
     {
-        if(_GAME.Timer < _GAME.warningTimeInSeconds)
+        #region TimerDisplay
+        //Timer display set up
+        timerCount.text = FormatTimeMMSS(_GAME.Timer);
+        timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
+
+        if (_GAME.Timer < _GAME.warningTimeInSeconds)  //Timer low display
         {
+            //texture set up
             timerCount.text = FormatTimeSSMilS(_GAME.Timer);
             timerCount.GetComponent<Text>().color = Color.yellow;
             timerCount.fontSize = 45;
-        }
-        else
-            timerCount.text = FormatTimeMMSS(_GAME.Timer);
-        if(_GAME.Timer/_GAME.maxTimerInSeconds < _GAME.warningTimeInSeconds / _GAME.maxTimerInSeconds)
-        {
-            timer.fillAmount = timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
+
+            //clock set up
+
+            timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
             timer.GetComponent<Image>().color = Color.red;
         }
-        else
-        timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
+        #endregion
 
         energyBar.value = _GAME.Energy;
 
@@ -91,41 +95,13 @@ public class UpdateUI : ReaperJr
 
         abilityCD.fillAmount = _GAME.CDTimer / _GAME.coolDown;
 
-        if (_GAME.pausePanel)
-        {
-            Time.timeScale = 0;
-            pausePanel.SetActive(true);
-            _GAME.playerActive = false;
-        }
-        else
-        {
-            pausePanel.SetActive(false);
-            Time.timeScale = 1;
-        }
-
-        if (_GAME.gameOver)
-            gameOverPanel.SetActive(true);
-        else
-            gameOverPanel.SetActive(false);
-
-        if (_GAME.menuPanel)
-        {
-            menu.SetActive(true);
-            UIs.SetActive(false);
-            _GAME.isPaused = true;
-        }
-        else
-        {
-            UIs.SetActive(true);
-            menu.SetActive(false);
-            _GAME.isPaused = false;
-        }
-
-        if (_GAME.wonGame)
-            wonPanel.SetActive(true);
-        else
-            wonPanel.SetActive(false);
-
         totalSoulNo.text = _GAME.totalSoulNo.ToString();
+    }
+    public void CloseAllPanels()
+    {
+        pausePanel.SetActive(false);
+        gameOverPanel.SetActive(false);
+        menu.SetActive(false);
+        wonPanel.SetActive(false);
     }
 }

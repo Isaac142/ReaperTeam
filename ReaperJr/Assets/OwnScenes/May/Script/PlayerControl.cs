@@ -127,7 +127,7 @@ public class PlayerControl : ReaperJr
 
                     if (hit.transform.tag == "FakeSoul")
                     {
-                        _GAME.dead = true;
+                        _GAME.SetGameState(GameManager.GameState.DEAD);
                         //do something --> collected amount, visual clue...
                     }
 

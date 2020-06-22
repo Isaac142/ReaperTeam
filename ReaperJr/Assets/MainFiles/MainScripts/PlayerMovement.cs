@@ -393,7 +393,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     if (hits[i].transform.tag == "FakeSoul")
                     {
                         _GAME.scytheEquiped = true;
-                        _GAME.dead = true;
+                        _GAME.SetGameState(GameManager.GameState.DEAD);
                         //do something --> collected amount, visual clue...
                     }
 
@@ -487,7 +487,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             if (isGrounded)
             {
                 if (fallDist >= _GAME.maxSafeFallDist)
-                    _GAME.dead = true;
+                    _GAME.SetGameState(GameManager.GameState.DEAD);
 
                 fallDist = 0f;
             }

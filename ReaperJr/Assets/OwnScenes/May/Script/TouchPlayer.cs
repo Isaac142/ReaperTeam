@@ -16,7 +16,7 @@ public class TouchPlayer : ReaperJr
         if (parentScript.enabled == true)
         {
             if (other.tag == "Player")
-                _GAME.dead = true;
+                _GAME.SetGameState(GameManager.GameState.DEAD);
         }
     }
 }

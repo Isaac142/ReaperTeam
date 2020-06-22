@@ -5,14 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Buttons : ReaperJr
 {
-    public UpdateUI uiScript;
-
-    private void Awake()
-    { 
-        if(uiScript == null)
-            uiScript = FindObjectOfType<Canvas>().GetComponent<UpdateUI>();
-    }
-
     private void OnMouseOver()
     {
         _GAME.playerActive = false;
@@ -22,48 +14,47 @@ public class Buttons : ReaperJr
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         _GAME.Restart();
+        _GAME.SetGameState(GameManager.GameState.RESUME);
     }
 
     public void Return()
     {
-        _GAME.pausePanel = false;
-        _GAME.isPaused = false;
-        _GAME.menuPanel = false;
+        _GAME.SetGameState(GameManager.GameState.RESUME);
     }
 
     public void Menu()
     {
-        _GAME.menuPanel = true;
-        uiScript.instrunctionPanel.SetActive(true);
-        uiScript.controlsPanel.SetActive(true);
-        uiScript.uiPanel.SetActive(false);
-        uiScript.optionPanel.SetActive(false);
+        _GAME.SetGameState(GameManager.GameState.MENU);
+        _UI.instrunctionPanel.SetActive(true);
+        _UI.controlsInfoPanel.SetActive(true);
+        _UI.uiInfoPanel.SetActive(false);
+        _UI.optionPanel.SetActive(false);
     }
 
     public void ControlsPanel()
     {
-        uiScript.controlsPanel.SetActive(true);
-        uiScript.uiPanel.SetActive(false);
+        _UI.controlsInfoPanel.SetActive(true);
+        _UI.uiInfoPanel.SetActive(false);
     }
     
     public void UIsPanel()
     {
-        uiScript.controlsPanel.SetActive(false);
-        uiScript.uiPanel.SetActive(true);
+        _UI.controlsInfoPanel.SetActive(false);
+        _UI.uiInfoPanel.SetActive(true);
     }
 
     public void OptionPanel()
     {
-        uiScript.instrunctionPanel.SetActive(false);
-        uiScript.optionPanel.SetActive(true);
+        _UI.instrunctionPanel.SetActive(false);
+        _UI.optionPanel.SetActive(true);
     }
 
     public void InstructionPanel()
     {
-        uiScript.instrunctionPanel.SetActive(true);
-        uiScript.controlsPanel.SetActive(true);
-        uiScript.uiPanel.SetActive(false);
-        uiScript.optionPanel.SetActive(false);
+        _UI.instrunctionPanel.SetActive(true);
+        _UI.controlsInfoPanel.SetActive(true);
+        _UI.uiInfoPanel.SetActive(false);
+        _UI.optionPanel.SetActive(false);
     }
 
     public void ExitGame()
