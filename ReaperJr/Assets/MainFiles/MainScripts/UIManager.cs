@@ -51,6 +51,7 @@ public class UIManager : Singleton<UIManager>
         energyBar.minValue = 0f;
 
         CloseAllPanels();
+        DisableSoulIcons();
 
         foreach (GameObject pic in masks)
             pic.SetActive(false);
@@ -103,6 +104,22 @@ public class UIManager : Singleton<UIManager>
         gameOverPanel.SetActive(false);
         menuPanel.SetActive(false);
         wonPanel.SetActive(false);
+    }
+
+    public void DisableSoulIcons()
+    {
+        foreach(Image soulIcon in souls)
+        {
+            soulIcon.sprite = null;
+            soulIcon.enabled = false;
+        }
+
+        foreach (Image soulIconMask in soulMasks)
+
+        {
+            soulIconMask.sprite = null;
+            soulIconMask.enabled = false;
+        }
     }
 }
 

@@ -7,14 +7,12 @@ public class RoomCollider : ReaperJr
 {
     Collider roomCollider;
     [HideInInspector]
-    public CameraControlScript cameraControl;
     public List<GameObject> inFront = new List<GameObject>(); //all game objects will not be shown when player is in this collider
     public List<MeshRenderer> frontWall = new List<MeshRenderer>(); //front barriers that will not show in the screen. --> not show their mesh, but still using their collider.
     [HideInInspector]
     public Vector3 roomPosition = Vector3.zero;
     [HideInInspector]
     public Vector2 roomSides = Vector2.zero, roomHeight = Vector2.zero, roomDepth = Vector2.zero;
-    private bool roomSwitch;
 
     public List<GameObject> soul = new List<GameObject>();
     [HideInInspector]
@@ -22,21 +20,16 @@ public class RoomCollider : ReaperJr
     [HideInInspector]
     public List<Sprite> soulMasks = new List<Sprite>();
 
-    private enum RoomType { LEVEL, ROOM, STAIR, CORRIDOR }
+    private enum RoomType { LEVEL, ROOM }
     private RoomType roomType;
 
     private void Awake()
     {
         transform.GetComponent<Collider>().isTrigger = true;
-        cameraControl = Camera.main.GetComponent<CameraControlScript>();
         if (transform.tag == "LevelCollider")
             roomType = RoomType.LEVEL;
         if (transform.tag == "RoomCollider")
             roomType = RoomType.ROOM;
-        if (transform.tag == "StairCollider")
-            roomType = RoomType.STAIR;
-        if (transform.tag == "CorridorCollider")
-            roomType = RoomType.CORRIDOR;
     }
 
     private void Start()
@@ -61,17 +54,8 @@ public class RoomCollider : ReaperJr
             switch (roomType)
             {
                 case RoomType.ROOM:
-                    foreach (Image soul in _UI.souls)
-                    {
-                        soul.sprite = null;
-                        soul.enabled = false;
-                    }
-                    foreach (Image mask in _UI.soulMasks)
-                    {
-                        mask.sprite = null;
-                        mask.enabled = false;
-                    }
-
+                    _UI.DisableSoulIcons();
+                    _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
                     for (int i = 0; i < souls.Count; i++)
                     {
                         _UI.souls[i].enabled = true;
@@ -91,18 +75,20 @@ public class RoomCollider : ReaperJr
             switch (roomType)
             {
                 case RoomType.LEVEL:
-                    cameraControl.levelHorBoundaries = new Vector2(roomSides.x, roomSides.y);
-                    cameraControl.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
-                    cameraControl.levelDepthBoundaries = new Vector2(roomDepth.x, +roomDepth.y);
-                    if (!cameraControl.inRoom)
-                        StartCoroutine("Disappear", 0f);
-                    else
+                    //set up level boundaries
+                    _CAMERA.levelHorBoundaries = new Vector2(roomSides.x, roomSides.y);
+                    _CAMERA.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
+                    _CAMERA.levelDepthBoundaries = new Vector2(roomDepth.x, +roomDepth.y);
+
+                    //making all object in between camera and player invisible
+                    StartCoroutine("Disappear", 0f);
+                    if (_GAME.gameState == GameManager.GameState.WON)
                         StartCoroutine("Appear", 0);
                     break;
 
                 case RoomType.ROOM:
-                    cameraControl.roomPosition = roomPosition;
-                    StartCoroutine(cameraControl.RoomSwitch(roomSides, roomHeight, roomDepth));
+                    _CAMERA.roomPosition = roomPosition;
+                    StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
                     StartCoroutine("Disappear", 0f);
 
                     for (int i = 0; i < souls.Count; i++)
@@ -112,18 +98,6 @@ public class RoomCollider : ReaperJr
                         if (!_UI.souls[i].IsActive())
                             _UI.soulMasks[i].enabled = false;
                     }
-                    break;
-
-                case RoomType.STAIR:
-                    cameraControl.roomPosition = roomPosition;
-                    StartCoroutine(cameraControl.StairSwitch(roomSides, roomHeight, roomDepth));
-                    cameraControl.onStairs = true;
-                    break;
-                case RoomType.CORRIDOR:
-                    cameraControl.roomPosition = roomPosition;
-                    cameraControl.inCorridor = true;
-                    if (!cameraControl.inRoom)
-                        StartCoroutine(cameraControl.CorridorSwitch(roomDepth));
                     break;
             }
         }
@@ -137,23 +111,12 @@ public class RoomCollider : ReaperJr
             switch(roomType)
             {
                 case RoomType.ROOM:
-                    foreach (Image soul in _UI.souls)
-                    {
-                        soul.sprite = null;
-                        soul.enabled = false;
-                    }
-                    foreach (Image mask in _UI.soulMasks)
-                    {
-                        mask.sprite = null;
-                        mask.enabled = false;
-                    }
-                    cameraControl.inRoom = false;
+                    _UI.DisableSoulIcons();
+                    _CAMERA.SetCameraState(CameraControlScript.CameraState.OUTROOM);
                     break;
-                case RoomType.STAIR:
-                    cameraControl.onStairs = false;
-                    break;
-                case RoomType.CORRIDOR:
-                    cameraControl.inCorridor = false;
+
+                case RoomType.LEVEL:
+                    StartCoroutine("Appear", 0);
                     break;
             }
         }

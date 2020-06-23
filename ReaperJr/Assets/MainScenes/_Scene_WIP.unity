@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44557452, g: 0.4952563, b: 0.57414466, a: 1}
+  m_IndirectSpecularColor: {r: 0.44557405, g: 0.4952559, b: 0.57414365, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 297211c231abbef4880169cb950f3522,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -10545,13 +10545,11 @@ MonoBehaviour:
   bottomRot: {x: 22, y: 0, z: 0}
   stairRotFactor: 0
   followSpeed: {x: 2.5, y: 2}
-  inRoom: 0
-  onStairs: 0
-  inCorridor: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 17
   transparentFactor: 0.5
+  camState: 0
 --- !u!81 &176517625
 AudioListener:
   m_ObjectHideFlags: 0
@@ -21286,7 +21284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 939159104}
   frontWall:
@@ -45502,7 +45499,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 1102216491}
   frontWall:
@@ -46268,7 +46264,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront: []
   frontWall:
   - {fileID: 366065222}
@@ -52438,7 +52433,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 2110282635}
   frontWall:
@@ -89691,7 +89685,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 1163889573}
   frontWall:
@@ -98312,7 +98305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront: []
   frontWall: []
   roomPosition: {x: 0, y: 0, z: 0}
@@ -100738,7 +100730,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 507625958}
   frontWall:
@@ -107237,7 +107228,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 1695323487}
   frontWall:
@@ -120858,7 +120848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 2093476651}
   frontWall:
@@ -121865,7 +121854,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd56a4acff85d84f855491743434de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControl: {fileID: 0}
   inFront:
   - {fileID: 1052442263}
   frontWall:
