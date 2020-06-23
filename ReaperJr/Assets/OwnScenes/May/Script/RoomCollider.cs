@@ -82,8 +82,8 @@ public class RoomCollider : ReaperJr
 
                     //making all object in between camera and player invisible
                     StartCoroutine("Disappear", 0f);
-                    if (_GAME.gameState == GameManager.GameState.WON)
-                        StartCoroutine("Appear", 0);
+                    //if (_GAME.gameState == GameManager.GameState.WON)
+                    //    StartCoroutine("Appear", 0);
                     break;
 
                 case RoomType.ROOM:

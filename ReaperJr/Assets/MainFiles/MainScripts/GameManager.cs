@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+public enum GameState { TITLE, INGAME, PAUSED, DEAD, RESUME, GAMEOVER, WON, MENU }
 
 public class GameManager : Singleton<GameManager>
 {
-    public enum GameState { TITLE, INGAME, PAUSED, DEAD, RESUME, GAMEOVER, WON, MENU}
+    
     public GameState gameState;
     private float lastStateChange = 0f;
     //public static GameManager Instance;
@@ -75,11 +76,13 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         Restart();
-        SetGameState(GameState.INGAME);
+        GameEvents.ReportGameStateChange(GameState.INGAME);
+        //SetGameState(GameState.INGAME);
     }
 
     public void Restart()
     {
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         _PLAYER.Restart();
         holdingLightObject = false;
         isHolding = false;
@@ -99,6 +102,8 @@ public class GameManager : Singleton<GameManager>
         switch(gameState)
         {
             case GameState.INGAME:
+                if (Input.GetKeyDown(KeyCode.Escape))
+                    GameEvents.ReportGameStateChange(GameState.PAUSED);
 
                 _timer -= Time.deltaTime; //Count down timer.
 
@@ -123,57 +128,54 @@ public class GameManager : Singleton<GameManager>
                     _cDTimer = coolDown;
                 }
 
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    SetGameState(GameState.PAUSED);
+               
 
                 if (_timer <= 0)
                 {
-                    SetGameState(GameState.GAMEOVER);
+                    GameEvents.ReportGameStateChange(GameState.GAMEOVER);
                     _timer = 0;
                 }
                 break;
 
-            case GameState.DEAD:
-                _timer -= punishmentTime;
-                _PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
-                SetGameState(GameState.INGAME);
-                break;
+            //case GameState.DEAD:
+            //    _timer -= punishmentTime;
+            //    _PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
+            //    SetGameState(GameState.INGAME);
+            //    break;
 
             case GameState.PAUSED:
-                PauseGame();
-                _UI.pausePanel.SetActive(true);
+                //PauseGame();
+                //_UI.pausePanel.SetActive(true);
 
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    SetGameState(GameState.RESUME);
+                    GameEvents.ReportGameStateChange(GameState.RESUME);
                 break;
 
             case GameState.MENU:
-                PauseGame();
-                _UI.menuPanel.SetActive(true);
+                //PauseGame();
+                //_UI.menuPanel.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    SetGameState(GameState.RESUME);
+                    GameEvents.ReportGameStateChange(GameState.RESUME);
                 break;
 
-            case GameState.RESUME:
-                Time.timeScale = 1;
-                isPaused = false;
-                _UI.CloseAllPanels();
-                if (Time.time - lastStateChange >= 0.1)
-                {
-                    playerActive = true;
-                    SetGameState(GameState.INGAME);
-                }
-                break;
+            //case GameState.RESUME:
+                
+            //    if (Time.time - lastStateChange >= 0.1)
+            //    {
+            //        playerActive = true;
+            //        SetGameState(GameState.INGAME);
+            //    }
+            //    break;
 
-            case GameState.GAMEOVER:
-                PauseGame();
-                _UI.gameOverPanel.SetActive(true);
-                break;
+            //case GameState.GAMEOVER:
+            //    PauseGame();
+            //    _UI.gameOverPanel.SetActive(true);
+            //    break;
 
-            case GameState.WON:
-                PauseGame();
-                _UI.wonPanel.SetActive(true);
-                break;
+            //case GameState.WON:
+            //    PauseGame();
+            //    _UI.wonPanel.SetActive(true);
+            //    break;
         }
 
         //preventing player fall of the world
@@ -190,10 +192,30 @@ public class GameManager : Singleton<GameManager>
             checkPoints.Remove(checkPoints[0]);
     }
 
-    public void SetGameState(GameState state)
+    public void OnGameStateChange(GameState state)
     {
         gameState = state;
         lastStateChange = Time.time;
+        switch (state)
+        {
+            case GameState.INGAME:
+                break;
+            case GameState.PAUSED:
+                PauseGame();
+                break;
+            case GameState.MENU:
+                PauseGame();
+                break;
+            case GameState.GAMEOVER:
+                PauseGame();
+                break;
+            case GameState.WON:
+                PauseGame();
+                break;
+            case GameState.RESUME:
+                StartCoroutine(ResumeGame());
+                break;
+        }
     }
 
     void PauseGame()
@@ -201,5 +223,31 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = 0;
         playerActive = false;
         isPaused = true;
+    }
+
+    IEnumerator ResumeGame()
+    {
+        Time.timeScale = 1;
+        isPaused = false;
+        yield return new WaitForSeconds(0.1f);
+        playerActive = true;
+        GameEvents.ReportGameStateChange(GameState.INGAME);
+    }
+
+    void OnScytheEquipped(bool scythe)
+    {
+        scytheEquiped = scythe;
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnGameStateChange += OnGameStateChange;
+        GameEvents.OnScytheEquipped += OnScytheEquipped;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnGameStateChange -= OnGameStateChange;
+        GameEvents.OnScytheEquipped -= OnScytheEquipped;
     }
 }

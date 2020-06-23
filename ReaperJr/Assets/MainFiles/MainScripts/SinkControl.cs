@@ -117,7 +117,7 @@ public class SinkControl : ReaperJr
         }
 
         if (playerIn && waterLine.y >= player.position.y + player.GetComponent<CapsuleCollider>().height) //player will dead if water level is above it.
-            _GAME.SetGameState(GameManager.GameState.DEAD);
+            GameEvents.ReportGameStateChange(GameState.DEAD);
 
         #region ClickEvent
         if (!_GAME.scytheEquiped)

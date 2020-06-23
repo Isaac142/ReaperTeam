@@ -384,7 +384,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 {
                     if (hits[i].transform.tag == "Soul")
                     {
-                        _GAME.scytheEquiped = true;
+                        
+                        GameEvents.ReportScytheEquipped(true);
                         Destroy(hits[i].transform.gameObject);
                         _GAME.totalSoulNo -= 1;
                         //do something --> collected amount, visual clue...
@@ -392,8 +393,9 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                     if (hits[i].transform.tag == "FakeSoul")
                     {
-                        _GAME.scytheEquiped = true;
-                        _GAME.SetGameState(GameManager.GameState.DEAD);
+                        
+                        GameEvents.ReportScytheEquipped(true);
+                        GameEvents.ReportGameStateChange(GameState.DEAD);
                         //do something --> collected amount, visual clue...
                     }
 
@@ -415,7 +417,11 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (!scytheScript.isThrown)
         {
             if (Input.GetAxis("Mouse ScrollWheel") != 0)
+            {
                 _GAME.scytheEquiped = !_GAME.scytheEquiped;
+                GameEvents.ReportScytheEquipped(_GAME.scytheEquiped);
+            }
+
         }
         else return;
     }
@@ -487,7 +493,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             if (isGrounded)
             {
                 if (fallDist >= _GAME.maxSafeFallDist)
-                    _GAME.SetGameState(GameManager.GameState.DEAD);
+                    GameEvents.ReportGameStateChange(GameState.DEAD);
 
                 fallDist = 0f;
             }

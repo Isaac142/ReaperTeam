@@ -205,7 +205,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
         rend.material.EnableKeyword("_ALPHABLEND_ON");
         rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
         rend.material.renderQueue = 3000;
-        rend.material.SetColor("_Color", new Color(color.r, color.g, color.b, transparentFactor));
+        rend.material.SetColor("_BaseColor", new Color(color.r, color.g, color.b, transparentFactor));
     }
 
     void ReturnColor(GameObject obj)
@@ -220,7 +220,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
         rend.material.DisableKeyword("_ALPHABLEND_ON");
         rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
         rend.material.renderQueue = -1;
-        rend.material.SetColor("_Color", new Color(color.r, color.g, color.b, 1f));
+        rend.material.SetColor("_BaseColor", new Color(color.r, color.g, color.b, 1f));
     }
 
     public void SetCameraState(CameraState state)

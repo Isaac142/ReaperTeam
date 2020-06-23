@@ -14,17 +14,17 @@ public class Buttons : ReaperJr
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         _GAME.Restart();
-        _GAME.SetGameState(GameManager.GameState.RESUME);
+        GameEvents.ReportGameStateChange(GameState.RESUME);
     }
 
     public void Return()
     {
-        _GAME.SetGameState(GameManager.GameState.RESUME);
+        GameEvents.ReportGameStateChange(GameState.RESUME);
     }
 
     public void Menu()
     {
-        _GAME.SetGameState(GameManager.GameState.MENU);
+        GameEvents.ReportGameStateChange(GameState.MENU);
         _UI.instrunctionPanel.SetActive(true);
         _UI.controlsInfoPanel.SetActive(true);
         _UI.uiInfoPanel.SetActive(false);
