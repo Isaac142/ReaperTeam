@@ -36,7 +36,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
     public Vector2 camHeight = Vector2.zero;
     private Vector2 camHorBoundaries = Vector2.zero; //min, max
     private Vector2 camVerBoundaries = Vector2.zero;
-    private Vector2 camDepthBoundaries = Vector2.zero;
+    public Vector2 camDepthBoundaries = Vector2.zero;
     [HideInInspector]
     public Vector2 levelHorBoundaries = Vector2.zero, levelVerBoundaries = Vector2.zero, levelDepthBoundaries = Vector2.zero;
     [HideInInspector]
@@ -126,28 +126,19 @@ public class CameraControlScript : Singleton<CameraControlScript>
             offset = (betweenDist > chaseThreshold) ? //camera chasing scythe if distance over threshold
                  new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f) : Vector3.zero;
 
-            //camera movement
-            transform.position = Vector3.Lerp(transform.position, playerPos + toPlayerDist + offset, followSpeed.x * Time.deltaTime); 
-            //set up camera boundary clamps
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, camHorBoundaries.x, camHorBoundaries.y), Mathf.Clamp(transform.position.y, camVerBoundaries.x, camVerBoundaries.y), Mathf.Clamp(transform.position.z, camDepthBoundaries.x, camDepthBoundaries.y));
-            //camera rotation
-            transform.rotation = (playerPos.z - transform.position.z <= camToPlayerDist.x) ? //when player closer to camera than minimum value, tilt down camera for better view.
-                    Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
-                    (playerPos.y >= camHeight.x) ? //if player higher than minimum camera height, camera tilt down to view ground.
-                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(topRot), followSpeed.y * Time.deltaTime) :
-                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime); //normal
+            
 
             switch(camState)
             {
                 case CameraState.INROOM:
                     //if the distance between camera and player over max value, camera chasing player at the max distance
                     toPlayerDist = (playerPos.z - transform.position.z > camToPlayerDist.y) ?
-                        new Vector3(0f, transform.position.y, -camToPlayerDist.y) : new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); //camera stays at the z- minimun clamp vale.
+                        new Vector3(0f, camHeight.x, -camToPlayerDist.y) : new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z); //camera stays at the z- minimun clamp vale.
                     break;
 
                 case CameraState.OUTROOM:
                     // if player is out room, camera chasing player at minimun camera to player distance
-                    toPlayerDist = new Vector3(0f, camHeight.x, camDepthBoundaries.x - playerPos.z);
+                    toPlayerDist = new Vector3(0f, camHeight.x, camDepthBoundaries.x);
 
                     //set up camera boundaries based on the level boundaries. 
                     camDepthBoundaries.x = levelDepthBoundaries.x - miniCamToEdgeDist;
@@ -156,6 +147,17 @@ public class CameraControlScript : Singleton<CameraControlScript>
                     camDepthBoundaries = new Vector2(camDepthBoundaries.x, levelDepthBoundaries.y - miniCamToEdgeDist);
                     break;
             }
+            
+            //camera movement
+            transform.position = Vector3.Lerp(transform.position, playerPos + toPlayerDist + offset, followSpeed.x * Time.deltaTime);
+            //set up camera boundary clamps
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, camHorBoundaries.x, camHorBoundaries.y), Mathf.Clamp(transform.position.y, camVerBoundaries.x, camVerBoundaries.y), Mathf.Clamp(transform.position.z, camDepthBoundaries.x, camDepthBoundaries.y));
+            //camera rotation
+            transform.rotation = (playerPos.z - transform.position.z <= camToPlayerDist.x) ? //when player closer to camera than minimum value, tilt down camera for better view.
+                    Quaternion.Lerp(transform.rotation, Quaternion.Euler(bottomRot), followSpeed.y * Time.deltaTime) :
+                    (playerPos.y >= camHeight.x) ? //if player higher than minimum camera height, camera tilt down to view ground.
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(topRot), followSpeed.y * Time.deltaTime) :
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(camRotation), followSpeed.y * Time.deltaTime); //normal
         }
     }
 

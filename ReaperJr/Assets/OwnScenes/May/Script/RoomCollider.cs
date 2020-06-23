@@ -91,12 +91,15 @@ public class RoomCollider : ReaperJr
                     StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
                     StartCoroutine("Disappear", 0f);
 
-                    for (int i = 0; i < souls.Count; i++)
+                    if (souls.Count > 0)
                     {
-                        if (soul[i] == null)
-                            _UI.soulMasks[i].enabled = true;
-                        if (!_UI.souls[i].IsActive())
-                            _UI.soulMasks[i].enabled = false;
+                        for (int i = 0; i < souls.Count; i++)
+                        {
+                            if (soul[i] == null)
+                                _UI.soulMasks[i].enabled = true;
+                            if (!_UI.souls[i].IsActive())
+                                _UI.soulMasks[i].enabled = false;
+                        }
                     }
                     break;
             }
