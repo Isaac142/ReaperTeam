@@ -225,24 +225,26 @@ public class ItemMovement : ReaperJr
         }
     }
 
-    void CanHold() //Testing if the player is standing on the object
+    void CanHold()
     {
         bool onTop = false;
         bool inFront = false;
         CapsuleCollider playerCollider = player.GetComponent<CapsuleCollider>();
+        float height = playerCollider.height;
         RaycastHit ver;
-        if (Physics.Raycast(player.transform.position, Vector3.down, out ver))
+        if (Physics.Raycast(player.transform.position, Vector3.down, out ver)) //test if player is on top of the object
             onTop = (ver.collider.transform.position == transform.position) ? true : false;
 
         RaycastHit hor;
-        //if (Physics.Raycast(player.transform.position, player.transform.right, out hor, pickUpDist))
-        Vector3 topPoint = player.transform.position + player.GetComponent<CapsuleCollider>().center + Vector3.up * (player.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
-        Vector3 bottomPoint = player.transform.position + player.GetComponent<CapsuleCollider>().center - Vector3.up * (player.GetComponent<CapsuleCollider>().height - 0.01f) / 2f;
-        float radius = player.GetComponent<CapsuleCollider>().radius - 0.05f;
+        Vector3 topPoint = player.transform.position + Vector3.up * (height - 0.01f);
+        Vector3 bottomPoint = player.transform.position + Vector3.up * 0.01f;
+        float radius = player.GetComponent<CapsuleCollider>().radius - 0.03f;
+        //test if player is close enough to the object
         if (Physics.CapsuleCast(topPoint, bottomPoint, radius, player.transform.right, out hor, pickUpDist))
             inFront = (hor.transform == transform) ? true : false;
 
-        if (_GAME.canHold)
+        //test if player is holding other object.
+        if (!_GAME.isHolding)
         {
             canHold = (!onTop && inFront) ? true : false;
         }

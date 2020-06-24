@@ -11,6 +11,10 @@ GameObject:
   - component: {fileID: 7876851406781805151}
   - component: {fileID: 1156075041780975721}
   - component: {fileID: 4843548055620236432}
+  - component: {fileID: 1409505290558901101}
+  - component: {fileID: 6187083486537152310}
+  - component: {fileID: 1054176478357423627}
+  - component: {fileID: 408285344165190060}
   m_Layer: 0
   m_Name: Desk
   m_TagString: Untagged
@@ -79,3 +83,55 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &1409505290558901101
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560455238880657484}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.1729228, y: 0.20890245, z: 1.1444056}
+  m_Center: {x: 0.000062957406, y: 0.5118609, z: -0.00012903474}
+--- !u!65 &6187083486537152310
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560455238880657484}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.63, y: 1.12, z: 1.03}
+  m_Center: {x: 1.19, y: 0.05815611, z: -0.00012903474}
+--- !u!65 &1054176478357423627
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560455238880657484}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.63, y: 1.12, z: 1.03}
+  m_Center: {x: -1.2, y: 0.05815611, z: -0.00012903474}
+--- !u!65 &408285344165190060
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560455238880657484}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 1.11, z: 0.15}
+  m_Center: {x: 0.000062957406, y: 0.05, z: -0.45}
