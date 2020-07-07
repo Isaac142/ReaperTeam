@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4651933820091591371}
   - component: {fileID: 8985509003724810422}
   - component: {fileID: 8951925320058271805}
-  - component: {fileID: 6330187366373673895}
+  - component: {fileID: 422803348334337934}
   m_Layer: 0
   m_Name: BoxCubeSmall1
   m_TagString: Untagged
@@ -81,8 +81,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &6330187366373673895
-MeshCollider:
+--- !u!65 &422803348334337934
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -91,10 +91,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1900702814157816777, guid: 225987a8917c03b46af8445d13fe67aa, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.8899386, y: 0.95363986, z: 0.9452241}
+  m_Center: {x: 0.0009883046, y: -0.00000016391277, z: -0.0014146566}
 --- !u!1 &7164579942771930098
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +105,7 @@ GameObject:
   - component: {fileID: 6716626069218117712}
   - component: {fileID: 968934038990177211}
   - component: {fileID: 1590777981882426972}
-  - component: {fileID: 8726055334289882820}
+  - component: {fileID: 5125632230222186718}
   m_Layer: 0
   m_Name: BoxCubeSmall1Lid
   m_TagString: Untagged
@@ -175,8 +174,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &8726055334289882820
-MeshCollider:
+--- !u!65 &5125632230222186718
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -185,7 +184,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2644125832297380705, guid: 225987a8917c03b46af8445d13fe67aa, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.9899385, y: 0.048231006, z: 0.9952242}
+  m_Center: {x: 0.0009883046, y: 0.04354918, z: -0.0014146566}
