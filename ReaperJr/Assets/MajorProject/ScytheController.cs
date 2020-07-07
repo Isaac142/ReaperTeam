@@ -285,7 +285,9 @@ public class ScytheController : MonoBehaviour
 						RaycastHit hit;
 						Physics.Linecast(lastVector, vector, out hit);
 						crosshairTransform.position = hit.point;
-						crosshairTransform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal); ;
+						crosshairTransform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+						crosshair.transform.position = hit.point;
+						//crosshair.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 					}
 					break;
 				}
@@ -317,7 +319,7 @@ public class ScytheController : MonoBehaviour
 
 		}
 
-		if (Input.GetKeyDown("space"))
+		if (Input.GetMouseButtonDown(0))
 		{
 			if (holdingScythe)
 			{
@@ -328,7 +330,7 @@ public class ScytheController : MonoBehaviour
 
 			else
 			{
-				Physics.gravity.Set(0, -9.81f, 0);
+				//Physics.gravity.Set(0, -9.81f, 0);
 				scythe.transform.position = this.transform.position;
 				scythe.transform.localEulerAngles = Vector3.zero;
 				scythe.GetComponent<Rigidbody>().isKinematic = true;

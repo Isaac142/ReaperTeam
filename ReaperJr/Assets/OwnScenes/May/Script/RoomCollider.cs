@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class RoomCollider : ReaperJr
 {
@@ -19,6 +20,8 @@ public class RoomCollider : ReaperJr
     public List<Sprite> souls = new List<Sprite>();
     [HideInInspector]
     public List<Sprite> soulMasks = new List<Sprite>();
+
+    public List<GameObject> frontWalls;
 
     private enum RoomType { LEVEL, ROOM }
     private RoomType roomType;
@@ -51,6 +54,7 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
+            WallDisappear();
             switch (roomType)
             {
                 case RoomType.ROOM:
@@ -81,7 +85,7 @@ public class RoomCollider : ReaperJr
                     _CAMERA.levelDepthBoundaries = new Vector2(roomDepth.x, +roomDepth.y);
 
                     //making all object in between camera and player invisible
-                    StartCoroutine("Disappear", 0f);
+                    //StartCoroutine("Disappear", 0f);
                     //if (_GAME.gameState == GameManager.GameState.WON)
                     //    StartCoroutine("Appear", 0);
                     break;
@@ -89,7 +93,7 @@ public class RoomCollider : ReaperJr
                 case RoomType.ROOM:
                     _CAMERA.roomPosition = roomPosition;
                     StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
-                    StartCoroutine("Disappear", 0f);
+                    //StartCoroutine("Disappear", 0f);
 
                     if (souls.Count > 0)
                     {
@@ -110,7 +114,8 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
-            StartCoroutine("Appear", 0);
+            //StartCoroutine("Appear", 0);
+            WallAppear();
             switch(roomType)
             {
                 case RoomType.ROOM:
@@ -119,7 +124,7 @@ public class RoomCollider : ReaperJr
                     break;
 
                 case RoomType.LEVEL:
-                    StartCoroutine("Appear", 0);
+                    //StartCoroutine("Appear", 0);
                     break;
             }
         }
@@ -150,6 +155,23 @@ public class RoomCollider : ReaperJr
         {
             wall.enabled = true;
             wall.gameObject.layer = 0;
+        }
+    }
+
+    void WallDisappear()
+    {
+        foreach (GameObject go in frontWalls)
+        {
+            go.gameObject.layer = 2;
+            go.GetComponent<Renderer>().material.DOFade(0, "_BaseColor", 1).SetEase(Ease.OutQuart);
+        }
+    }
+    void WallAppear()
+    {
+        foreach (GameObject go in frontWalls)
+        {
+            go.gameObject.layer = 0;
+            go.GetComponent<Renderer>().material.DOFade(1, "_BaseColor", 1).SetEase(Ease.OutQuart);
         }
     }
 }

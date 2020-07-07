@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -9,6 +10,8 @@ public class UIManager : Singleton<UIManager>
 
     public Text timerCount;
     public Image timer;
+
+    float fadeTime = 1;
 
     public List<Image> souls = new List<Image>();
     public List<Image> soulMasks = new List<Image>();
@@ -181,6 +184,7 @@ public class UIManager : Singleton<UIManager>
     {
         GameEvents.ReportGameStateChange(GameState.MENU);
         instrunctionPanel.SetActive(true);
+        //FadeInPanel(instrunctionPanel);
         controlsInfoPanel.SetActive(true);
         uiInfoPanel.SetActive(false);
         optionPanel.SetActive(false);
@@ -217,5 +221,20 @@ public class UIManager : Singleton<UIManager>
         Application.Quit();
     }
     #endregion
+
+    void FadeInPanel(GameObject panel)
+    {
+        CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
+        cvg.DOFade(1, fadeTime);
+        cvg.interactable = true;
+        cvg.blocksRaycasts = true;
+    }
+    void FadeOutPanel(GameObject panel)
+    {
+        CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
+        cvg.DOFade(0, fadeTime);
+        cvg.interactable = false;
+        cvg.blocksRaycasts = false;
+    }
 }
 
