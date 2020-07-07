@@ -11,6 +11,11 @@ GameObject:
   - component: {fileID: 2422732311381258519}
   - component: {fileID: 2838314224938150075}
   - component: {fileID: 1586181514389620974}
+  - component: {fileID: 8328176740827653870}
+  - component: {fileID: 8289857602030467057}
+  - component: {fileID: 8473881913982438053}
+  - component: {fileID: 2005206147936180807}
+  - component: {fileID: 3939563012898829071}
   m_Layer: 0
   m_Name: BathTub 1
   m_TagString: Untagged
@@ -79,6 +84,71 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &8328176740827653870
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216754712032653427}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 13.484488, y: 6.915936, z: 0.87310266}
+  m_Center: {x: 0.692469, y: 0.14200118, z: 2.8634486}
+--- !u!65 &8289857602030467057
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216754712032653427}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 13.329531, y: 6.915936, z: 0.87310266}
+  m_Center: {x: 0.6149908, y: 0.14200118, z: -2.8634489}
+--- !u!65 &8473881913982438053
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216754712032653427}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.0552201, y: 6.889616, z: 6.6}
+  m_Center: {x: -6.8889728, y: 0.15516117, z: 0}
+--- !u!65 &2005206147936180807
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216754712032653427}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9542773, y: 6.5928044, z: 5.3832746}
+  m_Center: {x: 7.5228615, y: 0.30356687, z: 0.0057514035}
+--- !u!65 &3939563012898829071
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216754712032653427}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 13.209745, y: 0.8928542, z: 6.6}
+  m_Center: {x: 0.8243808, y: -3.153603, z: 0}
 --- !u!1 &2679787353927227602
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,6 +160,10 @@ GameObject:
   - component: {fileID: 4359027461731979795}
   - component: {fileID: 1300619280695242710}
   - component: {fileID: 1072989933636125206}
+  - component: {fileID: 5431307375010178751}
+  - component: {fileID: 9014501836013877470}
+  - component: {fileID: 8110507893070310345}
+  - component: {fileID: 5578189296244060101}
   m_Layer: 0
   m_Name: BathTubFeet
   m_TagString: Untagged
@@ -158,6 +232,58 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &5431307375010178751
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679787353927227602}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.17034173, y: 0.13120762, z: 0.18990636}
+  m_Center: {x: -0.647648, y: -0.09471758, z: 0.27449572}
+--- !u!65 &9014501836013877470
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679787353927227602}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.17034173, y: 0.11029163, z: 0.18990636}
+  m_Center: {x: 0.647648, y: -0.10517557, z: 0.27449572}
+--- !u!65 &8110507893070310345
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679787353927227602}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.17034173, y: 0.13140598, z: 0.18990636}
+  m_Center: {x: -0.647648, y: -0.094618395, z: -0.2744957}
+--- !u!65 &5578189296244060101
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679787353927227602}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.17034173, y: 0.10991016, z: 0.18990636}
+  m_Center: {x: 0.647648, y: -0.105366305, z: -0.2744957}
 --- !u!1 &3826393402685011532
 GameObject:
   m_ObjectHideFlags: 0
