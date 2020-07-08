@@ -11,4 +11,5 @@ public class Scythe : MonoBehaviour
 
         GetComponent<Rigidbody>().velocity = transform.TransformDirection(Vector3.right * _velocity);
     }
+    
 }

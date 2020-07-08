@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 //Requires the LineRenderer component
 [RequireComponent(typeof(LineRenderer))]
 
-public class ScytheController : MonoBehaviour
+public class ScytheController : ReaperJr
 {
 	[Header("Reaper JR")]
 	public GameObject scythe;
 	public int rateOfRotation;
-	bool holdingScythe = true;
+	[NonSerialized]
+	public bool holdingScythe = true;
 
 	[Header("Trajectory")]
 	//Velocity that the object will be shot at

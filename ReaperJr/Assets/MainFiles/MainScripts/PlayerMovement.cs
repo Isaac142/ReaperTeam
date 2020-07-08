@@ -12,7 +12,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     public Vector3 startingPos;
 
-    private ThrowableScythe scytheScript;
+    private ScytheController scytheController;
     public float jumpForce = 20f;
     public float distanceGround;
     [HideInInspector]
@@ -52,7 +52,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         Debug.DrawRay(transform.position, transform.right, Color.red);
         controller = GetComponent<Rigidbody>();
         controller.mass = _GAME.playerMass;
-        scytheScript = GetComponent<ThrowableScythe>();
+        scytheController = scythe.GetComponentInParent<ScytheController>();
 
         bodyCollider = GetComponent<CapsuleCollider>();
         bodyCentre = bodyCollider.center;
@@ -87,7 +87,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 Jump();
         }    
 
-        if (Input.GetMouseButtonDown(0) && scytheScript.isThrown == true)
+        if (Input.GetMouseButtonDown(0) && scytheController.holdingScythe == false)
         {
             if (_GAME.Energy >= _GAME.teleportingEnergy)
             {
@@ -414,15 +414,13 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region EquipScythe
     void EquipScythe()
     {
-        if (!scytheScript.isThrown)
-        {
+
             if (Input.GetAxis("Mouse ScrollWheel") != 0)
             {
                 _GAME.scytheEquiped = !_GAME.scytheEquiped;
                 GameEvents.ReportScytheEquipped(_GAME.scytheEquiped);
             }
 
-        }
         else return;
     }
     #endregion
@@ -442,7 +440,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
             timer += Time.deltaTime;
             yield return null;
         }
-        scytheScript.ResetScythe();
     }
     #endregion
 
