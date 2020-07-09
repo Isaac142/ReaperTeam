@@ -128,6 +128,9 @@ public class ScytheController : ReaperJr
 	// Update is called once per frame
 	void Update()
 	{
+        if (!_GAME.playerActive || _GAME.isPaused || _GAME.onCD)
+            return;
+
 		//Sets "angle" and "phi" to the Euler equivalent of the object's rotation
 		if (hasFired == false)
 		{
@@ -323,27 +326,27 @@ public class ScytheController : ReaperJr
 
 		}
 
-		if (Input.GetMouseButtonDown(0))
-		{
-			if (holdingScythe)
-			{
-				Physics.gravity = new Vector3(0, -gravity.y,0);
-				scythe.GetComponent<Scythe>().Launch(velocity);
-				holdingScythe = false;
-			}
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (holdingScythe)
+            {
+                Physics.gravity = new Vector3(0, -gravity.y, 0);
+                scythe.GetComponent<Scythe>().Launch(velocity);
+                holdingScythe = false;
+            }
 
-			else
-			{
-				//Physics.gravity.Set(0, -9.81f, 0);
-				scythe.transform.position = this.transform.position;
-				scythe.transform.localEulerAngles = Vector3.zero;
-				scythe.GetComponent<Rigidbody>().isKinematic = true;
-				scythe.GetComponent<Rigidbody>().velocity.Set(0, 0, 0);
-				holdingScythe = true;
-			}
+            else
+            {
+                //Physics.gravity.Set(0, -9.81f, 0);
+                scythe.transform.position = this.transform.position;
+                scythe.transform.localEulerAngles = Vector3.zero;
+                scythe.GetComponent<Rigidbody>().isKinematic = true;
+                scythe.GetComponent<Rigidbody>().velocity.Set(0, 0, 0);
+                holdingScythe = true;
+            }
 
 
-		}
+        }
 		#endregion
 
 		//float newF = Map(velocity, 10, 50, 0, 1);

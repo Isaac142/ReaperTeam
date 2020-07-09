@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 133421201964349438}
   - component: {fileID: 2974507578000849239}
   - component: {fileID: 711291852022229052}
+  - component: {fileID: 6884921336398073908}
   m_Layer: 0
   m_Name: BoxCubeWill
   m_TagString: Untagged
@@ -80,6 +81,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &6884921336398073908
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097983971223509069}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.7798772, y: 1.7908973, z: 1.8904482}
+  m_Center: {x: 0.0019766092, y: -0.00000035762787, z: -0.0028293133}
 --- !u!1 &3903360263671637650
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,6 +105,7 @@ GameObject:
   - component: {fileID: 7832444107069901371}
   - component: {fileID: 3257793965843769547}
   - component: {fileID: 5620462093666750994}
+  - component: {fileID: 3275136018959941274}
   m_Layer: 0
   m_Name: BoxCubeWill
   m_TagString: Untagged
@@ -159,3 +174,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &3275136018959941274
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903360263671637650}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.979877, y: 0.37366343, z: 1.9904484}
+  m_Center: {x: 0.0019766092, y: 0.016074523, z: -0.0028293133}

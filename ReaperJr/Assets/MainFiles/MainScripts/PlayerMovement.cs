@@ -76,7 +76,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     //Calling the PlayerJumping function
     void Update()
     {
-        if (_GAME.playerActive == false)
+        if (_GAME.isPaused)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
@@ -127,6 +127,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     private void FixedUpdate() //prevent character walking into walls.
     {
+        if (_GAME.isPaused)
+            return;
         Grounded();
         FallDistCalculate();
         JumpBufferCayoteTime();

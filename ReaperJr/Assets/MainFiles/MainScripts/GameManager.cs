@@ -24,7 +24,6 @@ public class GameManager : Singleton<GameManager>
     public bool scytheEquiped = true, onCD = false;
     [HideInInspector] //grounding states
     public bool onSpecialGround = false;
-    private bool pauseCheck;
 
     public float maxSafeFallDist = 8f;
 
@@ -107,15 +106,9 @@ public class GameManager : Singleton<GameManager>
 
                 _timer -= Time.deltaTime; //Count down timer.
 
-                if (_energy < maxEnergy)  //energy recovery
-                {
-                    _energy += energyReturnFactor * Time.deltaTime;
-                }
-
-                if (_energy < 0)
-                {
-                    _energy = 0;
-                }
+                _energy += energyReturnFactor * Time.deltaTime;
+                _energy = Mathf.Clamp(_energy, 0f, maxEnergy);
+                Debug.Log("Engery = " + _energy);
 
                 if (onCD) 
                 {
@@ -128,8 +121,11 @@ public class GameManager : Singleton<GameManager>
                     _cDTimer = coolDown;
                 }
 
+                if(_energy < teleportingEnergy + throwEngery)
+                {
+                    onCD = true;
+                }
                
-
                 if (_timer <= 0)
                 {
                     GameEvents.ReportGameStateChange(GameState.GAMEOVER);
@@ -144,38 +140,14 @@ public class GameManager : Singleton<GameManager>
             //    break;
 
             case GameState.PAUSED:
-                //PauseGame();
-                //_UI.pausePanel.SetActive(true);
-
                 if (Input.GetKeyDown(KeyCode.Escape))
                     GameEvents.ReportGameStateChange(GameState.RESUME);
                 break;
 
             case GameState.MENU:
-                //PauseGame();
-                //_UI.menuPanel.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.Escape))
                     GameEvents.ReportGameStateChange(GameState.RESUME);
                 break;
-
-            //case GameState.RESUME:
-                
-            //    if (Time.time - lastStateChange >= 0.1)
-            //    {
-            //        playerActive = true;
-            //        SetGameState(GameState.INGAME);
-            //    }
-            //    break;
-
-            //case GameState.GAMEOVER:
-            //    PauseGame();
-            //    _UI.gameOverPanel.SetActive(true);
-            //    break;
-
-            //case GameState.WON:
-            //    PauseGame();
-            //    _UI.wonPanel.SetActive(true);
-            //    break;
         }
 
         //preventing player fall of the world
@@ -195,7 +167,6 @@ public class GameManager : Singleton<GameManager>
     public void OnGameStateChange(GameState state)
     {
         gameState = state;
-        lastStateChange = Time.time;
         switch (state)
         {
             case GameState.INGAME:
@@ -218,18 +189,19 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    void PauseGame()
+    public void PauseGame()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         playerActive = false;
         isPaused = true;
     }
 
     IEnumerator ResumeGame()
     {
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
+        yield return new WaitForSeconds(0.5f);
+
         isPaused = false;
-        yield return new WaitForSeconds(0.1f);
         playerActive = true;
         GameEvents.ReportGameStateChange(GameState.INGAME);
     }

@@ -6,12 +6,15 @@ using DG.Tweening;
 
 public class UIManager : Singleton<UIManager>
 {
+    public float fadeInTime = 0.5f;
+    public float fadeOutTime = 0.2f;
+    public Ease fadeInEase;
+    public Ease fadeOutEase;
+
     [Header("InGameUI")]
 
     public Text timerCount;
     public Image timer;
-
-    float fadeTime = 1;
 
     public List<Image> souls = new List<Image>();
     public List<Image> soulMasks = new List<Image>();
@@ -25,7 +28,7 @@ public class UIManager : Singleton<UIManager>
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
     public GameObject menuPanel;
-    public GameObject instrunctionPanel;
+    public GameObject instructionPanel;
     public GameObject controlsInfoPanel;
     public GameObject optionPanel;
     public GameObject uiInfoPanel;
@@ -87,19 +90,17 @@ public class UIManager : Singleton<UIManager>
 
         energyBar.value = _GAME.Energy;
 
-       
-
         abilityCD.fillAmount = _GAME.CDTimer / _GAME.coolDown;
 
         totalSoulNo.text = _GAME.totalSoulNo.ToString();
     }
     public void CloseAllPanels()
     {
-        inGamePanel.SetActive(false);
-        pausePanel.SetActive(false);
-        gameOverPanel.SetActive(false);
-        menuPanel.SetActive(false);
-        wonPanel.SetActive(false);
+        FadeOutPanel(inGamePanel);
+        FadeOutPanel(pausePanel);
+        FadeOutPanel(gameOverPanel);
+        FadeOutPanel(menuPanel);
+        FadeOutPanel(wonPanel);
     }
 
     public void DisableSoulIcons()
@@ -124,19 +125,19 @@ public class UIManager : Singleton<UIManager>
          switch (state)
         {
             case GameState.INGAME:
-                inGamePanel.SetActive(true);
+                FadeInPanel(inGamePanel);
                 break;
             case GameState.PAUSED:
-                pausePanel.SetActive(true);
+                FadeInPanel(pausePanel);
                 break;
             case GameState.MENU:
-                menuPanel.SetActive(true);
+                FadeInPanel(menuPanel);
                 break;
             case GameState.GAMEOVER:
-                gameOverPanel.SetActive(true);
+                FadeInPanel(gameOverPanel);
                 break;
             case GameState.WON:
-                wonPanel.SetActive(true);
+                FadeInPanel(wonPanel);
                 break;
         }
     }
@@ -169,8 +170,7 @@ public class UIManager : Singleton<UIManager>
 
     #region Button Press
     public void Restart()
-    {
-        
+    {       
         _GAME.Restart();
         GameEvents.ReportGameStateChange(GameState.RESUME);
     }
@@ -183,37 +183,39 @@ public class UIManager : Singleton<UIManager>
     public void Menu()
     {
         GameEvents.ReportGameStateChange(GameState.MENU);
-        instrunctionPanel.SetActive(true);
-        //FadeInPanel(instrunctionPanel);
-        controlsInfoPanel.SetActive(true);
-        uiInfoPanel.SetActive(false);
-        optionPanel.SetActive(false);
+        instructionPanel.GetComponent<CanvasGroup>().alpha = 1;
+        controlsInfoPanel.GetComponent<CanvasGroup>().alpha = 1;
+        uiInfoPanel.GetComponent<CanvasGroup>().alpha = 0;
+        optionPanel.GetComponent<CanvasGroup>().alpha = 0;
     }
 
     public void ControlsPanel()
     {
-        controlsInfoPanel.SetActive(true);
-        uiInfoPanel.SetActive(false);
+        FadeOutPanel(uiInfoPanel);
+        FadeInPanel(controlsInfoPanel);
     }
 
     public void UIsPanel()
     {
-        controlsInfoPanel.SetActive(false);
-        uiInfoPanel.SetActive(true);
+        FadeOutPanel(controlsInfoPanel);
+        FadeInPanel(uiInfoPanel);
+        
     }
 
     public void OptionPanel()
     {
-        instrunctionPanel.SetActive(false);
-        optionPanel.SetActive(true);
+        FadeOutPanel(instructionPanel);
+        FadeInPanel(optionPanel);
     }
 
     public void InstructionPanel()
     {
-        instrunctionPanel.SetActive(true);
-        controlsInfoPanel.SetActive(true);
-        uiInfoPanel.SetActive(false);
-        optionPanel.SetActive(false);
+        FadeOutPanel(optionPanel);
+        FadeInPanel(instructionPanel);
+        controlsInfoPanel.GetComponent<CanvasGroup>().alpha = 1;
+        uiInfoPanel.GetComponent<CanvasGroup>().alpha = 0;
+        optionPanel.GetComponent<CanvasGroup>().alpha = 0;
+        
     }
 
     public void ExitGame()
@@ -225,14 +227,14 @@ public class UIManager : Singleton<UIManager>
     void FadeInPanel(GameObject panel)
     {
         CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
-        cvg.DOFade(1, fadeTime);
+        cvg.DOFade(1, fadeInTime).SetEase(fadeInEase);
         cvg.interactable = true;
         cvg.blocksRaycasts = true;
     }
     void FadeOutPanel(GameObject panel)
     {
         CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
-        cvg.DOFade(0, fadeTime);
+        cvg.DOFade(0, fadeOutTime).SetEase(fadeOutEase);
         cvg.interactable = false;
         cvg.blocksRaycasts = false;
     }
