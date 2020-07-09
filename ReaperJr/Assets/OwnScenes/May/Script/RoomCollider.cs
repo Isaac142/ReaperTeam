@@ -54,7 +54,7 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
-            WallDisappear();
+            //WallDisappear();
             switch (roomType)
             {
                 case RoomType.ROOM:
@@ -93,7 +93,7 @@ public class RoomCollider : ReaperJr
                 case RoomType.ROOM:
                     _CAMERA.roomPosition = roomPosition;
                     StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
-                    //StartCoroutine("Disappear", 0f);
+                    StartCoroutine("Disappear", 0f);
 
                     if (souls.Count > 0)
                     {
@@ -114,8 +114,8 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
-            //StartCoroutine("Appear", 0);
-            WallAppear();
+            StartCoroutine("Appear", 0);
+           //WallAppear();
             switch(roomType)
             {
                 case RoomType.ROOM:
@@ -124,7 +124,7 @@ public class RoomCollider : ReaperJr
                     break;
 
                 case RoomType.LEVEL:
-                    //StartCoroutine("Appear", 0);
+                    StartCoroutine("Appear", 0);
                     break;
             }
         }
