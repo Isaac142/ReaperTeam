@@ -100,7 +100,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
         objInFrontLast = objInFront;
         #endregion
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             isViewingAll = !isViewingAll;
 

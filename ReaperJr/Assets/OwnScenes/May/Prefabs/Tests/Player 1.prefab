@@ -72,6 +72,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4864519302855298215, guid: f0c0fd1971be8ff44ab499526bccce23,
+        type: 3}
+      propertyPath: jumpForce
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4864519302855298215, guid: f0c0fd1971be8ff44ab499526bccce23,
+        type: 3}
+      propertyPath: gModifier
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 942495705, guid: f0c0fd1971be8ff44ab499526bccce23, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f0c0fd1971be8ff44ab499526bccce23, type: 3}
