@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 4133050603234156659}
   - component: {fileID: 5184625790995596617}
   - component: {fileID: 5057429116715601339}
+  - component: {fileID: 379196681976102099}
   m_Layer: 0
   m_Name: LockedChest
   m_TagString: Untagged
@@ -188,3 +189,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 3702327601787305609, guid: e44308331a12d8240939e86b171205dc, type: 3}
+--- !u!65 &379196681976102099
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9163753215537361336}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.9949503, y: 1.6428715, z: 2.0862706}
+  m_Center: {x: 0, y: -0.17615211, z: -0.030826688}

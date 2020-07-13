@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7889772269707906679}
+  - component: {fileID: 5624474593616063498}
   m_Layer: 0
   m_Name: MouseTrap
   m_TagString: Untagged
@@ -32,6 +33,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5624474593616063498
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567730171707407460}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.031672955, y: 0.008009911, z: 0.02481985}
+  m_Center: {x: -0.015156031, y: 0.0035577416, z: -0.0017259121}
 --- !u!1 &7306294717739042228
 GameObject:
   m_ObjectHideFlags: 0
