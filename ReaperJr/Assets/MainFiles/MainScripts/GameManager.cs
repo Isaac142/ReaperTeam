@@ -133,12 +133,6 @@ public class GameManager : Singleton<GameManager>
                 }
                 break;
 
-            //case GameState.DEAD:
-            //    _timer -= punishmentTime;
-            //    _PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
-            //    SetGameState(GameState.INGAME);
-            //    break;
-
             case GameState.PAUSED:
                 if (Input.GetKeyDown(KeyCode.Escape))
                     GameEvents.ReportGameStateChange(GameState.RESUME);
@@ -164,12 +158,21 @@ public class GameManager : Singleton<GameManager>
             checkPoints.Remove(checkPoints[0]);
     }
 
+    void PlayerDead()
+    {
+        _timer -= punishmentTime;
+        _PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
+        GameEvents.ReportGameStateChange(GameState.INGAME);
+    }
     public void OnGameStateChange(GameState state)
     {
         gameState = state;
         switch (state)
         {
             case GameState.INGAME:
+                break;
+            case GameState.DEAD:
+                PlayerDead();
                 break;
             case GameState.PAUSED:
                 PauseGame();
