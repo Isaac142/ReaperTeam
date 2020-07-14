@@ -198,7 +198,6 @@ public class CameraControlScript : Singleton<CameraControlScript>
     void Fade(GameObject obj)
     {
         Renderer rend = obj.GetComponent<Renderer>();
-        color = rend.material.color;
         rend.material.SetFloat("_Mode", rendererMode);
         rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
         rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
@@ -207,13 +206,12 @@ public class CameraControlScript : Singleton<CameraControlScript>
         rend.material.EnableKeyword("_ALPHABLEND_ON");
         rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
         rend.material.renderQueue = 3000;
-        rend.material.SetColor("_BaseColor", new Color(color.r, color.g, color.b, transparentFactor));
+        rend.material.DOFade(transparentFactor, "_BaseColor", 0.2f);
     }
 
     void ReturnColor(GameObject obj)
     {
         Renderer rend = obj.GetComponent<Renderer>();
-        color = rend.material.color;
         rend.material.SetFloat("_Mode", 0);
         rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
         rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
@@ -222,7 +220,6 @@ public class CameraControlScript : Singleton<CameraControlScript>
         rend.material.DisableKeyword("_ALPHABLEND_ON");
         rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
         rend.material.renderQueue = -1;
-        rend.material.SetColor("_BaseColor", new Color(color.r, color.g, color.b, 1f));
     }
 
     public void SetCameraState(CameraState state)
