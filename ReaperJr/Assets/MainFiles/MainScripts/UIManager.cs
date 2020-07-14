@@ -17,6 +17,7 @@ public class UIManager : Singleton<UIManager>
     public Image timer;
 
     public List<Image> souls = new List<Image>();
+    List<SoulType> currSouls = new List<SoulType>();
     public List<Image> soulMasks = new List<Image>();
     public Text totalSoulNo;
     public GameObject infoPanel;
@@ -35,6 +36,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject pausePanel;
     public GameObject gameOverPanel;
     public GameObject wonPanel;
+    public GameObject soulPanel;
 
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
@@ -156,16 +158,23 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    void OnSoulCollected(SoulType soulCollected)
+    {
+        UpdateSouls();
+    }
+
     private void OnEnable()
     {
         GameEvents.OnGameStateChange += OnGameStateChange;
         GameEvents.OnScytheEquipped += OnScytheEquipped;
+        GameEvents.OnSoulCollected += OnSoulCollected;
     }
 
     private void OnDisable()
     {
         GameEvents.OnGameStateChange -= OnGameStateChange;
         GameEvents.OnScytheEquipped -= OnScytheEquipped;
+        GameEvents.OnSoulCollected -= OnSoulCollected;
     }
 
     #region Button Press
@@ -224,17 +233,64 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
-    void FadeInPanel(GameObject panel)
+    public void SetSouls(List<SoulType> _souls)
+    {
+        FadeInPanel(soulPanel);
+        currSouls.Clear();
+        currSouls = _souls;
+        foreach (Image im in souls)
+        {
+            im.enabled = false;
+        }
+
+        for (int i = 0; i < _souls.Count; i++)
+        {
+            souls[i].sprite = _souls[i].soulIcon;
+            souls[i].enabled = true;
+        }
+        UpdateSouls();
+    }
+
+    public void UpdateSouls()
+    {
+        for (int i = 0; i < currSouls.Count; i++)
+        {
+            if (currSouls[i].isCollected)
+            {
+                souls[i].color = Color.gray;
+            }
+            else
+                souls[i].color = Color.white;
+        }
+    }
+
+    public void FadeInPanel(GameObject panel)
     {
         CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
-        cvg.DOFade(1, fadeInTime).SetEase(fadeInEase);
+        cvg.DOFade(1, fadeInTime).SetEase(fadeInEase).SetUpdate(true);
         cvg.interactable = true;
         cvg.blocksRaycasts = true;
     }
-    void FadeOutPanel(GameObject panel)
+    public void FadeOutPanel(GameObject panel)
     {
         CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
-        cvg.DOFade(0, fadeOutTime).SetEase(fadeOutEase);
+        cvg.DOFade(0, fadeOutTime).SetEase(fadeOutEase).SetUpdate(true);
+        cvg.interactable = false;
+        cvg.blocksRaycasts = false;
+    }
+
+    void InstantInPanel(GameObject panel)
+    {
+        CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
+        cvg.alpha = 1;
+        cvg.interactable = true;
+        cvg.blocksRaycasts = true;
+    }
+
+    void InstantOffPanel(GameObject panel)
+    {
+        CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
+        cvg.alpha = 0;
         cvg.interactable = false;
         cvg.blocksRaycasts = false;
     }

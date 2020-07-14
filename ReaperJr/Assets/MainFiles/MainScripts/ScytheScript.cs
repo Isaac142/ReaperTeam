@@ -13,5 +13,6 @@ public class ScytheScript : MonoBehaviour
     {
         activated = false;
         GetComponent<Rigidbody>().isKinematic = true;
+        transform.SetParent(null);
     }
 }

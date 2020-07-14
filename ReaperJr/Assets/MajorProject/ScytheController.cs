@@ -328,17 +328,18 @@ public class ScytheController : ReaperJr
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (holdingScythe)
+            if (holdingScythe && !_GAME.onCD)
             {
                 Physics.gravity = new Vector3(0, -gravity.y, 0);
                 scythe.GetComponent<Scythe>().Launch(velocity);
                 holdingScythe = false;
             }
 
-            else
+            else if (!holdingScythe)
             {
-                //Physics.gravity.Set(0, -9.81f, 0);
-                scythe.transform.position = this.transform.position;
+				//Physics.gravity.Set(0, -9.81f, 0);
+				scythe.transform.SetParent(this.transform);
+                scythe.transform.localPosition = Vector3.zero;
                 scythe.transform.localEulerAngles = Vector3.zero;
                 scythe.GetComponent<Rigidbody>().isKinematic = true;
                 scythe.GetComponent<Rigidbody>().velocity.Set(0, 0, 0);

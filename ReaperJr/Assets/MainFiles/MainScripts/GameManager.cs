@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
     public bool playerActive = true, isPaused =  false;
     [HideInInspector] //holding object states
     public bool isHolding = false, canHold = true, holdingLightObject = false;
-    [HideInInspector] //scythe and its ability state
+    //[HideInInspector] //scythe and its ability state
     public bool scytheEquiped = true, onCD = false;
     [HideInInspector] //grounding states
     public bool onSpecialGround = false;
@@ -194,14 +194,14 @@ public class GameManager : Singleton<GameManager>
 
     public void PauseGame()
     {
-        //Time.timeScale = 0;
+        Time.timeScale = 0;
         playerActive = false;
         isPaused = true;
     }
 
     IEnumerator ResumeGame()
     {
-        //Time.timeScale = 1;
+        Time.timeScale = 1;
         yield return new WaitForSeconds(0.5f);
 
         isPaused = false;

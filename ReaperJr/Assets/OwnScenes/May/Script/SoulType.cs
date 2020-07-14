@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoulType : MonoBehaviour
 {
     public Souls soul;
+    public bool isCollected = false;
     [HideInInspector]
     public Sprite soulIcon, soulMask;
     private enum SoulTypes { BRAVE, HAPPY, SKITTISH}
@@ -89,5 +90,21 @@ public class SoulType : MonoBehaviour
                     }
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnSoulCollected += OnSoulCollected;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnSoulCollected -= OnSoulCollected;
+    }
+
+    void OnSoulCollected(SoulType soulType)
+    {
+        isCollected = true;
+        this.gameObject.SetActive(false);
     }
 }

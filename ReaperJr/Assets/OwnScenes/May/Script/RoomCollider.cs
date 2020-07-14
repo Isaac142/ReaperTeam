@@ -17,10 +17,11 @@ public class RoomCollider : ReaperJr
 
     public List<GameObject> soul = new List<GameObject>();
     [HideInInspector]
-    public List<Sprite> souls = new List<Sprite>();
+    public List<Sprite> soulSprite = new List<Sprite>();
     [HideInInspector]
     public List<Sprite> soulMasks = new List<Sprite>();
 
+    public List<SoulType> souls = new List<SoulType>();
     public List<GameObject> frontWalls;
 
     private enum RoomType { LEVEL, ROOM }
@@ -44,7 +45,7 @@ public class RoomCollider : ReaperJr
         roomDepth = new Vector2(roomCollider.transform.position.z - roomCollider.bounds.size.z / 2f, roomCollider.transform.position.z + roomCollider.bounds.size.z / 2f);
         for (int i = 0; i <soul.Count; i ++)
         {
-            souls.Add(soul[i].GetComponent<SoulType>().soulIcon);
+            soulSprite.Add(soul[i].GetComponent<SoulType>().soulIcon);
             soulMasks.Add(soul[i].GetComponent<SoulType>().soulMask);
         }
         _GAME.totalSoulNo += soul.Count;
@@ -60,15 +61,16 @@ public class RoomCollider : ReaperJr
                 case RoomType.ROOM:
                     _UI.DisableSoulIcons();
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
-                    for (int i = 0; i < souls.Count; i++)
+                    for (int i = 0; i < soulSprite.Count; i++)
                     {
                         _UI.souls[i].enabled = true;
-                        _UI.souls[i].sprite = souls[i];
+                        _UI.souls[i].sprite = soulSprite[i];
                         _UI.soulMasks[i].sprite = soulMasks[i];
                         _UI.soulMasks[i].enabled = false;
                     }
                     break;
             }
+            _UI.SetSouls(souls);
         }
     }
 
@@ -95,9 +97,9 @@ public class RoomCollider : ReaperJr
                     StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
                     StartCoroutine("Disappear", 0f);
 
-                    if (souls.Count > 0)
+                    if (soulSprite.Count > 0)
                     {
-                        for (int i = 0; i < souls.Count; i++)
+                        for (int i = 0; i < soulSprite.Count; i++)
                         {
                             if (soul[i] == null)
                                 _UI.soulMasks[i].enabled = true;
@@ -127,6 +129,7 @@ public class RoomCollider : ReaperJr
                     StartCoroutine("Appear", 0);
                     break;
             }
+            _UI.FadeOutPanel(_UI.soulPanel);
         }
     }
 
