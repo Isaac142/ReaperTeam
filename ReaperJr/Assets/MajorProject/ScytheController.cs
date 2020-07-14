@@ -128,8 +128,8 @@ public class ScytheController : ReaperJr
 	// Update is called once per frame
 	void Update()
 	{
-        if (!_GAME.playerActive || _GAME.isPaused || _GAME.onCD)
-            return;
+        //if (!_GAME.playerActive || _GAME.isPaused || _GAME.onCD)
+          //  return;
 
 		//Sets "angle" and "phi" to the Euler equivalent of the object's rotation
 		if (hasFired == false)
