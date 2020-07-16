@@ -19,9 +19,9 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] //game states
     public bool playerActive = true, isPaused =  false;
     [HideInInspector] //holding object states
-    public bool isHolding = false, canHold = true, holdingLightObject = false;
+    public bool isHolding = false, holdingLightObject = false;
     //[HideInInspector] //scythe and its ability state
-    public bool scytheEquiped = true, onCD = false;
+    public bool scytheEquiped = true, scytheaThrown = false, onCD = false;
     [HideInInspector] //grounding states
     public bool onSpecialGround = false;
 
@@ -85,7 +85,6 @@ public class GameManager : Singleton<GameManager>
         _PLAYER.Restart();
         holdingLightObject = false;
         isHolding = false;
-        canHold = true;
         onSpecialGround = false;
         _timer = maxTimerInSeconds;
         _energy = maxEnergy;
@@ -214,10 +213,16 @@ public class GameManager : Singleton<GameManager>
         scytheEquiped = scythe;
     }
 
+    void OnScytheThrow(bool scythe)
+    {
+        scytheaThrown = scythe;
+    }
+
     private void OnEnable()
     {
         GameEvents.OnGameStateChange += OnGameStateChange;
         GameEvents.OnScytheEquipped += OnScytheEquipped;
+        GameEvents.OnScytheThrow += OnScytheThrow;
     }
 
     private void OnDisable()

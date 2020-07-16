@@ -8,6 +8,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     //public TrajectoryPredictor trajectory;
 
     Rigidbody controller;
+    public Transform firePoint;
     public GameObject scythe;
 
     public Vector3 startingPos;
@@ -416,13 +417,18 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region EquipScythe
     void EquipScythe()
     {
+        if (_GAME.scytheEquiped && !_GAME.scytheaThrown)
+        {
+            scythe.transform.parent = firePoint;
+            scythe.transform.localEulerAngles = Vector3.zero;
+            scythe.transform.localPosition = Vector3.zero;
+        }
 
-            if (Input.GetAxis("Mouse ScrollWheel") != 0)
-            {
-                _GAME.scytheEquiped = !_GAME.scytheEquiped;
-                GameEvents.ReportScytheEquipped(_GAME.scytheEquiped);
-            }
-
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            _GAME.scytheEquiped = !_GAME.scytheEquiped;
+            GameEvents.ReportScytheEquipped(_GAME.scytheEquiped);
+        }
         else return;
     }
     #endregion

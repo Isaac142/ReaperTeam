@@ -13,22 +13,12 @@ public class MoveableItemTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
-        {
-            itemMovement.player = other.gameObject;
             itemMovement.playerIn = true;
-        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
-        {
-            itemMovement.player = null;
             itemMovement.playerIn = false;
-            itemMovement.canHold = false;
-
-            if (itemMovement.transform.GetComponentInParent<Renderer>() != null)
-                itemMovement.transform.GetComponentInParent<Renderer>().material.DisableKeyword("_EMISSION");
-        }
     }
 }

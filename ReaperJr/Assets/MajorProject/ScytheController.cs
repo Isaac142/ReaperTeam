@@ -333,6 +333,7 @@ public class ScytheController : ReaperJr
                 Physics.gravity = new Vector3(0, -gravity.y, 0);
                 scythe.GetComponent<Scythe>().Launch(velocity);
                 holdingScythe = false;
+                GameEvents.ReportScytheThrown(true);
             }
 
             else if (!holdingScythe)
@@ -344,6 +345,7 @@ public class ScytheController : ReaperJr
                 scythe.GetComponent<Rigidbody>().isKinematic = true;
                 scythe.GetComponent<Rigidbody>().velocity.Set(0, 0, 0);
                 holdingScythe = true;
+                GameEvents.ReportScytheThrown(false);
             }
 
 

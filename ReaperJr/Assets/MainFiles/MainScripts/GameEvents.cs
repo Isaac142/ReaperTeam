@@ -8,6 +8,7 @@ public static class GameEvents
     public static event Action<GameState> OnGameStateChange = null;
     public static event Action<bool> OnScytheEquipped = null;
     public static event Action<SoulType> OnSoulCollected = null;
+    public static event Action<bool> OnScytheThrow = null;
 
     public static void ReportGameStateChange(GameState gameState)
     {
@@ -25,5 +26,11 @@ public static class GameEvents
     {
         if (OnSoulCollected != null)
             OnSoulCollected(soulCollected);
+    }
+
+    public static void ReportScytheThrown(bool ScytheThrown)
+    {
+        if (OnScytheThrow != null)
+            OnScytheThrow(ScytheThrown);
     }
 }

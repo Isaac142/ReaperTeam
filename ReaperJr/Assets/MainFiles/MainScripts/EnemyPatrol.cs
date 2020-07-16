@@ -9,6 +9,7 @@ public class EnemyPatrol : ReaperJr
     private NavMeshAgent agent;
 
     public float awareDistance = 10f;
+    public float detectRange = 5f;
     public List<Transform> patrolPoints;
     public float patrolSpeed = 3f;
     public float chasingSpeed = 3f;
@@ -17,7 +18,7 @@ public class EnemyPatrol : ReaperJr
     private float toPlayer;
     private int patrolIndex = 0;
     
-    private enum EnemyType { ENEMY, DUMMY}
+    private enum EnemyType { ENEMY, DUMMY, FLEE}
     private EnemyType enemyType;
 
     // Start is called before the first frame update
@@ -32,6 +33,7 @@ public class EnemyPatrol : ReaperJr
         {
             enemyType = EnemyType.DUMMY;
         }
+        if(transform.tag == "Flee")
 
         player = _PLAYER.gameObject.transform;
     }
@@ -73,10 +75,21 @@ public class EnemyPatrol : ReaperJr
                     NextPatrolPoint();
                 break;
 
-
             case EnemyType.DUMMY:
                 if (agent.remainingDistance < 0.5f)
                     NextPatrolPoint();
+                break;
+
+            case EnemyType.FLEE:
+                Vector3 runDirection = Vector3.zero;
+                if (toPlayer <= detectRange)
+                {
+                    runDirection = (transform.position - _PLAYER.gameObject.transform.position);
+                    Vector3 newPosition = transform.position + runDirection;
+                    agent.SetDestination(newPosition);
+                    if (agent.remainingDistance < 0.5f)
+                        NextPatrolPoint();
+                }
                 break;
         }            
     }
