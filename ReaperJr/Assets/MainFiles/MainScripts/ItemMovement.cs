@@ -10,7 +10,7 @@ using System.Collections.Generic;
  * equip scythe when hold heavy object will relase the object.
  * character CAN NOT jump if holding heavy object.
 */
-public enum MovingState { DEFAULT, PLARERIN, CANHOLD, HOLDING}
+public enum MovingState { DEFAULT, PLARERIN, CANHOLD, HOLDING }
 public class ItemMovement : ReaperJr
 {
     [HideInInspector]
@@ -20,7 +20,7 @@ public class ItemMovement : ReaperJr
     public float drag = 5f; //object's rigidbody's sliperness on ground
     [HideInInspector]
     public bool isLigther = false, canHold = false, playerIn = false, isHolding = false;
-    
+
     public float relasingThreshold = 0.3f; //when curren - iniDistance > releasingThreshold, object is released.
     public float gravityFactor = 7f;
     public float pickUpDist = 1f;
@@ -56,9 +56,9 @@ public class ItemMovement : ReaperJr
             objectRB.isKinematic = false;
         }
 
-        if(!emissionObj.Contains(this.gameObject))
+        if (!emissionObj.Contains(this.gameObject))
             emissionObj.Add(this.gameObject);
-        foreach(GameObject obj in emissionObj)
+        foreach (GameObject obj in emissionObj)
         {
             mats.Add(obj.GetComponent<Renderer>().material);
         }
@@ -78,7 +78,7 @@ public class ItemMovement : ReaperJr
             CanHold();
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (canHold)
                 PickUp();
@@ -86,7 +86,7 @@ public class ItemMovement : ReaperJr
                 StartCoroutine(Release());
             else
                 return;
-         }
+        }
 
         if (isHolding)
             HoldingEvents();
@@ -95,7 +95,7 @@ public class ItemMovement : ReaperJr
     IEnumerator DefaultState()
     {
         yield return new WaitForSeconds(0.5f);
-        if(objectRB != null)
+        if (objectRB != null)
         {
             if (objectRB.velocity.sqrMagnitude < 0.1f)
                 objectRB.isKinematic = true;
@@ -155,6 +155,14 @@ public class ItemMovement : ReaperJr
         }
         else
             canHold = false;
+
+        if (canHold)
+        {
+            _UI.SetHints(1);
+            _UI.hint1.text = "Press E key to Hold Object.";
+        }
+        else
+            _UI.FadeInPanel(_UI.hintsPanel);
     }
 
     void PickUp()
@@ -182,7 +190,7 @@ public class ItemMovement : ReaperJr
         if (objectRB != null)
         {
             objectRB.isKinematic = true;
-            if(!isLigther)
+            if (!isLigther)
             {
                 GetComponent<BoxCollider>().isTrigger = false;
                 ConstrainSetUp(); //constrain rotation at the mostly upwards axis.
@@ -215,6 +223,9 @@ public class ItemMovement : ReaperJr
                 }
             }
         }
+
+        _UI.SetHints(1);
+        _UI.hint1.text = "Press E key to Release Object.";
     }
 
     void ConstrainSetUp() //testing the local upward axis and set up constrains.

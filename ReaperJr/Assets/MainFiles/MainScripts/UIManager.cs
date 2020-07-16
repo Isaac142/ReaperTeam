@@ -18,6 +18,7 @@ public class UIManager : Singleton<UIManager>
 
     public List<Image> souls = new List<Image>();
     List<SoulType> currSouls = new List<SoulType>();
+    public GameObject soulPanel;
     public List<Image> soulMasks = new List<Image>();
     public Text totalSoulNo;
     public GameObject infoPanel;
@@ -25,6 +26,9 @@ public class UIManager : Singleton<UIManager>
     public Slider energyBar;
     public Image abilityCD;
     public GameObject[] masks;  //scythe icon masks
+    public GameObject hintsPanel;
+    public Text hint1;
+    public Text hint2;
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
@@ -36,7 +40,6 @@ public class UIManager : Singleton<UIManager>
     public GameObject pausePanel;
     public GameObject gameOverPanel;
     public GameObject wonPanel;
-    public GameObject soulPanel;
 
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
@@ -96,7 +99,7 @@ public class UIManager : Singleton<UIManager>
 
         totalSoulNo.text = _GAME.totalSoulNo.ToString();
     }
-    public void CloseAllPanels()
+    public void FadeOutAllPanels()
     {
         FadeOutPanel(inGamePanel);
         FadeOutPanel(pausePanel);
@@ -104,10 +107,19 @@ public class UIManager : Singleton<UIManager>
         FadeOutPanel(menuPanel);
         FadeOutPanel(wonPanel);
     }
+    public void CloseAllPanels()
+    {
+        //InstantOffPanel(inGamePanel);
+        InstantOffPanel(pausePanel);
+        InstantOffPanel(gameOverPanel);
+        InstantOffPanel(menuPanel);
+        InstantOffPanel(wonPanel);
+    }
 
     public void DisableSoulIcons()
     {
-        foreach(Image soulIcon in souls)
+        FadeOutPanel(hintsPanel);
+        foreach (Image soulIcon in souls)
         {
             soulIcon.sprite = null;
             soulIcon.enabled = false;
@@ -123,8 +135,8 @@ public class UIManager : Singleton<UIManager>
 
     void OnGameStateChange(GameState state)
     {
-        CloseAllPanels();
-         switch (state)
+        FadeOutAllPanels();
+        switch (state)
         {
             case GameState.INGAME:
                 FadeInPanel(inGamePanel);
@@ -179,7 +191,7 @@ public class UIManager : Singleton<UIManager>
 
     #region Button Press
     public void Restart()
-    {       
+    {
         _GAME.Restart();
         GameEvents.ReportGameStateChange(GameState.RESUME);
     }
@@ -208,7 +220,7 @@ public class UIManager : Singleton<UIManager>
     {
         FadeOutPanel(controlsInfoPanel);
         FadeInPanel(uiInfoPanel);
-        
+
     }
 
     public void OptionPanel()
@@ -224,7 +236,7 @@ public class UIManager : Singleton<UIManager>
         controlsInfoPanel.GetComponent<CanvasGroup>().alpha = 1;
         uiInfoPanel.GetComponent<CanvasGroup>().alpha = 0;
         optionPanel.GetComponent<CanvasGroup>().alpha = 0;
-        
+
     }
 
     public void ExitGame()
@@ -262,6 +274,17 @@ public class UIManager : Singleton<UIManager>
             else
                 souls[i].color = Color.white;
         }
+    }
+
+    public void SetHints(int hintNum)
+    {
+        FadeInPanel(hintsPanel);
+        hint1.enabled = false;
+        hint2.enabled = false;
+        if (hintNum == 1)
+            hint1.enabled = true;
+        if (hintNum == 2)
+            hint2.enabled = true;
     }
 
     public void FadeInPanel(GameObject panel)
