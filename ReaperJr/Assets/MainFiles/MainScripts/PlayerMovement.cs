@@ -389,6 +389,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     {
                         
                         GameEvents.ReportScytheEquipped(true);
+                        hits[i].transform.GetComponent<SoulType>().isCollected = true;
                         GameEvents.ReportSoulCollected(hits[i].transform.GetComponent<SoulType>());
                         _GAME.totalSoulNo -= 1;
                         //do something --> collected amount, visual clue...

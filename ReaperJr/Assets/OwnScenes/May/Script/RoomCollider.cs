@@ -59,15 +59,15 @@ public class RoomCollider : ReaperJr
             switch (roomType)
             {
                 case RoomType.ROOM:
-                    _UI.DisableSoulIcons();
+                    //_UI.DisableSoulIcons();
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
-                    for (int i = 0; i < soulSprite.Count; i++)
-                    {
-                        _UI.souls[i].enabled = true;
-                        _UI.souls[i].sprite = soulSprite[i];
-                        _UI.soulMasks[i].sprite = soulMasks[i];
-                        _UI.soulMasks[i].enabled = false;
-                    }
+                    //for (int i = 0; i < soulSprite.Count; i++)
+                    //{
+                    //    _UI.souls[i].enabled = true;
+                    //    _UI.souls[i].sprite = soulSprite[i];
+                    //    _UI.soulMasks[i].sprite = soulMasks[i];
+                    //    _UI.soulMasks[i].enabled = false;
+                    //}
                     break;
             }
             _UI.SetSouls(souls);
@@ -97,16 +97,16 @@ public class RoomCollider : ReaperJr
                     StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
                     StartCoroutine("Disappear", 0f);
 
-                    if (soulSprite.Count > 0)
-                    {
-                        for (int i = 0; i < soulSprite.Count; i++)
-                        {
-                            if (soul[i] == null)
-                                _UI.soulMasks[i].enabled = true;
-                            if (!_UI.souls[i].IsActive())
-                                _UI.soulMasks[i].enabled = false;
-                        }
-                    }
+                    //if (soulSprite.Count > 0)
+                    //{
+                    //    for (int i = 0; i < soulSprite.Count; i++)
+                    //    {
+                    //        if (soul[i] == null)
+                    //            _UI.soulMasks[i].enabled = true;
+                    //        if (!_UI.souls[i].IsActive())
+                    //            _UI.soulMasks[i].enabled = false;
+                    //    }
+                    //}
                     break;
             }
         }
@@ -121,7 +121,7 @@ public class RoomCollider : ReaperJr
             switch(roomType)
             {
                 case RoomType.ROOM:
-                    _UI.DisableSoulIcons();
+                    //_UI.DisableSoulIcons();
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.OUTROOM);
                     break;
 

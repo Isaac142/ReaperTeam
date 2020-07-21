@@ -17,7 +17,7 @@ public class UIManager : Singleton<UIManager>
     public Image timer;
 
     public List<Image> souls = new List<Image>();
-    List<SoulType> currSouls = new List<SoulType>();
+    public List<SoulType> currSouls = new List<SoulType>();
     public GameObject soulPanel;
     public List<Image> soulMasks = new List<Image>();
     public Text totalSoulNo;
@@ -172,7 +172,7 @@ public class UIManager : Singleton<UIManager>
 
     void OnSoulCollected(SoulType soulCollected)
     {
-        UpdateSouls();
+        //UpdateSouls();
     }
 
     private void OnEnable()
@@ -248,16 +248,16 @@ public class UIManager : Singleton<UIManager>
     public void SetSouls(List<SoulType> _souls)
     {
         FadeInPanel(soulPanel);
-        currSouls.Clear();
+        //currSouls.Clear();
         currSouls = _souls;
         foreach (Image im in souls)
         {
             im.enabled = false;
         }
 
-        for (int i = 0; i < _souls.Count; i++)
+        for (int i = 0; i < currSouls.Count; i++)
         {
-            souls[i].sprite = _souls[i].soulIcon;
+            souls[i].sprite = currSouls[i].soulIcon;
             souls[i].enabled = true;
         }
         UpdateSouls();
@@ -269,11 +269,23 @@ public class UIManager : Singleton<UIManager>
         {
             if (currSouls[i].isCollected)
             {
-                souls[i].color = Color.gray;
+                //souls[i].color = Color.gray;
+                souls[i].DOColor(Color.red, 0.5f);
+                souls[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
+                StartCoroutine(ReturnSouldIcon(souls[i]));
             }
+
             else
                 souls[i].color = Color.white;
         }
+
+    }
+
+    IEnumerator ReturnSouldIcon(Image _soul)
+    {
+        yield return new WaitForSeconds(0.5f);
+        _soul.rectTransform.DOScale(Vector3.one * 1f, 1f);
+        _soul.DOColor(Color.grey, 1f);
     }
 
     public void SetHints(int hintNum)
