@@ -94,6 +94,8 @@ public class ItemMovement : ReaperJr
 
     IEnumerator DefaultState()
     {
+        _UI.hint1.text = "";
+        GameEvents.ReportScytheEquipped(true);
         yield return new WaitForSeconds(0.5f);
         if (objectRB != null)
         {

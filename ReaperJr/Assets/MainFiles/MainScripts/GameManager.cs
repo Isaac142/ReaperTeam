@@ -107,7 +107,7 @@ public class GameManager : Singleton<GameManager>
 
                 _energy += energyReturnFactor * Time.deltaTime;
                 _energy = Mathf.Clamp(_energy, 0f, maxEnergy);
-                Debug.Log("Engery = " + _energy);
+                //Debug.Log("Engery = " + _energy);
 
                 if (onCD) 
                 {
@@ -160,8 +160,10 @@ public class GameManager : Singleton<GameManager>
     void PlayerDead()
     {
         _timer -= punishmentTime;
-        _PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
-        GameEvents.ReportGameStateChange(GameState.INGAME);
+        //_PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
+        _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3).OnComplete(()=>
+         GameEvents.ReportGameStateChange(GameState.INGAME));
+       
     }
     public void OnGameStateChange(GameState state)
     {

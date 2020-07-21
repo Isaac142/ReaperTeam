@@ -104,7 +104,12 @@ public class SoulType : MonoBehaviour
 
     void OnSoulCollected(SoulType soulType)
     {
-        isCollected = true;
-        this.gameObject.SetActive(false);
+        if (soulType == this)
+        {
+            //isCollected = true;
+            UIManager.INSTANCE.UpdateSouls();
+            this.gameObject.SetActive(false);
+        }
+        
     }
 }
