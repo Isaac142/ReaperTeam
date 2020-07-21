@@ -28,7 +28,7 @@ PrefabInstance:
     - target: {fileID: 3194856488391121948, guid: f0c0fd1971be8ff44ab499526bccce23,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.007
       objectReference: {fileID: 0}
     - target: {fileID: 3194856488391121949, guid: f0c0fd1971be8ff44ab499526bccce23,
         type: 3}
@@ -128,7 +128,7 @@ PrefabInstance:
     - target: {fileID: 3601565156814170650, guid: f0c0fd1971be8ff44ab499526bccce23,
         type: 3}
       propertyPath: m_Name
-      value: Player 1
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4864519302855298215, guid: f0c0fd1971be8ff44ab499526bccce23,
         type: 3}
@@ -145,6 +145,11 @@ PrefabInstance:
       propertyPath: firePoint
       value: 
       objectReference: {fileID: 6021808486813196413}
+    - target: {fileID: 4864519302855298215, guid: f0c0fd1971be8ff44ab499526bccce23,
+        type: 3}
+      propertyPath: distanceGround
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 942495705, guid: f0c0fd1971be8ff44ab499526bccce23, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f0c0fd1971be8ff44ab499526bccce23, type: 3}
