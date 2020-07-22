@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6761402925803012206}
   - component: {fileID: 1074633289476439191}
   - component: {fileID: 5028530019734815381}
+  - component: {fileID: 6803531154064214278}
+  - component: {fileID: 2793352660885493489}
   m_Layer: 0
   m_Name: Scythe
   m_TagString: Untagged
@@ -96,3 +98,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 48
   m_CollisionDetection: 0
+--- !u!65 &6803531154064214278
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645233629026011211}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.20057797, y: 0.9978225, z: 0.06}
+  m_Center: {x: 0.039744258, y: 0, z: 0}
+--- !u!65 &2793352660885493489
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645233629026011211}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.66063917, y: 0.3354159, z: 0.06}
+  m_Center: {x: -0.18732375, y: 0.34295765, z: -0}

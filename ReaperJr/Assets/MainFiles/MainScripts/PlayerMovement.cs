@@ -144,10 +144,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
     void DirectionSwitch()
     {
         if (Input.GetKey(KeyCode.W))
-            facingDirection = FacingDirection.BACK;
+            facingDirection = FacingDirection.FRONT;
 
         if (Input.GetKey(KeyCode.S))
-            facingDirection = FacingDirection.FRONT;
+            facingDirection = FacingDirection.BACK;
 
         if (Input.GetKey(KeyCode.D))
             facingDirection = FacingDirection.RIGHT;
@@ -156,16 +156,16 @@ public class PlayerMovement : Singleton<PlayerMovement>
             facingDirection = FacingDirection.LEFT;
 
         if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
-            facingDirection = FacingDirection.FRONTRIGHT;
+            facingDirection = FacingDirection.BACKRIGHT;
 
         if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
-            facingDirection = FacingDirection.FRONTLEFT;
+            facingDirection = FacingDirection.FRONTRIGHT;
 
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
-            facingDirection = FacingDirection.BACKLEFT;
+            facingDirection = FacingDirection.FRONTLEFT;
 
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
-            facingDirection = FacingDirection.BACKRIGHT;
+            facingDirection = FacingDirection.BACKLEFT;
 
         facingB = false;
         facingF = false;
@@ -178,28 +178,32 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (transform.eulerAngles == new Vector3(0, 270, 0))
         {
             facingB = true;
-            isVertical = true;
+            //isVertical = true;
+            isHorizontal = true;
             isDiagonal = false;
         }
 
         if (transform.eulerAngles == new Vector3(0, 90, 0))
         {
             facingF = true;
-            isVertical = true;
-            isDiagonal = false;
-        }
-
-        if (transform.eulerAngles == new Vector3(0, 0, 0))
-        {
-            facingR = true;
+            //isVertical = true;
             isHorizontal = true;
             isDiagonal = false;
         }
 
         if (transform.eulerAngles == new Vector3(0, 180, 0))
         {
+            facingR = true;
+            //isHorizontal = true;
+            isVertical = true;
+            isDiagonal = false;
+        }
+
+        if (transform.eulerAngles == new Vector3(0, 0, 0))
+        {
             facingL = true;
-            isHorizontal = true;
+            //isHorizontal = true;
+            isVertical = true;
             isDiagonal = false;
         }
     }
@@ -274,27 +278,27 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     break;
 
                 case FacingDirection.LEFT:
-                    transform.eulerAngles = new Vector3(0, 180, 0);
-                    break;
-
-                case FacingDirection.RIGHT:
                     transform.eulerAngles = new Vector3(0, 0, 0);
                     break;
 
+                case FacingDirection.RIGHT:
+                    transform.eulerAngles = new Vector3(0, 180, 0);
+                    break;
+
                 case FacingDirection.FRONTLEFT:
-                    transform.eulerAngles = new Vector3(0, 135, 0);
-                    break;
-
-                case FacingDirection.FRONTRIGHT:
-                    transform.eulerAngles = new Vector3(0, 45, 0);
-                    break;
-
-                case FacingDirection.BACKLEFT:
                     transform.eulerAngles = new Vector3(0, 225, 0);
                     break;
 
-                case FacingDirection.BACKRIGHT:
+                case FacingDirection.FRONTRIGHT:
+                    transform.eulerAngles = new Vector3(0, 135, 0);
+                    break;
+
+                case FacingDirection.BACKLEFT:
                     transform.eulerAngles = new Vector3(0, 315, 0);
+                    break;
+
+                case FacingDirection.BACKRIGHT:
+                    transform.eulerAngles = new Vector3(0, 45, 0);
                     break;
             }
 
