@@ -13,7 +13,7 @@ public class TouchPlayer : ReaperJr
 
     private void OnTriggerEnter(Collider other)
     {
-        if (parentScript != null)
+        if (parentScript != null && _GAME.gameState == GameState.INGAME)
         {
             if (parentScript.enabled == true)
             {

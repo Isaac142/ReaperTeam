@@ -64,6 +64,7 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
+            WallDisappear();
             switch (roomType)
             {
                 case RoomType.LEVEL:

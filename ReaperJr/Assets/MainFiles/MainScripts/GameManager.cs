@@ -63,7 +63,7 @@ public class GameManager : Singleton<GameManager>
     public int totalSoulNo = 0;
     public Transform bottomReset;
 
-    private void Awake()
+    private void OverrideAwke()
     {
         if(cursor != null)
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
@@ -160,10 +160,14 @@ public class GameManager : Singleton<GameManager>
     {
         _timer -= punishmentTime;
         //_PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
-        _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3).OnComplete(()=>
-         GameEvents.ReportGameStateChange(GameState.INGAME));
-       
+        _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3);
+        //    .OnComplete(()=>
+        //     GameEvents.ReportGameStateChange(GameState.INGAME));       
+        //
+
+        StartCoroutine(DeadToInGame());
     }
+
     public void OnGameStateChange(GameState state)
     {
         gameState = state;
@@ -230,5 +234,11 @@ public class GameManager : Singleton<GameManager>
     {
         GameEvents.OnGameStateChange -= OnGameStateChange;
         GameEvents.OnScytheEquipped -= OnScytheEquipped;
+    }
+
+    IEnumerator DeadToInGame()
+    {
+        yield return new WaitForSeconds(3f);
+        GameEvents.ReportGameStateChange(GameState.INGAME);
     }
 }
