@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3671091158787652165}
   - component: {fileID: 8641427145772079375}
   - component: {fileID: 8451179870657542350}
+  - component: {fileID: 8000221226027560363}
   m_Layer: 0
   m_Name: BoxCubeRough
   m_TagString: Untagged
@@ -150,6 +151,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.10665989, y: 1.7908973, z: 1.8904482}
   m_Center: {x: 0.83858526, y: -0.00000035762787, z: -0.0028293133}
+--- !u!208 &8000221226027560363
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097983971223509069}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.89000005, y: 0.89500004, z: 0.94500005}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.002, y: 0, z: -0.003}
+  m_TimeToStationary: 0.5
 --- !u!1 &3903360263671637650
 GameObject:
   m_ObjectHideFlags: 0

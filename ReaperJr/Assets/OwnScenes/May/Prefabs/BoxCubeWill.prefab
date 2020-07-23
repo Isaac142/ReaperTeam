@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2974507578000849239}
   - component: {fileID: 711291852022229052}
   - component: {fileID: 6884921336398073908}
+  - component: {fileID: 5099264933802646454}
   m_Layer: 0
   m_Name: BoxCubeWill
   m_TagString: Untagged
@@ -94,6 +95,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.852248, y: 1.8063654, z: 1.9551572}
   m_Center: {x: -0.00043582916, y: -0.007734418, z: -0.0014107823}
+--- !u!208 &5099264933802646454
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097983971223509069}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.89000005, y: 0.89500004, z: 0.94500005}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.002, y: 0, z: -0.003}
+  m_TimeToStationary: 0.5
 --- !u!1 &3903360263671637650
 GameObject:
   m_ObjectHideFlags: 0

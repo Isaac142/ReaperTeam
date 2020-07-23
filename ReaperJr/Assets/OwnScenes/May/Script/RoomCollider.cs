@@ -8,18 +8,12 @@ public class RoomCollider : ReaperJr
 {
     Collider roomCollider;
     [HideInInspector]
-    public List<GameObject> inFront = new List<GameObject>(); //all game objects will not be shown when player is in this collider
-    public List<MeshRenderer> frontWall = new List<MeshRenderer>(); //front barriers that will not show in the screen. --> not show their mesh, but still using their collider.
-    [HideInInspector]
     public Vector3 roomPosition = Vector3.zero;
     [HideInInspector]
     public Vector2 roomSides = Vector2.zero, roomHeight = Vector2.zero, roomDepth = Vector2.zero;
-
-    public List<GameObject> soul = new List<GameObject>();
+    
     [HideInInspector]
     public List<Sprite> soulSprite = new List<Sprite>();
-    [HideInInspector]
-    public List<Sprite> soulMasks = new List<Sprite>();
 
     public List<SoulType> souls = new List<SoulType>();
     public List<GameObject> frontWalls;
@@ -30,6 +24,7 @@ public class RoomCollider : ReaperJr
     private void Awake()
     {
         transform.GetComponent<Collider>().isTrigger = true;
+        this.gameObject.layer = 2; // set room collider to ignore raycast layer.
         if (transform.tag == "LevelCollider")
             roomType = RoomType.LEVEL;
         if (transform.tag == "RoomCollider")
@@ -43,31 +38,22 @@ public class RoomCollider : ReaperJr
         roomSides = new Vector2(roomCollider.transform.position.x - roomCollider.bounds.size.x / 2f, roomCollider.transform.position.x + roomCollider.bounds.size.x / 2f);
         roomHeight = new Vector2(roomCollider.transform.position.y - roomCollider.bounds.size.y / 2f, roomCollider.transform.position.y + roomCollider.bounds.size.y / 2f);
         roomDepth = new Vector2(roomCollider.transform.position.z - roomCollider.bounds.size.z / 2f, roomCollider.transform.position.z + roomCollider.bounds.size.z / 2f);
-        for (int i = 0; i <soul.Count; i ++)
+        for (int i = 0; i <souls.Count; i ++)
         {
-            soulSprite.Add(soul[i].GetComponent<SoulType>().soulIcon);
-            soulMasks.Add(soul[i].GetComponent<SoulType>().soulMask);
+            soulSprite.Add(souls[i].soulIcon);
         }
-        _GAME.totalSoulNo += soul.Count;
+        _GAME.totalSoulNo += souls.Count;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            //WallDisappear();
+            WallDisappear();
             switch (roomType)
             {
                 case RoomType.ROOM:
-                    //_UI.DisableSoulIcons();
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
-                    //for (int i = 0; i < soulSprite.Count; i++)
-                    //{
-                    //    _UI.souls[i].enabled = true;
-                    //    _UI.souls[i].sprite = soulSprite[i];
-                    //    _UI.soulMasks[i].sprite = soulMasks[i];
-                    //    _UI.soulMasks[i].enabled = false;
-                    //}
                     break;
             }
             _UI.SetSouls(souls);
@@ -85,28 +71,11 @@ public class RoomCollider : ReaperJr
                     _CAMERA.levelHorBoundaries = new Vector2(roomSides.x, roomSides.y);
                     _CAMERA.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
                     _CAMERA.levelDepthBoundaries = new Vector2(roomDepth.x, +roomDepth.y);
-
-                    //making all object in between camera and player invisible
-                    //StartCoroutine("Disappear", 0f);
-                    //if (_GAME.gameState == GameManager.GameState.WON)
-                    //    StartCoroutine("Appear", 0);
                     break;
 
                 case RoomType.ROOM:
                     _CAMERA.roomPosition = roomPosition;
                     StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
-                    StartCoroutine("Disappear", 0f);
-
-                    //if (soulSprite.Count > 0)
-                    //{
-                    //    for (int i = 0; i < soulSprite.Count; i++)
-                    //    {
-                    //        if (soul[i] == null)
-                    //            _UI.soulMasks[i].enabled = true;
-                    //        if (!_UI.souls[i].IsActive())
-                    //            _UI.soulMasks[i].enabled = false;
-                    //    }
-                    //}
                     break;
             }
         }
@@ -116,48 +85,17 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
-            StartCoroutine("Appear", 0);
-           //WallAppear();
+           WallAppear();
             switch(roomType)
             {
                 case RoomType.ROOM:
-                    //_UI.DisableSoulIcons();
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.OUTROOM);
                     break;
 
                 case RoomType.LEVEL:
-                    StartCoroutine("Appear", 0);
                     break;
             }
             _UI.FadeOutPanel(_UI.soulPanel);
-        }
-    }
-
-    IEnumerator Disappear(float waitSeconds)
-    {
-        yield return new WaitForSeconds(waitSeconds);
-
-        foreach (GameObject barrier in inFront)
-            barrier.SetActive(false);
-
-        foreach (MeshRenderer wall in frontWall)
-        {
-            wall.enabled = false;
-            wall.gameObject.layer = 2;
-        }
-    }
-
-    IEnumerator Appear(float waitSeconds)
-    {
-        yield return new WaitForSeconds(waitSeconds);
-
-        foreach (GameObject barrier in inFront)
-            barrier.SetActive(true);
-
-        foreach (MeshRenderer wall in frontWall)
-        {
-            wall.enabled = true;
-            wall.gameObject.layer = 0;
         }
     }
 
@@ -166,6 +104,15 @@ public class RoomCollider : ReaperJr
         foreach (GameObject go in frontWalls)
         {
             go.gameObject.layer = 2;
+            Renderer rend = go.GetComponent<Renderer>();
+            rend.material.SetFloat("_Mode", 2);
+            rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            rend.material.SetInt("_ZWrite", 0);
+            rend.material.DisableKeyword("_ALPHATEST_ON");
+            rend.material.EnableKeyword("_ALPHABLEND_ON");
+            rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            rend.material.renderQueue = 3000;
             go.GetComponent<Renderer>().material.DOFade(0, "_BaseColor", 1).SetEase(Ease.OutQuart);
         }
     }
@@ -175,6 +122,15 @@ public class RoomCollider : ReaperJr
         {
             go.gameObject.layer = 0;
             go.GetComponent<Renderer>().material.DOFade(1, "_BaseColor", 1).SetEase(Ease.OutQuart);
+            Renderer rend = go.GetComponent<Renderer>();
+            rend.material.SetFloat("_Mode", 0);
+            rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+            rend.material.SetInt("_ZWrite", 1);
+            rend.material.DisableKeyword("_ALPHATEST_ON");
+            rend.material.DisableKeyword("_ALPHABLEND_ON");
+            rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            rend.material.renderQueue = -1;
         }
     }
 }

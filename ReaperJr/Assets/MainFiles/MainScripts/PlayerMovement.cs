@@ -77,7 +77,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     //Calling the PlayerJumping function
     void Update()
     {
-        if (_GAME.isPaused)
+        if (_GAME.gameState != GameState.INGAME)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
@@ -99,8 +99,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             }
         }
 
-        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
-            Collect();
+        Collect();
 
         EquipScythe();
 
@@ -144,10 +143,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
     void DirectionSwitch()
     {
         if (Input.GetKey(KeyCode.W))
-            facingDirection = FacingDirection.FRONT;
+            facingDirection = FacingDirection.BACK;
 
         if (Input.GetKey(KeyCode.S))
-            facingDirection = FacingDirection.BACK;
+            facingDirection = FacingDirection.FRONT;
 
         if (Input.GetKey(KeyCode.D))
             facingDirection = FacingDirection.RIGHT;
@@ -156,16 +155,16 @@ public class PlayerMovement : Singleton<PlayerMovement>
             facingDirection = FacingDirection.LEFT;
 
         if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
-            facingDirection = FacingDirection.BACKRIGHT;
-
-        if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
             facingDirection = FacingDirection.FRONTRIGHT;
 
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
             facingDirection = FacingDirection.FRONTLEFT;
 
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
             facingDirection = FacingDirection.BACKLEFT;
+
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
+            facingDirection = FacingDirection.BACKRIGHT;
 
         facingB = false;
         facingF = false;
@@ -178,32 +177,28 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (transform.eulerAngles == new Vector3(0, 270, 0))
         {
             facingB = true;
-            //isVertical = true;
-            isHorizontal = true;
+            isVertical = true;
             isDiagonal = false;
         }
 
         if (transform.eulerAngles == new Vector3(0, 90, 0))
         {
             facingF = true;
-            //isVertical = true;
-            isHorizontal = true;
-            isDiagonal = false;
-        }
-
-        if (transform.eulerAngles == new Vector3(0, 180, 0))
-        {
-            facingR = true;
-            //isHorizontal = true;
             isVertical = true;
             isDiagonal = false;
         }
 
         if (transform.eulerAngles == new Vector3(0, 0, 0))
         {
+            facingR = true;
+            isHorizontal = true;
+            isDiagonal = false;
+        }
+
+        if (transform.eulerAngles == new Vector3(0, 180, 0))
+        {
             facingL = true;
-            //isHorizontal = true;
-            isVertical = true;
+            isHorizontal = true;
             isDiagonal = false;
         }
     }
@@ -278,27 +273,27 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     break;
 
                 case FacingDirection.LEFT:
-                    transform.eulerAngles = new Vector3(0, 0, 0);
-                    break;
-
-                case FacingDirection.RIGHT:
                     transform.eulerAngles = new Vector3(0, 180, 0);
                     break;
 
-                case FacingDirection.FRONTLEFT:
-                    transform.eulerAngles = new Vector3(0, 225, 0);
+                case FacingDirection.RIGHT:
+                    transform.eulerAngles = new Vector3(0, 0, 0);
                     break;
 
-                case FacingDirection.FRONTRIGHT:
+                case FacingDirection.FRONTLEFT:
                     transform.eulerAngles = new Vector3(0, 135, 0);
                     break;
 
+                case FacingDirection.FRONTRIGHT:
+                    transform.eulerAngles = new Vector3(0, 45, 0);
+                    break;
+
                 case FacingDirection.BACKLEFT:
-                    transform.eulerAngles = new Vector3(0, 315, 0);
+                    transform.eulerAngles = new Vector3(0, 225, 0);
                     break;
 
                 case FacingDirection.BACKRIGHT:
-                    transform.eulerAngles = new Vector3(0, 45, 0);
+                    transform.eulerAngles = new Vector3(0, 315, 0);
                     break;
             }
 
@@ -376,6 +371,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Collecting
     void Collect()
     {
+        GameEvents.ReportHintShown(HintForActions.DEFAULT);
         RaycastHit[] hits;
 
         Vector3 centre = transform.position + Vector3.up * collectableDist + transform.right * collectableDist;
@@ -391,26 +387,37 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 {
                     if (hits[i].transform.tag == "Soul")
                     {
-                        
-                        GameEvents.ReportScytheEquipped(true);
-                        hits[i].transform.GetComponent<SoulType>().isCollected = true;
-                        GameEvents.ReportSoulCollected(hits[i].transform.GetComponent<SoulType>());
-                        _GAME.totalSoulNo -= 1;
-                        //do something --> collected amount, visual clue...
+                        GameEvents.ReportHintShown(HintForActions.COLLECTSOULS);
+
+                        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
+                        {
+                            GameEvents.ReportScytheEquipped(true);
+                            hits[i].transform.GetComponent<SoulType>().isCollected = true;
+                            GameEvents.ReportSoulCollected(hits[i].transform.GetComponent<SoulType>());
+                            _GAME.totalSoulNo -= 1;
+                            //do something --> collected amount, visual clue...
+                        }
                     }
 
                     if (hits[i].transform.tag == "FakeSoul")
                     {
-                        
-                        GameEvents.ReportScytheEquipped(true);
-                        GameEvents.ReportGameStateChange(GameState.DEAD);
-                        //do something --> collected amount, visual clue...
+                        GameEvents.ReportHintShown(HintForActions.COLLECTSOULS);
+                        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
+                        {
+                            GameEvents.ReportScytheEquipped(true);
+                            GameEvents.ReportGameStateChange(GameState.DEAD);
+                            //do something --> collected amount, visual clue...
+                        }
                     }
 
                     if (hits[i].transform.tag == "HiddenItem")
                     {
-                        _GAME.Timer += _GAME.rewardTime;
-                        Destroy(hits[i].transform.gameObject);
+                        GameEvents.ReportHintShown(HintForActions.COLLECTITEMS);
+                        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
+                        {
+                            _GAME.Timer += _GAME.rewardTime;
+                            Destroy(hits[i].transform.gameObject);
+                        }
                     }
                     //if there's other collectables
                 }

@@ -9,6 +9,8 @@ public class MoveableItemTrigger : MonoBehaviour
     public void Awake()
     {
         itemMovement = transform.GetComponentInParent<ItemMovement>();
+        GetComponent<BoxCollider>().isTrigger = true;
+        this.gameObject.layer = 2;
     }
     private void OnTriggerEnter(Collider other)
     {

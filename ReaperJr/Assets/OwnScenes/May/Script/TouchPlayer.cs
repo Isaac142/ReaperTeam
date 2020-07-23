@@ -13,10 +13,13 @@ public class TouchPlayer : ReaperJr
 
     private void OnTriggerEnter(Collider other)
     {
-        if (parentScript.enabled == true)
+        if (parentScript != null)
         {
-            if (other.tag == "Player")
-                GameEvents.ReportGameStateChange(GameState.DEAD);
+            if (parentScript.enabled == true)
+            {
+                if (other.tag == "Player")
+                    GameEvents.ReportGameStateChange(GameState.DEAD);
+            }
         }
     }
 }

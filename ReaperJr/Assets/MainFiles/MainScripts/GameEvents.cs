@@ -9,6 +9,7 @@ public static class GameEvents
     public static event Action<bool> OnScytheEquipped = null;
     public static event Action<SoulType> OnSoulCollected = null;
     public static event Action<bool> OnScytheThrow = null;
+    public static event Action<HintForActions> OnHintShown = null;
 
     public static void ReportGameStateChange(GameState gameState)
     {
@@ -32,5 +33,11 @@ public static class GameEvents
     {
         if (OnScytheThrow != null)
             OnScytheThrow(ScytheThrown);
+    }
+
+    public static void ReportHintShown(HintForActions action)
+    {
+        if (OnHintShown != null)
+            OnHintShown(action);
     }
 }

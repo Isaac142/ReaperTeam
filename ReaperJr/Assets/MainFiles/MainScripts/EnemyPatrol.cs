@@ -34,6 +34,9 @@ public class EnemyPatrol : ReaperJr
             enemyType = EnemyType.DUMMY;
         }
         if(transform.tag == "Flee")
+        {
+            enemyType = EnemyType.FLEE;
+        }
 
         player = _PLAYER.gameObject.transform;
     }
@@ -48,7 +51,7 @@ public class EnemyPatrol : ReaperJr
         switch(enemyType)
         {
             case EnemyType.ENEMY:
-                if (toPlayer < awareDistance)
+                if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
                 {
                     transform.LookAt(player);
 
@@ -84,11 +87,21 @@ public class EnemyPatrol : ReaperJr
                 Vector3 runDirection = Vector3.zero;
                 if (toPlayer <= detectRange)
                 {
+                    agent.speed = chasingSpeed;
                     runDirection = (transform.position - _PLAYER.gameObject.transform.position);
                     Vector3 newPosition = transform.position + runDirection;
                     agent.SetDestination(newPosition);
                     if (agent.remainingDistance < 0.5f)
                         NextPatrolPoint();
+                }
+
+                else
+                {
+                    if (agent.remainingDistance < 0.5f)
+                    {
+                        NextPatrolPoint();
+                        agent.speed = patrolSpeed;
+                    }
                 }
                 break;
         }            

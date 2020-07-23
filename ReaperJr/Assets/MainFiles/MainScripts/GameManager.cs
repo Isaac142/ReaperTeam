@@ -107,7 +107,6 @@ public class GameManager : Singleton<GameManager>
 
                 _energy += energyReturnFactor * Time.deltaTime;
                 _energy = Mathf.Clamp(_energy, 0f, maxEnergy);
-                //Debug.Log("Engery = " + _energy);
 
                 if (onCD) 
                 {

@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
+
+public enum HintForActions {DEFAULT, CANHOLD, RELEASING, SWITCH, OPENBOX, MOVABLEOPENABLEBOX , COLLECTSOULS, COLLECTITEMS}
 
 public class UIManager : Singleton<UIManager>
 {
+    public HintForActions currInfo;
     public float fadeInTime = 0.5f;
     public float fadeOutTime = 0.2f;
     public Ease fadeInEase;
@@ -19,7 +23,6 @@ public class UIManager : Singleton<UIManager>
     public List<Image> souls = new List<Image>();
     public List<SoulType> currSouls = new List<SoulType>();
     public GameObject soulPanel;
-    public List<Image> soulMasks = new List<Image>();
     public Text totalSoulNo;
     public GameObject infoPanel;
     public Text itemName, itemType, itemDescription;
@@ -27,8 +30,8 @@ public class UIManager : Singleton<UIManager>
     public Image abilityCD;
     public GameObject[] masks;  //scythe icon masks
     public GameObject hintsPanel;
-    public Text hint1;
-    public Text hint2;
+    public TextMeshProUGUI hint1; //keyboard input
+    public TextMeshProUGUI hint2; // mouse input
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
@@ -40,6 +43,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject pausePanel;
     public GameObject gameOverPanel;
     public GameObject wonPanel;
+    public GameObject deadPanel;
 
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
@@ -106,14 +110,17 @@ public class UIManager : Singleton<UIManager>
         FadeOutPanel(gameOverPanel);
         FadeOutPanel(menuPanel);
         FadeOutPanel(wonPanel);
+        FadeOutPanel(deadPanel);
     }
     public void CloseAllPanels()
     {
         //InstantOffPanel(inGamePanel);
+        InstantOffPanel(hintsPanel);
         InstantOffPanel(pausePanel);
         InstantOffPanel(gameOverPanel);
         InstantOffPanel(menuPanel);
         InstantOffPanel(wonPanel);
+        InstantOffPanel(deadPanel);
     }
 
     public void DisableSoulIcons()
@@ -123,13 +130,6 @@ public class UIManager : Singleton<UIManager>
         {
             soulIcon.sprite = null;
             soulIcon.enabled = false;
-        }
-
-        foreach (Image soulIconMask in soulMasks)
-
-        {
-            soulIconMask.sprite = null;
-            soulIconMask.enabled = false;
         }
     }
 
@@ -152,6 +152,9 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.WON:
                 FadeInPanel(wonPanel);
+                break;
+            case GameState.DEAD:
+                FadeInPanel(deadPanel);
                 break;
         }
     }
@@ -180,6 +183,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnGameStateChange += OnGameStateChange;
         GameEvents.OnScytheEquipped += OnScytheEquipped;
         GameEvents.OnSoulCollected += OnSoulCollected;
+        GameEvents.OnHintShown += OnHintShown;
     }
 
     private void OnDisable()
@@ -187,6 +191,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnGameStateChange -= OnGameStateChange;
         GameEvents.OnScytheEquipped -= OnScytheEquipped;
         GameEvents.OnSoulCollected -= OnSoulCollected;
+        GameEvents.OnHintShown -= OnHintShown;
     }
 
     #region Button Press
@@ -288,17 +293,6 @@ public class UIManager : Singleton<UIManager>
         _soul.DOColor(Color.grey, 1f);
     }
 
-    public void SetHints(int hintNum)
-    {
-        FadeInPanel(hintsPanel);
-        hint1.enabled = false;
-        hint2.enabled = false;
-        if (hintNum == 1)
-            hint1.enabled = true;
-        if (hintNum == 2)
-            hint2.enabled = true;
-    }
-
     public void FadeInPanel(GameObject panel)
     {
         CanvasGroup cvg = panel.GetComponent<CanvasGroup>();
@@ -328,6 +322,59 @@ public class UIManager : Singleton<UIManager>
         cvg.alpha = 0;
         cvg.interactable = false;
         cvg.blocksRaycasts = false;
+    }
+
+    private void SetHints()
+    {
+        CanvasGroup cvg = hintsPanel.GetComponent<CanvasGroup>();
+        cvg.DOFade(1f, 0.5f).SetEase(fadeInEase).SetUpdate(true);
+        hint1.enabled = true;
+        hint2.enabled = true;
+    }
+
+    public void OnHintShown (HintForActions action)
+    {
+        currInfo = action;
+        switch(action)
+        {
+            case HintForActions.DEFAULT:
+                FadeOutPanel(hintsPanel);
+                break;
+            case HintForActions.CANHOLD:
+                SetHints();
+                hint1.text = "Press E key to Hold Object in front.";
+                hint2.enabled = false;
+                break;
+            case HintForActions.RELEASING:
+                SetHints();
+                hint1.text = "Press E key to Release Object in front.";
+                hint2.enabled = false;
+                break;
+            case HintForActions.SWITCH:
+                SetHints();
+                hint2.text = "Right click on the switch to initiating the object";
+                hint1.enabled = false;
+                break;
+            case HintForActions.OPENBOX:
+                SetHints();
+                hint2.text = "Right click to open the box in front";
+                hint1.enabled = false;
+                break;
+            case HintForActions.MOVABLEOPENABLEBOX:
+                hint2.enabled = true;
+                hint2.text = "Right click to open the box in front.";
+                break;
+            case HintForActions.COLLECTSOULS:
+                SetHints();
+                hint1.text = "Right click to collect the soul(s).";
+                hint2.text = "Don't collect fake soul(s).";
+                break;
+            case HintForActions.COLLECTITEMS:
+                SetHints();
+                hint1.enabled = false;
+                hint2.text = "Right click to collect the object(s).";
+                break;
+        }
     }
 }
 

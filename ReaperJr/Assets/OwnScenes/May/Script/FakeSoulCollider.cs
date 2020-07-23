@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FakeSoulCollider : MonoBehaviour
+public class FakeSoulCollider : ReaperJr
 {
     public List<GameObject> dummies;
     private List<EnemyPatrol> enemyPartrolScripts = new List<EnemyPatrol>();
@@ -11,7 +11,9 @@ public class FakeSoulCollider : MonoBehaviour
     void Start()
     {
         foreach (GameObject dummy in dummies)
-            enemyPartrolScripts.Add(dummy.transform.GetComponentInChildren<EnemyPatrol>());
+        {
+            enemyPartrolScripts.Add(dummy.transform.GetComponent<EnemyPatrol>());
+        }
 
         foreach (EnemyPatrol script in enemyPartrolScripts)
             script.enabled = false;
@@ -22,7 +24,10 @@ public class FakeSoulCollider : MonoBehaviour
         if (other.tag == "Player")
         {
             foreach (EnemyPatrol script in enemyPartrolScripts)
+            {
+                if(script != null)
                 script.enabled = true;
+            }
         }
     }
 
@@ -31,7 +36,10 @@ public class FakeSoulCollider : MonoBehaviour
         if (other.tag == "Player")
         {
             foreach (EnemyPatrol script in enemyPartrolScripts)
-                script.enabled = false;
+            {
+                if (script != null)
+                    script.enabled = false;
+            }
         }
     }
 }

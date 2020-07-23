@@ -20,6 +20,7 @@ public class ItemMovement : ReaperJr
     public float drag = 5f; //object's rigidbody's sliperness on ground
     [HideInInspector]
     public bool isLigther = false, canHold = false, playerIn = false, isHolding = false;
+    private bool hasRB = false;
 
     public float relasingThreshold = 0.3f; //when curren - iniDistance > releasingThreshold, object is released.
     public float gravityFactor = 7f;
@@ -31,7 +32,8 @@ public class ItemMovement : ReaperJr
     public Vector3 emiColorPlayerIn = Vector3.zero, emiColorCanHold = Vector3.zero, emiColorHold = Vector3.zero; //emissionc colour settings
     private Vector3 colliderSize = Vector3.zero;
 
-    private Rigidbody objectRB;
+    [HideInInspector]
+    public Rigidbody objectRB;
     private GameObject placeHolder;
 
     private float iniDistance; //initial distance between character and object when the object is held. use for heavy object
@@ -50,6 +52,7 @@ public class ItemMovement : ReaperJr
 
         if (GetComponent<Rigidbody>() != null)
         {
+            hasRB = true;
             objectRB = GetComponent<Rigidbody>();
             objectRB.mass = mass;
             objectRB.drag = drag;
@@ -63,7 +66,7 @@ public class ItemMovement : ReaperJr
             mats.Add(obj.GetComponent<Renderer>().material);
         }
 
-        StartCoroutine(DefaultState());
+        DefaultState();
     }
 
     void Update()
@@ -92,18 +95,12 @@ public class ItemMovement : ReaperJr
             HoldingEvents();
     }
 
-    IEnumerator DefaultState()
+    void DefaultState()
     {
-        _UI.hint1.text = "";
-        GameEvents.ReportScytheEquipped(true);
-        yield return new WaitForSeconds(0.5f);
-        if (objectRB != null)
-        {
-            if (objectRB.velocity.sqrMagnitude < 0.1f)
-                objectRB.isKinematic = true;
-            else
-                objectRB.isKinematic = false;
-        }
+        GameEvents.ReportHintShown(HintForActions.DEFAULT);
+        transform.parent = null;
+        if (hasRB)
+            objectRB.isKinematic = false;
     }
 
     void EmissionControl()
@@ -160,11 +157,10 @@ public class ItemMovement : ReaperJr
 
         if (canHold)
         {
-            _UI.SetHints(1);
-            _UI.hint1.text = "Press E key to Hold Object.";
+            GameEvents.ReportHintShown(HintForActions.CANHOLD);
         }
         else
-            _UI.FadeInPanel(_UI.hintsPanel);
+            GameEvents.ReportHintShown(HintForActions.DEFAULT);
     }
 
     void PickUp()
@@ -178,28 +174,23 @@ public class ItemMovement : ReaperJr
             transform.parent = null;
         ReaperJr._PLAYER.speedFactor -= mass * massModifier;
         ReaperJr._PLAYER.GetComponent<Rigidbody>().mass += mass * massModifier;
+        _PLAYER.jumpForce -= mass * 20f;
         this.transform.parent = ReaperJr._PLAYER.transform;
 
         if (isLigther)
         {
-            transform.position = new Vector3(transform.position.x, _PLAYER.GetComponent<CapsuleCollider>().height / 2f + transform.position.y, transform.position.z); //can change to hand position
+            transform.position = new Vector3(transform.position.x, _PLAYER.GetComponent<CapsuleCollider>().height / 2f + (GetComponent<Collider>().bounds.min.y), transform.position.z); //can change to hand position
             transform.eulerAngles = Vector3.zero;
             _GAME.holdingLightObject = true;
         }
         else
             _GAME.holdingLightObject = false;
 
-        if (objectRB != null)
+        if (hasRB)
         {
-            objectRB.isKinematic = true;
+            Destroy(objectRB);
             if (!isLigther)
-            {
-                GetComponent<BoxCollider>().isTrigger = false;
-                ConstrainSetUp(); //constrain rotation at the mostly upwards axis.
-                objectRB.mass = 0;
-                objectRB.isKinematic = false;
                 iniDistance = Vector3.Distance(transform.position, _PLAYER.transform.position);
-            }
         }
     }
 
@@ -213,11 +204,25 @@ public class ItemMovement : ReaperJr
             }
         }
 
-        if (objectRB != null) //dynamic events
+        if (hasRB) //dynamic events
         {
             if (!isLigther)
             {
                 CurrDist = Vector3.Distance(transform.position, _PLAYER.transform.position); //if object rotat further enough, object falls.
+
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, Vector3.down, out hit, (transform.position.y - _PLAYER.transform.position.y) + 0.05f))
+                {
+                    if(hit.transform == null)
+                    {
+                        objectRB = this.gameObject.AddComponent<Rigidbody>();
+                        GetComponent<BoxCollider>().isTrigger = false;
+                        ConstrainSetUp(); //constrain rotation at the mostly upwards axis.
+                        objectRB.mass = 0;
+                        objectRB.drag = drag;
+                        objectRB.isKinematic = false;
+                    }
+                }
 
                 if (CurrDist - iniDistance >= relasingThreshold)
                 {
@@ -225,9 +230,7 @@ public class ItemMovement : ReaperJr
                 }
             }
         }
-
-        _UI.SetHints(1);
-        _UI.hint1.text = "Press E key to Release Object.";
+        GameEvents.ReportHintShown(HintForActions.RELEASING);
     }
 
     void ConstrainSetUp() //testing the local upward axis and set up constrains.
@@ -252,23 +255,44 @@ public class ItemMovement : ReaperJr
         ReaperJr._PLAYER.movable = true;
         ReaperJr._PLAYER.speedFactor += mass * massModifier;
         _PLAYER.GetComponent<Rigidbody>().mass -= mass * massModifier;
+        _PLAYER.jumpForce += mass * 20f;
         transform.parent = null;
         _GAME.holdingLightObject = false;
 
-        if (objectRB != null)
+        if (hasRB)
         {
-            objectRB.isKinematic = false;
+            objectRB = this.gameObject.AddComponent<Rigidbody>();
             if (!isLigther)
             {
                 objectRB.mass = mass;
+                objectRB.drag = drag;
                 GetComponent<BoxCollider>().isTrigger = true;
             }
         }
 
         isHolding = false;
+        GameEvents.ReportScytheEquipped(true);
         yield return new WaitForSeconds(0.1f);
         _GAME.isHolding = false;
 
-        StartCoroutine(DefaultState());
+        DefaultState();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (objectRB != null && !isLigther)
+        {
+            if (other.tag == "Player" || other.tag == "Scythe")
+                objectRB.isKinematic = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (objectRB != null && !isLigther)
+        {
+            if (other.tag == "Player" || other.tag == "Scythe")
+                objectRB.isKinematic = false;
+        }
     }
 }

@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 3612028228297646795}
   - component: {fileID: 6057986489720034060}
   - component: {fileID: 4007107220192609542}
+  - component: {fileID: 465321381682335326}
   m_Layer: 0
   m_Name: ToyBox
   m_TagString: Untagged
@@ -189,3 +190,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1858111831191524047, guid: b8a2d643704e152418688b28e78902d0, type: 3}
+--- !u!208 &465321381682335326
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8120139787756262899}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.432, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
