@@ -6,6 +6,7 @@ public class FakeSoulCollider : ReaperJr
 {
     public List<GameObject> dummies;
     private List<EnemyPatrol> enemyPartrolScripts = new List<EnemyPatrol>();
+    public bool isWalking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,22 +24,32 @@ public class FakeSoulCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
+            isWalking = true;
             foreach (EnemyPatrol script in enemyPartrolScripts)
             {
-                if(script != null)
-                script.enabled = true;
+                if (script != null)
+                {
+                    script.enabled = true;
+                    script.agent.isStopped = false;
+
+                }
             }
         }
     }
+
 
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
         {
+            isWalking = false;
             foreach (EnemyPatrol script in enemyPartrolScripts)
             {
                 if (script != null)
-                    script.enabled = false;
+                {
+                    script.agent.isStopped = true;
+                    script.enabled = false;                   
+                }
             }
         }
     }

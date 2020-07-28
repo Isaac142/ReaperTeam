@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class EnemyPatrol : ReaperJr
 {
     public Transform player;
-    private NavMeshAgent agent;
+    [HideInInspector]
+    public NavMeshAgent agent;
 
     public float awareDistance = 10f;
     public float detectRange = 5f;
@@ -79,6 +80,7 @@ public class EnemyPatrol : ReaperJr
                 break;
 
             case EnemyType.DUMMY:
+                
                 if (agent.remainingDistance < 0.5f)
                     NextPatrolPoint();
                 break;
