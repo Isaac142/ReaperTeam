@@ -18,7 +18,7 @@ GameObject:
   m_TagString: Soul
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &189994005800045326
 Transform:
@@ -113,6 +113,7 @@ MonoBehaviour:
   soulIcon: {fileID: 0}
   soulMask: {fileID: 0}
   radius: 3
+  transparency: 0.2
 --- !u!1 &5373363445248957964
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +129,7 @@ GameObject:
   m_TagString: Soul
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4542481180274581157
 Transform:
@@ -221,7 +222,7 @@ GameObject:
   m_TagString: Soul
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2242455230478068866
 Transform:
@@ -4914,8 +4915,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2d7680498c248aa478ff5b5dab82ceaf, type: 2}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 448c765d286c73949b2dc762d651836c, type: 2}
+  - {fileID: 2100000, guid: 448c765d286c73949b2dc762d651836c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
