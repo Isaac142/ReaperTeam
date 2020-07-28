@@ -339,6 +339,8 @@ public class ScytheController : ReaperJr
         {
             if (holdingScythe && !_GAME.onCD)
             {
+
+                _PLAYER.anim.SetTrigger("ScytheThrow");
                 Physics.gravity = new Vector3(0, -gravity.y, 0);
                 scythe.GetComponent<Scythe>().Launch(velocity);
                 holdingScythe = false;

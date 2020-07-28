@@ -44,6 +44,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public FacingDirection facingDirection;
     
     private float timeToGround = 0;
+
+    public Animator anim;
+
+    public bool walkHack;
     #endregion
 
     #region Start
@@ -205,18 +209,40 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #endregion
 
     #region PlayerMovement
+
+    bool dragging;
+    bool pushing;
+
     //Creating the player jumping, and player movement function.
     void Movement()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
+        anim.SetFloat("Walk",Mathf.Abs(h));
+        anim.SetBool("Drag", dragging);
+        anim.SetBool("Push", pushing);
 
+        if (Mathf.Abs(h) > 0.1f)
+        {
+            walkHack = true;
+        }
+        else
+        {
+            StartCoroutine(ResetMovement());
+        }
+        anim.SetBool("WalkHack",walkHack);
         if (_GAME.isHolding && !_GAME.holdingLightObject)
         #region MovingHeavyObject
         {
             speed = speedFactor;
+            pushing = false;
+            dragging = false;
             if (facingF)
             {
+                if(v < 0)
+                    pushing = true;
+                if (v > 0)
+                    dragging = true;
                 transform.eulerAngles = new Vector3(0, 90, 0);
 
                 if (_GAME.onSpecialGround)
@@ -227,6 +253,11 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
             if (facingB)
             {
+                if (v > 0)
+                    pushing = true;
+                if (v < 0)
+                    dragging = true;
+
                 transform.eulerAngles = new Vector3(0, 270, 0);
 
                 if (_GAME.onSpecialGround)
@@ -237,6 +268,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
             if (facingR)
             {
+                if (h > 0)
+                    pushing = true;
+                if (h < 0)
+                    dragging = true;
                 transform.eulerAngles = new Vector3(0, 0, 0);
 
                 if (_GAME.onSpecialGround)
@@ -247,6 +282,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
             if (facingL)
             {
+                if (h < 0)
+                    pushing = true;
+                if (h > 0)
+                    dragging = true;
                 transform.eulerAngles = new Vector3(0, 180, 0);
 
                 if (_GAME.onSpecialGround)
@@ -321,6 +360,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         //float timeToLand = 0f;
         if (!_GAME.isHolding || _GAME.holdingLightObject) // character can not jump if it's holding heavy objects.
         {
+            anim.SetTrigger("Jump");
             controller.velocity = Vector3.up * jumpForce; //using velocity instead of addforce to ensure each jump reaches the same height.
             isJumping = false;
             distToGround = 0;
@@ -331,6 +371,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Crouch
     void Crouch()
     {
+
+        anim.SetBool("Crouch", isCrouching);
         if (isCrouching)
         {
             bodyCollider.center = new Vector3(0f, bodyCentre.y / 2f, 0f);
@@ -537,4 +579,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
     }
     */
     #endregion
+
+    public IEnumerator ResetMovement()
+    {
+        yield return new WaitForSeconds(0.1f);
+        walkHack = false;
+    }
 }
