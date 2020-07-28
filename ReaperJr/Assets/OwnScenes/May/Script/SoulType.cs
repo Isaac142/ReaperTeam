@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class SoulType : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class SoulType : MonoBehaviour
     private enum SoulTypes { BRAVE, HAPPY, SKITTISH}
     private SoulTypes soulTypes;
     public float radius = 3f;
-    private Color color;
+    private Renderer rend;
+    public float transparency = 0.2f;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,26 +27,25 @@ public class SoulType : MonoBehaviour
             soulTypes = SoulTypes.HAPPY;
         if (soul.Type == "Skittish")
             soulTypes = SoulTypes.SKITTISH;
-        color = GetComponent<Renderer>().material.color;
+        rend = GetComponent<Renderer>();
 
-        switch(soulTypes)
+        switch (soulTypes)
         {
             case SoulTypes.BRAVE:
                 {
-                    GetComponent<Renderer>().material.SetColor("_Color", new Color(color.r, color.b, color.g, color.a));
                     transform.GetChild(0).gameObject.SetActive(true);
                     break;
                 }
             case SoulTypes.HAPPY:
                 {
-                    GetComponent<Renderer>().material.SetColor("_Color", new Color(color.r, color.b, color.g, color.a));
                     transform.GetChild(0).gameObject.SetActive(true);
                     break;
                 }
             case SoulTypes.SKITTISH:
                 {
-                    GetComponent<Renderer>().material.SetColor("_Color", new Color(color.r, color.b, color.g, 0f));
+                    rend.material.DOFade(transparency, "_BaseColor", 0.1f);
                     transform.GetChild(0).gameObject.SetActive(false);
+                    transform.GetChild(1).gameObject.SetActive(false);
                     GameObject detectCollider = new GameObject("Collider");
                     detectCollider.transform.parent = transform;
                     detectCollider.transform.position = transform.position;
@@ -68,8 +69,9 @@ public class SoulType : MonoBehaviour
             {
                 case SoulTypes.SKITTISH:
                     {
-                        GetComponent<Renderer>().material.SetColor("_Color", new Color(color.r, color.b, color.g, color.a));
+                        rend.material.DOFade(0.8f, "_BaseColor", 0.5f);
                         transform.GetChild(0).gameObject.SetActive(true);
+                        transform.GetChild(1).gameObject.SetActive(true);
                         break;
                     }
             }
@@ -84,8 +86,9 @@ public class SoulType : MonoBehaviour
             {
                 case SoulTypes.SKITTISH:
                     {
-                        GetComponent<Renderer>().material.SetColor("_Color", new Color(color.r, color.b, color.g, 0f));
+                        rend.material.DOFade(transparency, "_BaseColor", 0.5f);
                         transform.GetChild(0).gameObject.SetActive(false);
+                        transform.GetChild(1).gameObject.SetActive(false);
                         break;
                     }
             }

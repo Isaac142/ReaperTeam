@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public enum HintForActions {DEFAULT, CANHOLD, RELEASING, SWITCH, OPENBOX, MOVABLEOPENABLEBOX , COLLECTSOULS, COLLECTITEMS}
 
@@ -197,6 +198,7 @@ public class UIManager : Singleton<UIManager>
     #region Button Press
     public void Restart()
     {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         _GAME.Restart();
         GameEvents.ReportGameStateChange(GameState.RESUME);
     }

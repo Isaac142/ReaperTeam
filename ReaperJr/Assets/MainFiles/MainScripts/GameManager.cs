@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
     
     // character rigidbody reference
     public float playerMass = 1f;
+    public GameObject deadParticleEffect;
     [HideInInspector] //game states
     public bool playerActive = true, isPaused =  false;
     [HideInInspector] //holding object states
@@ -166,6 +167,7 @@ public class GameManager : Singleton<GameManager>
         //
 
         StartCoroutine(DeadToInGame());
+        deadParticleEffect.SetActive(true);
     }
 
     public void OnGameStateChange(GameState state)
@@ -174,6 +176,7 @@ public class GameManager : Singleton<GameManager>
         switch (state)
         {
             case GameState.INGAME:
+                deadParticleEffect.SetActive(false);
                 break;
             case GameState.DEAD:
                 PlayerDead();
