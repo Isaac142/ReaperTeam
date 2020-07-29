@@ -13,13 +13,13 @@ public class FallingObjects : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
             rb.isKinematic = false;
             Debug.Log(" LOOK OUT!! ");
-            BlockDestroy();
+            //BlockDestroy();
             Debug.Log(" activating destroy box ");
            
         }
@@ -32,21 +32,21 @@ public class FallingObjects : MonoBehaviour
 
     }
 
-    void OnCollisionEnter(Collision collider)
-    {
-        if (collider.gameObject.tag == "Player")
-        {
-            rb.isKinematic = false;
-            Debug.Log(" Player Hit ");
-        }
+    //void OnCollisionEnter(Collision collider)
+    //{
+    //    if (collider.gameObject.tag == "Player")
+    //    {
+    //        rb.isKinematic = false;
+    //        Debug.Log(" Player Hit ");
+    //    }
         
 
-    }
-    IEnumerator BlockDestroy()
-    {
-        yield return new WaitForSeconds(3);
-        block.gameObject.SetActive(false);
-        Debug.Log(" Destroying block in 3... 2... 1...");
-    }
+    //}
+    //IEnumerator BlockDestroy()
+    //{
+    //    yield return new WaitForSeconds(3);
+    //    block.gameObject.SetActive(false);
+    //    Debug.Log(" Destroying block in 3... 2... 1...");
+    //}
 
 }
