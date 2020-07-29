@@ -159,6 +159,7 @@ public class GameManager : Singleton<GameManager>
 
     void PlayerDead()
     {
+        FindObjectOfType<AudioManager>().Play("PlayerReset");
         _timer -= punishmentTime;
         //_PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
         _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3);

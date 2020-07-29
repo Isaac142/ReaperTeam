@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class EnemyPatrol : ReaperJr
 {
+    AudioManager audioManager;
+
     public Transform player;
     [HideInInspector]
     public NavMeshAgent agent;
@@ -25,6 +27,7 @@ public class EnemyPatrol : ReaperJr
     // Start is called before the first frame update
     void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         agent = GetComponent<NavMeshAgent>();
         if (transform.tag == "Enemy")
         {
@@ -61,6 +64,7 @@ public class EnemyPatrol : ReaperJr
                     {
                         if (hit.transform.tag == "Player")
                         {
+                            audioManager.Play("PlayerImpact");
                             if (toPlayer > touchPlayerDist) //preventing enemy pushes character
                             {
                                 agent.destination = player.position;

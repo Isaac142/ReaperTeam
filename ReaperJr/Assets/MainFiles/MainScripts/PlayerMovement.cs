@@ -6,6 +6,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 {
     #region Variables
     //public TrajectoryPredictor trajectory;
+    AudioManager audioManager;
 
     Rigidbody controller;
     public Transform firePoint;
@@ -54,6 +55,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
     //Calling on the CharacterController Component
     void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>();
+
         Debug.DrawRay(transform.position, transform.right, Color.red);
         controller = GetComponent<Rigidbody>();
         controller.mass = _GAME.playerMass;
@@ -86,6 +89,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
         if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
         {
+            audioManager.Play("Jump");
             distToGround = 0f;
             isJumping = true;
             if (isGrounded)
@@ -96,6 +100,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         {
             if (_GAME.Energy >= _GAME.teleportingEnergy)
             {
+                audioManager.Play("Teleport1");
                 StartCoroutine(TeleportToScythe());
                 _GAME.Energy -= _GAME.teleportingEnergy;
                 _GAME.onCD = true;
@@ -433,6 +438,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                         if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
                         {
+                            audioManager.Play("SoulCollect");
                             GameEvents.ReportScytheEquipped(true);
                             hits[i].transform.GetComponent<SoulType>().isCollected = true;
                             GameEvents.ReportSoulCollected(hits[i].transform.GetComponent<SoulType>());
@@ -454,6 +460,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                     if (hits[i].transform.tag == "HiddenItem")
                     {
+                        audioManager.Play("SpecialCollect");
                         GameEvents.ReportHintShown(HintForActions.COLLECTITEMS);
                         if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
                         {

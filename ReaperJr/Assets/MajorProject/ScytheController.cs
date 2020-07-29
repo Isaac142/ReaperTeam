@@ -73,7 +73,6 @@ public class ScytheController : ReaperJr
     // Use this for initialization
     void Start()
     {
-
         //Gets the line renderer component
         lineRenderer = GetComponent<LineRenderer>();
         lineOut = false;
@@ -339,7 +338,7 @@ public class ScytheController : ReaperJr
         {
             if (holdingScythe && !_GAME.onCD)
             {
-
+                FindObjectOfType<AudioManager>().Play("ScytheThrow");
                 _PLAYER.anim.SetTrigger("ScytheThrow");
                 Physics.gravity = new Vector3(0, -gravity.y, 0);
                 scythe.GetComponent<Scythe>().Launch(velocity);

@@ -184,7 +184,9 @@ public class ItemMovement : ReaperJr
             _GAME.holdingLightObject = true;
         }
         else
+        {
             _GAME.holdingLightObject = false;
+        }
 
         if (hasRB)
         {
