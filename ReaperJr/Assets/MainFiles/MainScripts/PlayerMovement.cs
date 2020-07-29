@@ -100,6 +100,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         {
             if (_GAME.Energy >= _GAME.teleportingEnergy)
             {
+                anim.SetTrigger("Teleport");
                 audioManager.Play("Teleport1");
                 StartCoroutine(TeleportToScythe());
                 _GAME.Energy -= _GAME.teleportingEnergy;
@@ -217,6 +218,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     bool dragging;
     bool pushing;
+    bool carrying;
 
     //Creating the player jumping, and player movement function.
     void Movement()
@@ -226,6 +228,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         anim.SetFloat("Walk",Mathf.Abs(h));
         anim.SetBool("Drag", dragging);
         anim.SetBool("Push", pushing);
+        anim.SetBool("Carry", carrying);
 
         if (Mathf.Abs(h) > 0.1f)
         {
@@ -235,7 +238,19 @@ public class PlayerMovement : Singleton<PlayerMovement>
         {
             StartCoroutine(ResetMovement());
         }
+        if (Mathf.Abs(v) > 0.1f)
+        {
+            walkHack = true;
+        }
+        else
+        {
+            StartCoroutine(ResetMovement());
+        }
+
         anim.SetBool("WalkHack",walkHack);
+        pushing = false;
+        dragging = false;
+        carrying = false;
         if (_GAME.isHolding && !_GAME.holdingLightObject)
         #region MovingHeavyObject
         {
@@ -366,6 +381,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (!_GAME.isHolding || _GAME.holdingLightObject) // character can not jump if it's holding heavy objects.
         {
             anim.SetTrigger("Jump");
+            anim.SetBool("Air", !isGrounded);
             controller.velocity = Vector3.up * jumpForce; //using velocity instead of addforce to ensure each jump reaches the same height.
             isJumping = false;
             distToGround = 0;

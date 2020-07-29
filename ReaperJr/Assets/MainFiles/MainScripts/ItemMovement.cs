@@ -169,7 +169,7 @@ public class ItemMovement : ReaperJr
         GameEvents.ReportScytheEquipped(false);
         ReaperJr._PLAYER.movable = (ReaperJr._PLAYER.isGrounded) ? true : false;
         _GAME.isHolding = true;
-
+        _PLAYER.anim.SetBool("Holding", canHold);
         if (transform.parent != null)
             transform.parent = null;
         ReaperJr._PLAYER.speedFactor -= mass * massModifier;
@@ -182,10 +182,12 @@ public class ItemMovement : ReaperJr
             transform.position = new Vector3(transform.position.x, _PLAYER.GetComponent<CapsuleCollider>().height / 2f + (GetComponent<Collider>().bounds.min.y), transform.position.z); //can change to hand position
             transform.eulerAngles = Vector3.zero;
             _GAME.holdingLightObject = true;
+            _PLAYER.anim.SetBool("Carrying", isLigther);
         }
         else
         {
             _GAME.holdingLightObject = false;
+            isLigther = false;
         }
 
         if (hasRB)
