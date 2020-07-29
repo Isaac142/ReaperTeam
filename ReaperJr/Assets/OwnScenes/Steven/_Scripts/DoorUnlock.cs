@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DoorUnlock : MonoBehaviour
 {
-    public Animator lockedDoor;
+    ///public Animator lockedDoor;
+    public GameObject door;
     public bool box1 = false;
     public bool box2 = false;
     public bool box3 = false;
@@ -51,8 +52,8 @@ public class DoorUnlock : MonoBehaviour
 
     void DoorOpen()
     {
-        
-         lockedDoor.SetBool("LockedDoor", true);
+
+        Destroy(door);
          Debug.Log(" Key Set... Now Unlocking ");
        
     }
