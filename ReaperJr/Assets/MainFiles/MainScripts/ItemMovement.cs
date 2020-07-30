@@ -203,10 +203,11 @@ public class ItemMovement : ReaperJr
         if (!isLigther)
         {
             if (_GAME.scytheEquiped) //equip scythe releases heavy object
-            {
                 StartCoroutine(Release());
-            }
+            GameEvents.ReportHintShown(HintForActions.HEAVYOBJNOTE);
         }
+        else
+            GameEvents.ReportHintShown(HintForActions.RELEASING);
 
         if (hasRB) //dynamic events
         {
@@ -229,12 +230,12 @@ public class ItemMovement : ReaperJr
                 }
 
                 if (CurrDist - iniDistance >= relasingThreshold)
-                {
                     StartCoroutine(Release());
-                }
             }
         }
-        GameEvents.ReportHintShown(HintForActions.RELEASING);
+
+        if (_GAME.gameState == GameState.DEAD)
+            StartCoroutine(Release());
     }
 
     void ConstrainSetUp() //testing the local upward axis and set up constrains.

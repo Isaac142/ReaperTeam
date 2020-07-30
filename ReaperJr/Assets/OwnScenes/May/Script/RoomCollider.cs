@@ -87,8 +87,9 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
-           WallAppear(); 
-            switch(roomType)
+            WallAppear();
+            DoorAppear();
+            switch (roomType)
             {
                 case RoomType.ROOM:
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.OUTROOM);
@@ -104,24 +105,6 @@ public class RoomCollider : ReaperJr
     void WallDisappear()
     {
         foreach (GameObject go in frontWalls)
-        {
-            go.gameObject.layer = 2;
-            Renderer rend = go.GetComponent<Renderer>();
-            rend.material.SetFloat("_Mode", 2);
-            rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            rend.material.SetInt("_ZWrite", 0);
-            rend.material.DisableKeyword("_ALPHATEST_ON");
-            rend.material.EnableKeyword("_ALPHABLEND_ON");
-            rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            rend.material.renderQueue = 3000;
-            go.GetComponent<Renderer>().material.DOFade(0, "_BaseColor", 1).SetEase(Ease.OutQuart);
-        }
-    }
-
-    void DoorDisappear()
-    {
-        foreach (GameObject go in frontDoors)
         {
             go.gameObject.layer = 2;
             Renderer rend = go.GetComponent<Renderer>();
@@ -153,5 +136,17 @@ public class RoomCollider : ReaperJr
             rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
             rend.material.renderQueue = -1;
         }
+    }
+
+    void DoorDisappear()
+    {
+        foreach (GameObject door in frontDoors)
+            door.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    void DoorAppear()
+    {
+        foreach (GameObject door in frontDoors)
+            door.GetComponent<MeshRenderer>().enabled = true;
     }
 }

@@ -30,7 +30,7 @@ public class FakeSoulCollider : ReaperJr
                 if (script != null)
                 {
                     script.enabled = true;
-                    //script.agent.isStopped = false;
+                    script.agent.isStopped = false;
 
                 }
             }

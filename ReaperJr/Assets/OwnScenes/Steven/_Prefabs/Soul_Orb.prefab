@@ -112,9 +112,12 @@ MonoBehaviour:
   soul: {fileID: 0}
   isCollected: 0
   soulIcon: {fileID: 0}
-  soulMask: {fileID: 0}
   radius: 3
-  transparency: 0.2
+  transparency: 0.5
+  childObj:
+  - {fileID: 5373363445248957964}
+  - {fileID: 7805252032523043283}
+  - {fileID: 8386567677398163165}
 --- !u!1 &5373363445248957964
 GameObject:
   m_ObjectHideFlags: 0

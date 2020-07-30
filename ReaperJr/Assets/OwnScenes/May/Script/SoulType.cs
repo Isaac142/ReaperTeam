@@ -8,18 +8,18 @@ public class SoulType : MonoBehaviour
     public Souls soul;
     public bool isCollected = false;
     [HideInInspector]
-    public Sprite soulIcon, soulMask;
+    public Sprite soulIcon;
     private enum SoulTypes { BRAVE, HAPPY, SKITTISH}
     private SoulTypes soulTypes;
     public float radius = 3f;
     private Renderer rend;
     public float transparency = 0.2f;
+    public List<GameObject> childObj = new List<GameObject>();
 
     // Start is called before the first frame update
     void Awake()
     {
         soulIcon = soul.icon;
-        soulMask = soul.mask;
 
         if (soul.Type == "Brave")
             soulTypes = SoulTypes.BRAVE;
@@ -32,20 +32,12 @@ public class SoulType : MonoBehaviour
         switch (soulTypes)
         {
             case SoulTypes.BRAVE:
-                {
-                    transform.GetChild(0).gameObject.SetActive(true);
-                    break;
-                }
+                break;
             case SoulTypes.HAPPY:
-                {
-                    transform.GetChild(0).gameObject.SetActive(true);
-                    break;
-                }
+                break;
             case SoulTypes.SKITTISH:
                 {
                     rend.material.DOFade(transparency, "_BaseColor", 0.1f);
-                    transform.GetChild(0).gameObject.SetActive(false);
-                    transform.GetChild(1).gameObject.SetActive(false);
                     GameObject detectCollider = new GameObject("Collider");
                     detectCollider.transform.parent = transform;
                     detectCollider.transform.position = transform.position;
@@ -56,6 +48,8 @@ public class SoulType : MonoBehaviour
                     rb.isKinematic = true;
                     collider.isTrigger = true;
                     collider.radius = radius;
+                    foreach(GameObject obj in childObj)
+                        obj.SetActive(false);
                     break;
                 }
         }
@@ -70,8 +64,8 @@ public class SoulType : MonoBehaviour
                 case SoulTypes.SKITTISH:
                     {
                         rend.material.DOFade(0.8f, "_BaseColor", 0.5f);
-                        transform.GetChild(0).gameObject.SetActive(true);
-                        transform.GetChild(1).gameObject.SetActive(true);
+                        foreach (GameObject obj in childObj)
+                            obj.SetActive(true);
                         break;
                     }
             }
@@ -87,8 +81,8 @@ public class SoulType : MonoBehaviour
                 case SoulTypes.SKITTISH:
                     {
                         rend.material.DOFade(transparency, "_BaseColor", 0.5f);
-                        transform.GetChild(0).gameObject.SetActive(false);
-                        transform.GetChild(1).gameObject.SetActive(false);
+                        foreach (GameObject obj in childObj)
+                            obj.SetActive(false);
                         break;
                     }
             }

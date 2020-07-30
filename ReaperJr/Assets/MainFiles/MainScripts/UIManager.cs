@@ -6,7 +6,7 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
-public enum HintForActions {DEFAULT, CANHOLD, RELEASING, SWITCH, OPENBOX, MOVABLEOPENABLEBOX , COLLECTSOULS, COLLECTITEMS}
+public enum HintForActions {DEFAULT, CANHOLD, RELEASING, SWITCH, OPENBOX, COLLECTSOULS, COLLECTITEMS, HEAVYOBJNOTE}
 
 public class UIManager : Singleton<UIManager>
 {
@@ -33,6 +33,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject hintsPanel;
     public TextMeshProUGUI hint1; //keyboard input
     public TextMeshProUGUI hint2; // mouse input
+    public TextMeshProUGUI hint3; //object notes
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
@@ -331,7 +332,11 @@ public class UIManager : Singleton<UIManager>
         CanvasGroup cvg = hintsPanel.GetComponent<CanvasGroup>();
         cvg.DOFade(1f, 0.5f).SetEase(fadeInEase).SetUpdate(true);
         hint1.enabled = true;
+        hint1.text = null;
         hint2.enabled = true;
+        hint2.text = null;
+        hint3.enabled = true;
+        hint3.text = null;
     }
 
     public void OnHintShown (HintForActions action)
@@ -345,26 +350,23 @@ public class UIManager : Singleton<UIManager>
             case HintForActions.CANHOLD:
                 SetHints();
                 hint1.text = "Press E key to Hold Object in front.";
-                hint2.enabled = false;
                 break;
             case HintForActions.RELEASING:
                 SetHints();
                 hint1.text = "Press E key to Release Object in front.";
-                hint2.enabled = false;
+                break;
+            case HintForActions.HEAVYOBJNOTE:
+                SetHints();
+                hint1.text = "Press E key to Release Object in front.";
+                hint3.text = "You can ONLY drag or push this object.";
                 break;
             case HintForActions.SWITCH:
                 SetHints();
                 hint2.text = "Right click on the switch to initiating the object";
-                hint1.enabled = false;
                 break;
             case HintForActions.OPENBOX:
                 SetHints();
                 hint2.text = "Right click to open the box in front";
-                hint1.enabled = false;
-                break;
-            case HintForActions.MOVABLEOPENABLEBOX:
-                hint2.enabled = true;
-                hint2.text = "Right click to open the box in front.";
                 break;
             case HintForActions.COLLECTSOULS:
                 SetHints();
@@ -373,7 +375,6 @@ public class UIManager : Singleton<UIManager>
                 break;
             case HintForActions.COLLECTITEMS:
                 SetHints();
-                hint1.enabled = false;
                 hint2.text = "Right click to collect the object(s).";
                 break;
         }
