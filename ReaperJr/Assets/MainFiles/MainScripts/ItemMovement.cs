@@ -73,6 +73,8 @@ public class ItemMovement : ReaperJr
     {
         if (_GAME.playerActive == false)
             return;
+        if (_PLAYER.isCrouching == true)
+            return;
 
         EmissionControl();
 
