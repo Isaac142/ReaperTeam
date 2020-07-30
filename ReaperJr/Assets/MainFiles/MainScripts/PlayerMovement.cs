@@ -259,7 +259,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
             dragging = false;
             if (facingF)
             {
-                if(v < 0)
+                h = 0; //stop side way walk
+                if (v < 0)
                     pushing = true;
                 if (v > 0)
                     dragging = true;
@@ -273,6 +274,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
             if (facingB)
             {
+                h = 0; //stop side way walk
                 if (v > 0)
                     pushing = true;
                 if (v < 0)
@@ -288,6 +290,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
             if (facingR)
             {
+                v = 0; //stop side way walk
                 if (h > 0)
                     pushing = true;
                 if (h < 0)
@@ -302,6 +305,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
             if (facingL)
             {
+                v = 0; //stop side way walk
                 if (h < 0)
                     pushing = true;
                 if (h > 0)
