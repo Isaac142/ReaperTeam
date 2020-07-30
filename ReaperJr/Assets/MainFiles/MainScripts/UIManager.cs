@@ -29,7 +29,7 @@ public class UIManager : Singleton<UIManager>
     public Text itemName, itemType, itemDescription;
     public Slider energyBar;
     public Image abilityCD;
-    public GameObject[] masks;  //scythe icon masks
+    public GameObject scytheMasks, abilityMask;  //scythe icon masks
     public GameObject hintsPanel;
     public TextMeshProUGUI hint1; //keyboard input
     public TextMeshProUGUI hint2; // mouse input
@@ -71,8 +71,9 @@ public class UIManager : Singleton<UIManager>
         CloseAllPanels();
         DisableSoulIcons();
 
-        foreach (GameObject pic in masks)
-            pic.SetActive(false);
+        
+        abilityMask.SetActive(false);
+        scytheMasks.SetActive(false);
 
         infoPanel.SetActive(false);
     }
@@ -165,14 +166,22 @@ public class UIManager : Singleton<UIManager>
     {
         if (scythe)
         {
-            foreach (GameObject pic in masks)
-                pic.SetActive(false);
+            abilityMask.SetActive(false);
+            scytheMasks.SetActive(false);
         }
         else
         {
-            foreach (GameObject pic in masks)
-                pic.SetActive(true);
+            abilityMask.SetActive(true);
+            scytheMasks.SetActive(true);
         }
+    }
+
+    void OnScytheThrown(bool scytheThrow)
+    {
+        if (scytheThrow)
+            scytheMasks.SetActive(true);
+        else
+            scytheMasks.SetActive(false);
     }
 
     void OnSoulCollected(SoulType soulCollected)
@@ -186,6 +195,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnScytheEquipped += OnScytheEquipped;
         GameEvents.OnSoulCollected += OnSoulCollected;
         GameEvents.OnHintShown += OnHintShown;
+        GameEvents.OnScytheThrow += OnScytheThrown;
     }
 
     private void OnDisable()
@@ -194,13 +204,14 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnScytheEquipped -= OnScytheEquipped;
         GameEvents.OnSoulCollected -= OnSoulCollected;
         GameEvents.OnHintShown -= OnHintShown;
+        GameEvents.OnScytheThrow -= OnScytheThrown;
     }
 
     #region Button Press
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        _GAME.Restart();
+        _GAME.ResetGame();
         GameEvents.ReportGameStateChange(GameState.RESUME);
     }
 
@@ -327,54 +338,41 @@ public class UIManager : Singleton<UIManager>
         cvg.blocksRaycasts = false;
     }
 
-    private void SetHints()
-    {
-        CanvasGroup cvg = hintsPanel.GetComponent<CanvasGroup>();
-        cvg.DOFade(1f, 0.5f).SetEase(fadeInEase).SetUpdate(true);
-        hint1.enabled = true;
-        hint1.text = null;
-        hint2.enabled = true;
-        hint2.text = null;
-        hint3.enabled = true;
-        hint3.text = null;
-    }
 
     public void OnHintShown (HintForActions action)
     {
+        CanvasGroup cvg = hintsPanel.GetComponent<CanvasGroup>();
+        cvg.DOFade(1f, 1f).SetEase(fadeInEase).SetUpdate(true);
+        hint1.text = null;
+        hint2.text = null;
+        hint3.text = null;
+
         currInfo = action;
         switch(action)
         {
-            case HintForActions.DEFAULT:
-                FadeOutPanel(hintsPanel);
-                break;
+            //case HintForActions.DEFAULT:
+            //    break;
             case HintForActions.CANHOLD:
-                SetHints();
                 hint1.text = "Press E key to Hold Object in front.";
                 break;
             case HintForActions.RELEASING:
-                SetHints();
                 hint1.text = "Press E key to Release Object in front.";
                 break;
             case HintForActions.HEAVYOBJNOTE:
-                SetHints();
                 hint1.text = "Press E key to Release Object in front.";
                 hint3.text = "You can ONLY drag or push this object.";
                 break;
             case HintForActions.SWITCH:
-                SetHints();
                 hint2.text = "Right click on the switch to initiating the object";
                 break;
             case HintForActions.OPENBOX:
-                SetHints();
                 hint2.text = "Right click to open the box in front";
                 break;
             case HintForActions.COLLECTSOULS:
-                SetHints();
                 hint1.text = "Right click to collect the soul(s).";
                 hint2.text = "Don't collect fake soul(s).";
                 break;
             case HintForActions.COLLECTITEMS:
-                SetHints();
                 hint2.text = "Right click to collect the object(s).";
                 break;
         }

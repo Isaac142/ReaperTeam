@@ -6252,6 +6252,8 @@ MonoBehaviour:
     m_Bits: 1041
   fallDist: 0
   facingDirection: 0
+  anim: {fileID: 1741016118}
+  walkHack: 0
 --- !u!1 &8176038612170960662
 GameObject:
   m_ObjectHideFlags: 0
@@ -6552,6 +6554,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8684111963248595331}
+  - component: {fileID: 1741016118}
   m_Layer: 8
   m_Name: Models
   m_TagString: Untagged
@@ -6577,6 +6580,25 @@ Transform:
   m_Father: {fileID: 5059723364124320150}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1741016118
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8732041728858001770}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cf9d74ff6e520504ca9f45a75a92e719, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8752118346580477995
 GameObject:
   m_ObjectHideFlags: 0
@@ -7318,7 +7340,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6081906714661020098}
-  - component: {fileID: 711210709}
   m_Layer: 0
   m_Name: ReaperJrRigging__1_:Skeleton_GRP
   m_TagString: Player
@@ -7341,25 +7362,6 @@ Transform:
   m_Father: {fileID: 8684111963248595331}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!95 &711210709
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9212030284512791579}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cf9d74ff6e520504ca9f45a75a92e719, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &3420715755846001487
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7619,15 +7621,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 527dc420fdcc54a408aadd90bc5c36d3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e77e0234f905a24ab2929405ba3a831, type: 3}
---- !u!4 &9000743140764939753 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6021808485303027626, guid: 2e77e0234f905a24ab2929405ba3a831,
-    type: 3}
-  m_PrefabInstance: {fileID: 3420715756172112451}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9000743140959166477 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6021808485360980558, guid: 2e77e0234f905a24ab2929405ba3a831,
+    type: 3}
+  m_PrefabInstance: {fileID: 3420715756172112451}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9000743140764939753 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6021808485303027626, guid: 2e77e0234f905a24ab2929405ba3a831,
     type: 3}
   m_PrefabInstance: {fileID: 3420715756172112451}
   m_PrefabAsset: {fileID: 0}

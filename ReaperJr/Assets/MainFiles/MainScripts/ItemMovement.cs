@@ -99,7 +99,7 @@ public class ItemMovement : ReaperJr
 
     void DefaultState()
     {
-        GameEvents.ReportHintShown(HintForActions.DEFAULT);
+        //GameEvents.ReportHintShown(HintForActions.DEFAULT);
         transform.parent = null;
         if (hasRB)
             objectRB.isKinematic = false;
@@ -157,6 +157,9 @@ public class ItemMovement : ReaperJr
         else
             canHold = false;
 
+        if (_PLAYER.isCrouching)  //can not carry things when crouching
+            canHold = false;
+
         if (canHold)
         {
             GameEvents.ReportHintShown(HintForActions.CANHOLD);
@@ -171,7 +174,7 @@ public class ItemMovement : ReaperJr
         GameEvents.ReportScytheEquipped(false);
         ReaperJr._PLAYER.movable = (ReaperJr._PLAYER.isGrounded) ? true : false;
         _GAME.isHolding = true;
-        _PLAYER.anim.SetBool("Holding", canHold);
+        
         if (transform.parent != null)
             transform.parent = null;
         ReaperJr._PLAYER.speedFactor -= mass * massModifier;
@@ -183,8 +186,7 @@ public class ItemMovement : ReaperJr
         {
             transform.position = new Vector3(transform.position.x, _PLAYER.GetComponent<CapsuleCollider>().height / 2f + (GetComponent<Collider>().bounds.min.y), transform.position.z); //can change to hand position
             transform.eulerAngles = Vector3.zero;
-            _GAME.holdingLightObject = true;
-            _PLAYER.anim.SetBool("Carrying", isLigther);
+            _GAME.holdingLightObject = true;   
         }
         else
         {
@@ -203,11 +205,9 @@ public class ItemMovement : ReaperJr
     void HoldingEvents()
     {
         if (!isLigther)
-        {
-            if (_GAME.scytheEquiped) //equip scythe releases heavy object
-                StartCoroutine(Release());
+            //if (_GAME.scytheEquiped) //equip scythe releases heavy object
+            //    StartCoroutine(Release());
             GameEvents.ReportHintShown(HintForActions.HEAVYOBJNOTE);
-        }
         else
             GameEvents.ReportHintShown(HintForActions.RELEASING);
 

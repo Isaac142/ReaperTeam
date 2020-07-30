@@ -75,14 +75,12 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        Restart();
+        ResetGame();
         GameEvents.ReportGameStateChange(GameState.INGAME);
-        //SetGameState(GameState.INGAME);
     }
 
-    public void Restart()
+    public void ResetGame()
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         _PLAYER.Restart();
         holdingLightObject = false;
         isHolding = false;

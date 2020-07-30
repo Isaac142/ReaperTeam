@@ -3274,9 +3274,9 @@ RectTransform:
   - {fileID: 5939522654160230172}
   - {fileID: 7184786206678896871}
   - {fileID: 5939522654686156646}
+  - {fileID: 4296456044625726820}
   - {fileID: 5647121656906851854}
   - {fileID: 7769678975920804253}
-  - {fileID: 4296456044625726820}
   m_Father: {fileID: 3058703819191062058}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3834,7 +3834,7 @@ RectTransform:
   m_Children:
   - {fileID: 54109016645020624}
   m_Father: {fileID: 2937780561101300738}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -11058,7 +11058,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7160771983969173605}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -11076,7 +11076,7 @@ RectTransform:
   - {fileID: 6299360281689522015}
   - {fileID: 9147534503247057712}
   m_Father: {fileID: 2937780561101300738}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -11423,9 +11423,8 @@ MonoBehaviour:
   itemDescription: {fileID: 7184786208105282652}
   energyBar: {fileID: 806070362254855075}
   abilityCD: {fileID: 3762594628363117871}
-  masks:
-  - {fileID: 8279526335443615321}
-  - {fileID: 7893469209906440330}
+  scytheMasks: {fileID: 7893469209906440330}
+  abilityMask: {fileID: 8279526335443615321}
   hintsPanel: {fileID: 8634304038436343089}
   hint1: {fileID: 793897070380146477}
   hint2: {fileID: 90989769026694811}
@@ -13002,7 +13001,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8634304038436343089}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -13010,7 +13009,7 @@ RectTransform:
   - {fileID: 6344754331514655383}
   - {fileID: 7855961654770019789}
   m_Father: {fileID: 2937780561101300738}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

@@ -96,7 +96,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 Jump();
         }    
 
-        if (Input.GetMouseButtonDown(0) && scytheController.holdingScythe == false)
+        if (Input.GetMouseButtonDown(0) && !scytheController.holdingScythe)
         {
             if (_GAME.Energy >= _GAME.teleportingEnergy)
             {
@@ -119,6 +119,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             scythe.SetActive(false);
 
         isCrouching = Input.GetKey(KeyCode.LeftShift) ? true : false; //crouching
+
         if (Input.GetKeyDown(KeyCode.LeftShift))
             isCrouched = true;
         if(isCrouched && !isCrouching)
@@ -132,7 +133,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
             }
         }
 
-        //trajectory.zDepth = transform.position.z;
+        bool holding = _GAME.isHolding;
+        bool carrying = _GAME.holdingLightObject;
+        anim.SetBool("Holding", holding);
+        anim.SetBool("Carrying", carrying);
     }
 
     private void FixedUpdate() //prevent character walking into walls.
@@ -218,39 +222,27 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     bool dragging;
     bool pushing;
-    bool carrying;
 
     //Creating the player jumping, and player movement function.
     void Movement()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        anim.SetFloat("Walk",Mathf.Abs(h));
         anim.SetBool("Drag", dragging);
         anim.SetBool("Push", pushing);
-        anim.SetBool("Carry", carrying);
 
         if (Mathf.Abs(h) > 0.1f)
-        {
             walkHack = true;
-        }
         else
-        {
             StartCoroutine(ResetMovement());
-        }
+
         if (Mathf.Abs(v) > 0.1f)
-        {
             walkHack = true;
-        }
         else
-        {
             StartCoroutine(ResetMovement());
-        }
 
         anim.SetBool("WalkHack",walkHack);
-        pushing = false;
-        dragging = false;
-        carrying = false;
+
         if (_GAME.isHolding && !_GAME.holdingLightObject)
         #region MovingHeavyObject
         {
