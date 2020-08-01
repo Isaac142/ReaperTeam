@@ -6,10 +6,11 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
-public enum HintForActions {DEFAULT, CANHOLD, RELEASING, SWITCH, OPENBOX, COLLECTSOULS, COLLECTITEMS, HEAVYOBJNOTE}
+public enum HintForActions {DEFAULT, CANHOLD, RELEASING, SWITCH, OPEN, COLLECTSOULS, COLLECTITEMS, HEAVYOBJNOTE, REQUIRKEY, DISTANCEREQUIRED}
 
 public class UIManager : Singleton<UIManager>
 {
+    [HideInInspector]
     public HintForActions currInfo;
     public float fadeInTime = 0.5f;
     public float fadeOutTime = 0.2f;
@@ -22,6 +23,7 @@ public class UIManager : Singleton<UIManager>
     public Image timer;
 
     public List<Image> souls = new List<Image>();
+    [HideInInspector]
     public List<SoulType> currSouls = new List<SoulType>();
     public GameObject soulPanel;
     public Text totalSoulNo;
@@ -34,6 +36,10 @@ public class UIManager : Singleton<UIManager>
     public TextMeshProUGUI hint1; //keyboard input
     public TextMeshProUGUI hint2; // mouse input
     public TextMeshProUGUI hint3; //object notes
+    public GameObject keyItemPanel;
+    public List<Image> keyItems = new List<Image>();
+    [HideInInspector]
+    public List<KeyItem> currKeyItems = new List<KeyItem>();
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
@@ -70,6 +76,9 @@ public class UIManager : Singleton<UIManager>
 
         CloseAllPanels();
         DisableSoulIcons();
+        DisableKeyItems();
+        hintsPanel.GetComponent<CanvasGroup>().alpha = 1;
+        SetHintPanel();
 
         
         abilityMask.SetActive(false);
@@ -117,22 +126,32 @@ public class UIManager : Singleton<UIManager>
     }
     public void CloseAllPanels()
     {
-        //InstantOffPanel(inGamePanel);
         InstantOffPanel(hintsPanel);
         InstantOffPanel(pausePanel);
         InstantOffPanel(gameOverPanel);
         InstantOffPanel(menuPanel);
         InstantOffPanel(wonPanel);
         InstantOffPanel(deadPanel);
+        InstantOffPanel(hintsPanel);
     }
 
     public void DisableSoulIcons()
     {
-        FadeOutPanel(hintsPanel);
+        FadeOutPanel(soulPanel);
         foreach (Image soulIcon in souls)
         {
             soulIcon.sprite = null;
             soulIcon.enabled = false;
+        }
+    }
+
+    public void DisableKeyItems()
+    {
+        FadeOutPanel(keyItemPanel);
+        foreach (Image keyitem in keyItems)
+        {
+            keyitem.sprite = null;
+            keyitem.enabled = false;
         }
     }
 
@@ -183,28 +202,26 @@ public class UIManager : Singleton<UIManager>
         else
             scytheMasks.SetActive(false);
     }
-
-    void OnSoulCollected(SoulType soulCollected)
-    {
-        //UpdateSouls();
-    }
+    
 
     private void OnEnable()
     {
         GameEvents.OnGameStateChange += OnGameStateChange;
         GameEvents.OnScytheEquipped += OnScytheEquipped;
-        GameEvents.OnSoulCollected += OnSoulCollected;
         GameEvents.OnHintShown += OnHintShown;
         GameEvents.OnScytheThrow += OnScytheThrown;
+        GameEvents.OnKeyItemCollected += OnKeyItemCOllected;
+        GameEvents.OnSoulCollected += OnSoulCollected;
     }
 
     private void OnDisable()
     {
         GameEvents.OnGameStateChange -= OnGameStateChange;
         GameEvents.OnScytheEquipped -= OnScytheEquipped;
-        GameEvents.OnSoulCollected -= OnSoulCollected;
         GameEvents.OnHintShown -= OnHintShown;
         GameEvents.OnScytheThrow -= OnScytheThrown;
+        GameEvents.OnKeyItemCollected -= OnKeyItemCOllected;
+        GameEvents.OnSoulCollected -= OnSoulCollected;
     }
 
     #region Button Press
@@ -278,33 +295,91 @@ public class UIManager : Singleton<UIManager>
         {
             souls[i].sprite = currSouls[i].soulIcon;
             souls[i].enabled = true;
-        }
-        UpdateSouls();
-    }
 
-    public void UpdateSouls()
-    {
-        for (int i = 0; i < currSouls.Count; i++)
-        {
             if (currSouls[i].isCollected)
-            {
-                //souls[i].color = Color.gray;
-                souls[i].DOColor(Color.red, 0.5f);
-                souls[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
-                StartCoroutine(ReturnSouldIcon(souls[i]));
-            }
-
+                souls[i].color = Color.gray;
             else
                 souls[i].color = Color.white;
         }
-
+        //UpdateSouls();
     }
 
-    IEnumerator ReturnSouldIcon(Image _soul)
+    //public void UpdateSouls()
+    //{
+    //    for (int i = 0; i < currSouls.Count; i++)
+    //    {
+    //        if (currSouls[i].isCollected)
+    //        {
+    //            //souls[i].color = Color.gray;
+    //            souls[i].DOColor(Color.red, 0.5f);
+    //            souls[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
+    //            StartCoroutine(ReturnSouldIcon(souls[i]));
+    //        }
+
+    //        else
+    //            souls[i].color = Color.white;
+    //    }
+    //}
+
+    public void OnSoulCollected(SoulType soul)
+    {
+        for (int i = 0; i < currSouls.Count; i++)
+        {
+            if (currSouls[i] == soul)
+            {
+                souls[i].DOColor(Color.red, 0.5f);
+                souls[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
+                StartCoroutine(ReturnSoulIcon(souls[i]));
+            }
+        }
+    }
+
+    IEnumerator ReturnSoulIcon(Image _soul)
     {
         yield return new WaitForSeconds(0.5f);
         _soul.rectTransform.DOScale(Vector3.one * 1f, 1f);
         _soul.DOColor(Color.grey, 1f);
+    }
+
+    public void SetKeyItemPanel(List<KeyItem> keyItemSprite)
+    {
+        FadeInPanel(keyItemPanel);
+
+        currKeyItems = keyItemSprite;
+        foreach (Image im in keyItems)
+        {
+            im.enabled = false;
+        }
+
+        for (int i = 0; i < currKeyItems.Count; i++)
+        {
+            keyItems[i].sprite = currKeyItems[i].itemSprite;
+            keyItems[i].enabled = true;
+            if (currKeyItems[i].isCollected)
+                keyItems[i].color = Color.white;
+            else
+                keyItems[i].color = Color.gray;
+        }
+    }
+
+    public void OnKeyItemCOllected(KeyItem key)
+    {
+
+        for (int i = 0; i < currKeyItems.Count; i++)
+        {
+            if (currKeyItems[i] == key)
+            {
+                keyItems[i].DOColor(Color.white , 0.5f);
+                keyItems[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
+                StartCoroutine(ReturnKeyItemIcon(keyItems[i]));
+            }
+        }
+    }
+
+    IEnumerator ReturnKeyItemIcon(Image keyItem)
+    {
+        yield return new WaitForSeconds(0.5f);
+        keyItem.rectTransform.DOScale(Vector3.one * 1f, 1f);
     }
 
     public void FadeInPanel(GameObject panel)
@@ -338,20 +413,21 @@ public class UIManager : Singleton<UIManager>
         cvg.blocksRaycasts = false;
     }
 
-
+    public void SetHintPanel()
+    {
+        hint1.text = null;
+        hint1.color = Color.white;
+        hint2.text = null;
+        hint2.color = Color.white;
+        hint3.text = null;
+        hint3.color = Color.white;
+    }
+    
     public void OnHintShown (HintForActions action)
     {
-        CanvasGroup cvg = hintsPanel.GetComponent<CanvasGroup>();
-        cvg.DOFade(1f, 1f).SetEase(fadeInEase).SetUpdate(true);
-        hint1.text = null;
-        hint2.text = null;
-        hint3.text = null;
-
         currInfo = action;
         switch(action)
         {
-            //case HintForActions.DEFAULT:
-            //    break;
             case HintForActions.CANHOLD:
                 hint1.text = "Press E key to Hold Object in front.";
                 break;
@@ -360,20 +436,30 @@ public class UIManager : Singleton<UIManager>
                 break;
             case HintForActions.HEAVYOBJNOTE:
                 hint1.text = "Press E key to Release Object in front.";
-                hint3.text = "You can ONLY drag or push this object.";
+                hint2.text = "You can ONLY drag or push this object.";
+                hint2.color = new Color(237f / 255f, 195f / 255f, 1);
                 break;
             case HintForActions.SWITCH:
-                hint2.text = "Right click on the switch to initiating the object";
+                hint3.text = "Right click to initiating it";
                 break;
-            case HintForActions.OPENBOX:
-                hint2.text = "Right click to open the box in front";
+            case HintForActions.OPEN:
+                hint2.text = "Right click to open it";
                 break;
             case HintForActions.COLLECTSOULS:
-                hint1.text = "Right click to collect the soul(s).";
-                hint2.text = "Don't collect fake soul(s).";
+                hint2.text = "Right click to collect the soul(s).";
+                hint3.text = "Don't collect fake soul(s).";
+                hint3.color = new Color(237f / 255f, 195f/ 255f, 1f);
                 break;
             case HintForActions.COLLECTITEMS:
                 hint2.text = "Right click to collect the object(s).";
+                break;
+            case HintForActions.REQUIRKEY:
+                hint3.text = "Requir Keyitems!";
+                hint3.color = new Color(237f / 255f, 195f / 255f, 1);
+                break;
+            case HintForActions.DISTANCEREQUIRED:
+                hint3.text = "You need to get closer.";
+                hint3.color = new Color(237f / 255f, 195f / 255f, 1);
                 break;
         }
     }

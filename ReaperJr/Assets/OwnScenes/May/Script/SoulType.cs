@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class SoulType : MonoBehaviour
+public class SoulType : ReaperJr
 {
     public Souls soul;
     public bool isCollected = false;
@@ -104,9 +104,9 @@ public class SoulType : MonoBehaviour
         if (soulType == this)
         {
             //isCollected = true;
-            UIManager.INSTANCE.UpdateSouls();
+            //UIManager.INSTANCE.UpdateSouls();
             this.gameObject.SetActive(false);
-        }
-        
+            _UI.SetHintPanel();
+        }      
     }
 }

@@ -12,6 +12,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public Transform firePoint;
     public GameObject scythe;
 
+    [HideInInspector]
     public Vector3 startingPos;
 
     private ScytheController scytheController;
@@ -43,6 +44,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public enum FacingDirection { LEFT, RIGHT, FRONT, BACK, FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT }
     [HideInInspector]
     public FacingDirection facingDirection;
+    [HideInInspector]
+    public bool canCollect = false;
     
     private float timeToGround = 0;
 
@@ -109,7 +112,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
             }
         }
 
-        Collect();
+        if(canCollect)
+            Collect();
 
         EquipScythe();
 
@@ -430,7 +434,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Collecting
     void Collect()
     {
-        GameEvents.ReportHintShown(HintForActions.DEFAULT);
+        _UI.SetHintPanel();
         RaycastHit[] hits;
 
         Vector3 centre = transform.position + Vector3.up * collectableDist + transform.right * collectableDist;
@@ -444,11 +448,16 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     return;
                 else
                 {
-                    if (hits[i].transform.tag == "Soul")
-                    {
+                    if (hits[i].transform.tag == "Soul" || hits[i].transform.tag == "FakeSoul")
                         GameEvents.ReportHintShown(HintForActions.COLLECTSOULS);
+                    else
+                        GameEvents.ReportHintShown(HintForActions.COLLECTITEMS);                   
 
-                        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
+                    if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
+                    {
+                        anim.SetTrigger("Collect");
+
+                        if (hits[i].transform.tag == "Soul")
                         {
                             audioManager.Play("SoulCollect");
                             GameEvents.ReportScytheEquipped(true);
@@ -457,27 +466,30 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             _GAME.totalSoulNo -= 1;
                             //do something --> collected amount, visual clue...
                         }
-                    }
 
-                    if (hits[i].transform.tag == "FakeSoul")
-                    {
-                        GameEvents.ReportHintShown(HintForActions.COLLECTSOULS);
-                        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
+                        if (hits[i].transform.tag == "FakeSoul")
                         {
                             GameEvents.ReportScytheEquipped(true);
                             GameEvents.ReportGameStateChange(GameState.DEAD);
                             //do something --> collected amount, visual clue...
                         }
-                    }
 
-                    if (hits[i].transform.tag == "HiddenItem")
-                    {
-                        audioManager.Play("SpecialCollect");
-                        GameEvents.ReportHintShown(HintForActions.COLLECTITEMS);
-                        if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
+                        if (hits[i].transform.tag == "HiddenItem")
                         {
+                            audioManager.Play("SpecialCollect");
                             _GAME.Timer += _GAME.rewardTime;
                             Destroy(hits[i].transform.gameObject);
+                            _UI.SetHintPanel();
+                        }
+
+                        if (hits[i].transform.tag == "KeyItem")
+                        {
+                            if (!hits[i].transform.GetComponent<KeyItem>().isCollected)
+                            {
+                                audioManager.Play("SpecialCollect");
+                                hits[i].transform.GetComponent<KeyItem>().isCollected = true;
+                                GameEvents.ReportKeyItemCollected(hits[i].transform.GetComponent<KeyItem>());
+                            }
                         }
                     }
                     //if there's other collectables

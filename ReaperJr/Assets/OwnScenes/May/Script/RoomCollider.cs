@@ -15,6 +15,8 @@ public class RoomCollider : ReaperJr
     [HideInInspector]
     public List<Sprite> soulSprite = new List<Sprite>();
 
+    public bool atticRoom = false;
+    public float offset = 5f;
     public List<SoulType> souls = new List<SoulType>();
     public List<GameObject> frontWalls;
     public List<GameObject> frontDoors;
@@ -39,6 +41,10 @@ public class RoomCollider : ReaperJr
         roomSides = new Vector2(roomCollider.transform.position.x - roomCollider.bounds.size.x / 2f, roomCollider.transform.position.x + roomCollider.bounds.size.x / 2f);
         roomHeight = new Vector2(roomCollider.transform.position.y - roomCollider.bounds.size.y / 2f, roomCollider.transform.position.y + roomCollider.bounds.size.y / 2f);
         roomDepth = new Vector2(roomCollider.transform.position.z - roomCollider.bounds.size.z / 2f, roomCollider.transform.position.z + roomCollider.bounds.size.z / 2f);
+
+        if(atticRoom)
+            roomSides = new Vector2(roomCollider.transform.position.x - roomCollider.bounds.size.x / 2f + offset, roomCollider.transform.position.x + roomCollider.bounds.size.x / 2f - offset);
+
         for (int i = 0; i <souls.Count; i ++)
         {
             soulSprite.Add(souls[i].soulIcon);
@@ -50,22 +56,10 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
+            if (_UI.hintsPanel.GetComponent<CanvasGroup>().alpha != 1f)
+                _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;
             WallDisappear();
             DoorDisappear();
-            switch (roomType)
-            {
-                case RoomType.ROOM:
-                    _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
-                    break;
-            }
-            _UI.SetSouls(souls);
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.tag == "Player")
-        {
             switch (roomType)
             {
                 case RoomType.LEVEL:
@@ -78,8 +72,38 @@ public class RoomCollider : ReaperJr
                 case RoomType.ROOM:
                     _CAMERA.roomPosition = roomPosition;
                     StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
+                    _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
                     break;
             }
+            _UI.SetSouls(souls);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            //switch (roomType)
+            //{
+            //    case RoomType.LEVEL:
+            //        //set up level boundaries
+            //        _CAMERA.levelHorBoundaries = new Vector2(roomSides.x, roomSides.y);
+            //        _CAMERA.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
+            //        _CAMERA.levelDepthBoundaries = new Vector2(roomDepth.x, +roomDepth.y);
+            //        break;
+
+            //    case RoomType.ROOM:
+            //        _CAMERA.roomPosition = roomPosition;
+            //        StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
+            //        break;
+            //}
+            if(souls.Count>0)
+            {
+                if (_UI.soulPanel.GetComponent<CanvasGroup>().alpha != 1f)
+                    _UI.SetSouls(souls);
+            }
+            if (_UI.hintsPanel.GetComponent<CanvasGroup>().alpha != 1f)
+                _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;
         }
     }
 
@@ -99,6 +123,7 @@ public class RoomCollider : ReaperJr
                     break;
             }
             _UI.FadeOutPanel(_UI.soulPanel);
+            _UI.FadeOutPanel(_UI.keyItemPanel);
         }
     }
 

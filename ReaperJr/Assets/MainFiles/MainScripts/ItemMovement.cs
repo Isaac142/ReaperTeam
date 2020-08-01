@@ -162,10 +162,11 @@ public class ItemMovement : ReaperJr
 
         if (canHold)
         {
+            _UI.SetHintPanel();
             GameEvents.ReportHintShown(HintForActions.CANHOLD);
         }
         else
-            GameEvents.ReportHintShown(HintForActions.DEFAULT);
+            _UI.SetHintPanel();
     }
 
     void PickUp()
@@ -205,11 +206,18 @@ public class ItemMovement : ReaperJr
     void HoldingEvents()
     {
         if (!isLigther)
-            //if (_GAME.scytheEquiped) //equip scythe releases heavy object
-            //    StartCoroutine(Release());
+        {
+            _UI.SetHintPanel();
             GameEvents.ReportHintShown(HintForActions.HEAVYOBJNOTE);
+
+            if (_GAME.scytheEquiped) //equip scythe releases heavy object
+                StartCoroutine(Release());
+        }
         else
+        {
+            _UI.SetHintPanel();
             GameEvents.ReportHintShown(HintForActions.RELEASING);
+        }
 
         if (hasRB) //dynamic events
         {

@@ -66,8 +66,6 @@ public class GameManager : Singleton<GameManager>
 
     private void OverrideAwke()
     {
-        if(cursor != null)
-            Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
 
         checkPoints.Add(_PLAYER.transform.position);
     }
@@ -75,6 +73,8 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
+        if (cursor != null)
+            Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         ResetGame();
         GameEvents.ReportGameStateChange(GameState.INGAME);
     }
@@ -160,7 +160,13 @@ public class GameManager : Singleton<GameManager>
         FindObjectOfType<AudioManager>().Play("PlayerReset");
         _timer -= punishmentTime;
         //_PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
-        _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3);
+        
+        if(checkPoints.Count <= 0) // return to starting point if no saved check point.
+        {
+            _PLAYER.transform.position = _PLAYER.startingPos;
+        }
+        else
+            _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3);
         //    .OnComplete(()=>
         //     GameEvents.ReportGameStateChange(GameState.INGAME));       
         //

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveableItemTrigger : MonoBehaviour
+public class MoveableItemTrigger : ReaperJr
 {
     public ItemMovement itemMovement;
 
@@ -15,12 +15,18 @@ public class MoveableItemTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
+        {
             itemMovement.playerIn = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
+        {
             itemMovement.playerIn = false;
+            _UI.SetHintPanel();
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorLocking : MonoBehaviour
+public class DoorLocking : ReaperJr
 {
     public GameObject Door;
     // Start is called before the first frame update
