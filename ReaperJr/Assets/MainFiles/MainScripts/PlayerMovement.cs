@@ -71,8 +71,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
         bodyMesh = transform.GetChild(0);
         bodyScale = bodyMesh.localScale;
         bodyPos = bodyMesh.localPosition;
-
-        startingPos = transform.position;
     }
 
     public void Restart()
@@ -149,7 +147,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (_GAME.isPaused)
             return;
         Grounded();
-        FallDistCalculate();
+        if(!teleported || !_GAME.isInvincible)
+            FallDistCalculate();
         JumpBufferCayoteTime();
         if(movable)
             Movement();
@@ -235,6 +234,12 @@ public class PlayerMovement : Singleton<PlayerMovement>
         float v = Input.GetAxis("Vertical");
         anim.SetBool("Drag", dragging);
         anim.SetBool("Push", pushing);
+        if (dragging || pushing)
+            _AUDIO.Play("BoxMove");
+        else
+
+            _AUDIO.StopPlay("BoxMove");
+
 
         if (Mathf.Abs(h) > 0.1f)
             walkHack = true;
@@ -435,7 +440,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Collecting
     void Collect()
     {
-        _UI.SetHintPanel();
+        GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         RaycastHit[] hits;
 
         Vector3 centre = transform.position + Vector3.up * collectableDist + transform.right * collectableDist;
@@ -450,9 +455,9 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 else
                 {
                     if (hits[i].transform.tag == "Soul" || hits[i].transform.tag == "FakeSoul")
-                        GameEvents.ReportHintShown(HintForActions.COLLECTSOULS);
+                        GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTSOULS);
                     else
-                        GameEvents.ReportHintShown(HintForActions.COLLECTITEMS);                   
+                        GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);                   
 
                     if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
                     {
@@ -480,7 +485,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             _AUDIO.Play("SpecialCollect");
                             _GAME.Timer += _GAME.rewardTime;
                             Destroy(hits[i].transform.gameObject);
-                            _UI.SetHintPanel();
+                            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
                         }
 
                         if (hits[i].transform.tag == "KeyItem")
@@ -592,9 +597,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 fallDist = 0f;
             }
         }
-
-        if (_GAME.isInvincible || teleported)
-            fallDist = 0f;
     }
     #endregion
 

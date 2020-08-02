@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 1250332128922069752}
   - component: {fileID: 8096685191626811700}
   - component: {fileID: 6961640227135553447}
+  - component: {fileID: 3488034934380849905}
   m_Layer: 0
   m_Name: Colliders
   m_TagString: Untagged
@@ -297,7 +298,7 @@ BoxCollider:
   m_GameObject: {fileID: 6803320635539634140}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.075, y: 0.95, z: 0.95}
   m_Center: {x: -0.4128804, y: 0.002158165, z: -0.0017906725}
@@ -310,7 +311,7 @@ BoxCollider:
   m_GameObject: {fileID: 6803320635539634140}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.075, y: 0.95, z: 0.95}
   m_Center: {x: 0.4128804, y: 0.002158165, z: -0.000000014901161}
@@ -323,7 +324,7 @@ BoxCollider:
   m_GameObject: {fileID: 6803320635539634140}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.91, y: 0.95, z: 0.075}
   m_Center: {x: 0, y: 0.002158165, z: 0.45}
@@ -336,7 +337,7 @@ BoxCollider:
   m_GameObject: {fileID: 6803320635539634140}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.91, y: 0.95, z: 0.075}
   m_Center: {x: 0, y: 0.002158165, z: -0.45}
@@ -349,10 +350,23 @@ BoxCollider:
   m_GameObject: {fileID: 6803320635539634140}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.91, y: 0.075, z: 0.95}
   m_Center: {x: 0, y: -0.44, z: 0}
+--- !u!65 &3488034934380849905
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6803320635539634140}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.025, z: 0}
 --- !u!1 &7033896480310453210
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,7 +443,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4327542337258083919
 Transform:
   m_ObjectHideFlags: 0

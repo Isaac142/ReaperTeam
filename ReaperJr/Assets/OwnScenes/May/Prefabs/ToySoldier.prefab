@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5083450552384890160}
   - component: {fileID: 310873734079777862}
   - component: {fileID: 4678367419156463132}
-  - component: {fileID: 4773976900914352343}
   - component: {fileID: 3933980242836329872}
   m_Layer: 0
   m_Name: ToySoldier
@@ -110,25 +109,14 @@ MonoBehaviour:
   player: {fileID: 0}
   agent: {fileID: 0}
   awareDistance: 10
-  detectRange: 5
   patrolPoints: []
   patrolSpeed: 3
   chasingSpeed: 3
   touchPlayerDist: 1
---- !u!114 &4773976900914352343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638025677060819212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a838c65fd57d0e644bd62f5e09da8a53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controlScript: {fileID: 0}
-  anme: {fileID: 310873734079777862}
+  isMouse: 0
+  isDog: 0
+  isToySoldier: 1
+  anim: {fileID: 310873734079777862}
 --- !u!136 &3933980242836329872
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -201,6 +189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e4fcfcf281e6b145b02d2dc78413c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isToyGun: 0
+  isDog: 0
+  isMouse: 0
 --- !u!1 &1701947513834973349
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +598,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e4fcfcf281e6b145b02d2dc78413c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isToyGun: 1
+  isDog: 0
+  isMouse: 0
 --- !u!1 &4839675656513169402
 GameObject:
   m_ObjectHideFlags: 0

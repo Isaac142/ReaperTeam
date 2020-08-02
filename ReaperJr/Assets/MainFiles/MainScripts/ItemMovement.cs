@@ -39,6 +39,8 @@ public class ItemMovement : ReaperJr
     private float iniDistance; //initial distance between character and object when the object is held. use for heavy object
     private float CurrDist; //current distance between character and object as the character is holding object. use for heavy object.
 
+    public bool isKeyItem = false;
+
     private void Start()
     {
         isHolding = false;
@@ -162,11 +164,16 @@ public class ItemMovement : ReaperJr
 
         if (canHold)
         {
-            _UI.SetHintPanel();
-            GameEvents.ReportHintShown(HintForActions.CANHOLD);
+            GameEvents.ReportMovableHintShown(HintForMovingBoxes.CANHOLD);
+            if (isKeyItem && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
+                GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
         }
         else
-            _UI.SetHintPanel();
+        {
+            GameEvents.ReportMovableHintShown(HintForMovingBoxes.DEFAULT);
+            if (isKeyItem)
+                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+        }
     }
 
     void PickUp()
@@ -207,17 +214,13 @@ public class ItemMovement : ReaperJr
     {
         if (!isLigther)
         {
-            _UI.SetHintPanel();
-            GameEvents.ReportHintShown(HintForActions.HEAVYOBJNOTE);
+            GameEvents.ReportMovableHintShown(HintForMovingBoxes.HEAVYOBJNOTE);
 
             if (_GAME.scytheEquiped) //equip scythe releases heavy object
                 StartCoroutine(Release());
         }
         else
-        {
-            _UI.SetHintPanel();
-            GameEvents.ReportHintShown(HintForActions.RELEASING);
-        }
+            GameEvents.ReportMovableHintShown(HintForMovingBoxes.RELEASING);
 
         if (hasRB) //dynamic events
         {
@@ -243,7 +246,8 @@ public class ItemMovement : ReaperJr
                     StartCoroutine(Release());
             }
         }
-
+        if (isKeyItem && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
+            GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
         if (_GAME.gameState == GameState.DEAD)
             StartCoroutine(Release());
     }
@@ -287,6 +291,9 @@ public class ItemMovement : ReaperJr
 
         isHolding = false;
         GameEvents.ReportScytheEquipped(true);
+        GameEvents.ReportMovableHintShown(HintForMovingBoxes.DEFAULT);
+        if (isKeyItem)
+            GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
         yield return new WaitForSeconds(0.5f);
         _GAME.isHolding = false;
 

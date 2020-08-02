@@ -11,7 +11,6 @@ public class EnemyPatrol : ReaperJr
     public NavMeshAgent agent;
 
     public float awareDistance = 10f;
-    public float detectRange = 5f;
     public List<Transform> patrolPoints;
     public float patrolSpeed = 3f;
     public float chasingSpeed = 3f;
@@ -22,6 +21,8 @@ public class EnemyPatrol : ReaperJr
     
     private enum EnemyType { ENEMY, DUMMY, FLEE}
     private EnemyType enemyType;
+    public bool isMouse = false, isDog = false, isToySoldier = false;
+    public Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -57,36 +58,12 @@ public class EnemyPatrol : ReaperJr
             return;
 
         toPlayer = Vector3.Distance(player.position, transform.position);
+
+
         switch(enemyType)
         {
             case EnemyType.ENEMY:
-                if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
-                {
-                    if (!_GAME.isInvincible)
-                    {
-                        transform.LookAt(player);
-
-                        RaycastHit hit;
-                        if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
-                        {
-                            if (hit.transform.tag == "Player")
-                            {
-                                _AUDIO.Play("PlayerImpact");
-                                if (toPlayer > touchPlayerDist) //preventing enemy pushes character
-                                {
-                                    agent.destination = player.position;
-                                    agent.speed = chasingSpeed;
-                                }
-                                else
-                                {
-                                    NextPatrolPoint();
-                                    agent.speed = patrolSpeed;
-                                }
-                            }
-                        }
-                    }
-                }
-
+                StartCoroutine(Chasing());
                 if (agent.remainingDistance < 0.5f)
                     NextPatrolPoint();
                 break;
@@ -98,24 +75,11 @@ public class EnemyPatrol : ReaperJr
                 break;
 
             case EnemyType.FLEE:
-                Vector3 runDirection = Vector3.zero;
-                if (toPlayer <= detectRange)
+                StartCoroutine(Flee());
+                if (agent.remainingDistance < 0.5f)
                 {
-                    agent.speed = chasingSpeed;
-                    runDirection = (transform.position - _PLAYER.gameObject.transform.position);
-                    Vector3 newPosition = transform.position + runDirection;
-                    agent.SetDestination(newPosition);
-                    if (agent.remainingDistance < 0.5f)
-                        NextPatrolPoint();
-                }
-
-                else
-                {
-                    if (agent.remainingDistance < 0.5f)
-                    {
-                        NextPatrolPoint();
-                        agent.speed = patrolSpeed;
-                    }
+                    NextPatrolPoint();
+                    agent.speed = patrolSpeed;
                 }
                 break;
         }            
@@ -129,5 +93,87 @@ public class EnemyPatrol : ReaperJr
             patrolIndex++;
             patrolIndex %= patrolPoints.Count; //cycling index number.
         }
+    }
+
+    public IEnumerator Flee()
+    {
+        Vector3 runDirection = Vector3.zero;
+        if (toPlayer <= awareDistance)
+        {
+            if (isMouse)
+            {
+                _AUDIO.Play("MouseRunning");
+            }
+
+            agent.speed = chasingSpeed;
+            runDirection = (transform.position - _PLAYER.gameObject.transform.position);
+            Vector3 newPosition = transform.position + runDirection;
+            agent.SetDestination(newPosition);
+            if (agent.remainingDistance < 0.5f)
+                NextPatrolPoint();
+        } 
+        else
+            _AUDIO.StopPlay("MouseRunning");
+
+        yield return null;
+    }
+
+    public IEnumerator Chasing()
+    {
+        if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
+        {
+            if (isDog)
+            {
+                _AUDIO.Play("Rattling");
+            }
+
+            if (isMouse)
+            {
+                _AUDIO.Play("MouseRunning");
+            }
+            if (!_GAME.isInvincible)
+            {
+                transform.LookAt(player);
+
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
+                {
+                    if (hit.transform.tag == "Player")
+                    {
+                        if (toPlayer > touchPlayerDist) //preventing enemy pushes character
+                        {
+                            if(isDog)
+                            {
+                                _AUDIO.StopPlay("Rattling");
+                                _AUDIO.Play("DogSnarl");
+                            }
+                            agent.destination = player.position;
+                            agent.speed = chasingSpeed;
+                        }
+                        else
+                        {
+                            NextPatrolPoint();
+                            agent.speed = patrolSpeed;
+                        }
+                    }
+                }
+            }
+        }
+
+        else
+        {
+            if (isDog)
+            {
+                _AUDIO.StopPlay("DogSnarl");
+                _AUDIO.StopPlay("Rattling");
+            }
+
+            if(isMouse)
+            {
+                _AUDIO.StopPlay("MouseRunning");
+            }
+
+        }
+        yield return null;
     }
 }

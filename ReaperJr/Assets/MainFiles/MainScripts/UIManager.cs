@@ -6,12 +6,18 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
-public enum HintForActions {DEFAULT, CANHOLD, RELEASING, SWITCH, OPEN, COLLECTSOULS, COLLECTITEMS, HEAVYOBJNOTE, REQUIRKEY, DISTANCEREQUIRED}
+public enum HintForMovingBoxes {DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE}
+public enum HintForItemCollect {DEFAULT, COLLECTSOULS, COLLECTITEMS}
+public enum HintForInteraction {DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM}
 
 public class UIManager : Singleton<UIManager>
 {
     [HideInInspector]
-    public HintForActions currInfo;
+    public HintForMovingBoxes currMovingInfo;
+    [HideInInspector]
+    public HintForItemCollect currCollectInfo;
+    [HideInInspector]
+    public HintForInteraction currInteractInfo;
     public float fadeInTime = 0.5f;
     public float fadeOutTime = 0.2f;
     public Ease fadeInEase;
@@ -33,9 +39,9 @@ public class UIManager : Singleton<UIManager>
     public Image abilityCD;
     public GameObject scytheMasks, abilityMask;  //scythe icon masks
     public GameObject hintsPanel;
-    public TextMeshProUGUI hint1; //keyboard input
-    public TextMeshProUGUI hint2; // mouse input
-    public TextMeshProUGUI hint3; //object notes
+    public TextMeshProUGUI hint1, hint2; //moving object hint
+    public TextMeshProUGUI hint3, hint4; // collecting object hint
+    public TextMeshProUGUI hint5, hint6; //interact hint
     public GameObject keyItemPanel;
     public List<Image> keyItems = new List<Image>();
     [HideInInspector]
@@ -214,10 +220,12 @@ public class UIManager : Singleton<UIManager>
     {
         GameEvents.OnGameStateChange += OnGameStateChange;
         GameEvents.OnScytheEquipped += OnScytheEquipped;
-        GameEvents.OnHintShown += OnHintShown;
+        GameEvents.OnMovableHintShown += OnMovableHintShown;
         GameEvents.OnScytheThrow += OnScytheThrown;
         GameEvents.OnKeyItemCollected += OnKeyItemCOllected;
         GameEvents.OnSoulCollected += OnSoulCollected;
+        GameEvents.OnCollectHintShown += OnCollectHintShown;
+        GameEvents.OnInteractHintShown += OnInterActionHintShown;
         GameEvents.OnCrossHairOut += OnCrossHairOut;
     }
 
@@ -225,11 +233,13 @@ public class UIManager : Singleton<UIManager>
     {
         GameEvents.OnGameStateChange -= OnGameStateChange;
         GameEvents.OnScytheEquipped -= OnScytheEquipped;
-        GameEvents.OnHintShown -= OnHintShown;
+        GameEvents.OnMovableHintShown -= OnMovableHintShown;
         GameEvents.OnScytheThrow -= OnScytheThrown;
         GameEvents.OnKeyItemCollected -= OnKeyItemCOllected;
         GameEvents.OnSoulCollected -= OnSoulCollected;
         GameEvents.OnCrossHairOut -= OnCrossHairOut;
+        GameEvents.OnCollectHintShown -= OnCollectHintShown;
+        GameEvents.OnInteractHintShown -= OnInterActionHintShown;
     }
     
     void OnCrossHairOut(bool crosshair)
@@ -430,51 +440,86 @@ public class UIManager : Singleton<UIManager>
 
     public void SetHintPanel()
     {
-        hint1.text = null;
-        hint1.color = Color.white;
-        hint2.text = null;
-        hint2.color = Color.white;
-        hint3.text = null;
-        hint3.color = Color.white;
+        GameEvents.ReportMovableHintShown(HintForMovingBoxes.DEFAULT);
+        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+        GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
     }
     
-    public void OnHintShown (HintForActions action)
+    public void OnMovableHintShown (HintForMovingBoxes action)
     {
-        currInfo = action;
+        currMovingInfo = action;
         switch(action)
         {
-            case HintForActions.CANHOLD:
+            case HintForMovingBoxes.DEFAULT:
+                hint1.text = null;
+                hint1.color = Color.white;
+                hint2.text = null;
+                hint2.color = Color.white;
+                break;
+            case HintForMovingBoxes.CANHOLD:
                 hint1.text = "Press E key to Hold Object in front.";
                 break;
-            case HintForActions.RELEASING:
+            case HintForMovingBoxes.RELEASING:
                 hint1.text = "Press E key to Release Object in front.";
                 break;
-            case HintForActions.HEAVYOBJNOTE:
+            case HintForMovingBoxes.HEAVYOBJNOTE:
                 hint1.text = "Press E key to Release Object in front.";
                 hint2.text = "You can ONLY drag or push this object.";
                 hint2.color = new Color(237f / 255f, 195f / 255f, 1);
                 break;
-            case HintForActions.SWITCH:
-                hint3.text = "Right click to initiating it";
+        }
+    }
+
+    public void OnCollectHintShown(HintForItemCollect action)
+    {
+        currCollectInfo = action;
+        switch (action)
+        {
+            case HintForItemCollect.DEFAULT:
+                hint4.text = null;
+                hint4.color = Color.white;
+                hint3.text = null;
+                hint3.color = Color.white;
                 break;
-            case HintForActions.OPEN:
-                hint2.text = "Right click to open it";
-                break;
-            case HintForActions.COLLECTSOULS:
-                hint2.text = "Right click to collect the soul(s).";
+            case HintForItemCollect.COLLECTSOULS:
+                hint4.text = "Right click to collect the soul(s).";
                 hint3.text = "Don't collect fake soul(s).";
-                hint3.color = new Color(237f / 255f, 195f/ 255f, 1f);
+                hint3.color = new Color(237f / 255f, 195f / 255f, 1f);
                 break;
-            case HintForActions.COLLECTITEMS:
-                hint2.text = "Right click to collect the object(s).";
+            case HintForItemCollect.COLLECTITEMS:
+                hint4.text = "Right click to collect the object(s).";
                 break;
-            case HintForActions.REQUIRKEY:
-                hint3.text = "Requir Keyitems!";
-                hint3.color = new Color(237f / 255f, 195f / 255f, 1);
+        }
+    }
+
+    public void OnInterActionHintShown(HintForInteraction action)
+    {
+        currInteractInfo = action;
+        switch (action)
+        {
+            case HintForInteraction.DEFAULT:
+                hint5.text = null;
+                hint5.color = Color.white;
+                hint6.text = null;
+                hint6.color = Color.white;
                 break;
-            case HintForActions.DISTANCEREQUIRED:
-                hint3.text = "You need to get closer.";
-                hint3.color = new Color(237f / 255f, 195f / 255f, 1);
+            case HintForInteraction.SWITCH:
+                hint5.text = "Right click to initiating it";
+                break;
+            case HintForInteraction.OPEN:
+                hint6.text = "Right click to open it";
+                break;
+            case HintForInteraction.REQUIRKEY:
+                hint5.text = "Requir Keyitems!";
+                hint5.color = new Color(237f / 255f, 195f / 255f, 1);
+                break;
+            case HintForInteraction.DISTANCEREQUIRED:
+                hint5.text = "You need to get closer.";
+                hint5.color = new Color(237f / 255f, 195f / 255f, 1);
+                break;
+            case HintForInteraction.KEYITEM:
+                hint6.text = "This is a Key Item!";
+                hint6.color = Color.red;
                 break;
         }
     }

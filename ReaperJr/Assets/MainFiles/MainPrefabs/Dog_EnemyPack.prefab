@@ -58,6 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e4fcfcf281e6b145b02d2dc78413c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isToyGun: 0
+  isDog: 1
+  isMouse: 0
 --- !u!1 &1439106824707339421
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +273,6 @@ MonoBehaviour:
   player: {fileID: 0}
   agent: {fileID: 0}
   awareDistance: 8
-  detectRange: 5
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -281,6 +283,9 @@ MonoBehaviour:
   patrolSpeed: 3.5
   chasingSpeed: 5
   touchPlayerDist: 1
+  isMouse: 0
+  isDog: 1
+  isToySoldier: 0
 --- !u!195 &6551601889124659376
 NavMeshAgent:
   m_ObjectHideFlags: 0

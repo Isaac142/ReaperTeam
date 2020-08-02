@@ -33,20 +33,20 @@ public class AtticKeyHoleControl : ReaperJr
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                _UI.SetHintPanel();
+                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
                 if (hit.transform == this.transform)
                 {
                     if (controller.keyItems[keyIndex].isCollected )
                     {
                         if (!controller.keyItems[keyIndex].isInPosition)
                         {
-                            GameEvents.ReportHintShown(HintForActions.DISTANCEREQUIRED);
+                            GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
                             if (playerDist <= clickDist)
-                                GameEvents.ReportHintShown(HintForActions.SWITCH);
+                                GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
                         }
                     }
                     else
-                        GameEvents.ReportHintShown(HintForActions.REQUIRKEY);
+                        GameEvents.ReportInteractHintShown(HintForInteraction.REQUIRKEY);
                 }
             }
 

@@ -23,6 +23,7 @@ public class RoomCollider : ReaperJr
 
     private enum RoomType { LEVEL, ROOM }
     private RoomType roomType;
+    public bool notCalculate = false;
 
     private void Awake()
     {
@@ -71,8 +72,11 @@ public class RoomCollider : ReaperJr
                     break;
 
                 case RoomType.ROOM:
-                    _CAMERA.roomPosition = roomPosition;
-                    StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
+                    if (!notCalculate)
+                    {
+                        _CAMERA.roomPosition = roomPosition;
+                        StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
+                    }
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
                     break;
             }

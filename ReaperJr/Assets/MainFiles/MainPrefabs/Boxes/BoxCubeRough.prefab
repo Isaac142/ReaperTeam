@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 2315640926639288717}
   - component: {fileID: 8297819859924887749}
   - component: {fileID: 6648528136248158549}
+  - component: {fileID: 5194808751328990653}
   m_Layer: 0
   m_Name: Colliders
   m_TagString: Untagged
@@ -357,7 +358,7 @@ BoxCollider:
   m_GameObject: {fileID: 9093478853797024656}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.7798772, y: 1.7908973, z: 0.15280747}
   m_Center: {x: 0.0019766092, y: -0.00000035762787, z: -0.8967694}
@@ -370,7 +371,7 @@ BoxCollider:
   m_GameObject: {fileID: 9093478853797024656}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.7798772, y: 1.7908973, z: 0.15130258}
   m_Center: {x: 0.0019766092, y: -0.00000035762787, z: 0.9118074}
@@ -383,7 +384,7 @@ BoxCollider:
   m_GameObject: {fileID: 9093478853797024656}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.7798772, y: 0.094117165, z: 1.8904482}
   m_Center: {x: 0.0019766092, y: -0.84839046, z: -0.0028293133}
@@ -396,7 +397,7 @@ BoxCollider:
   m_GameObject: {fileID: 9093478853797024656}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.13511169, y: 1.7908973, z: 1.8904482}
   m_Center: {x: -0.8460265, y: -0.00000035762787, z: -0.0028293133}
@@ -409,10 +410,23 @@ BoxCollider:
   m_GameObject: {fileID: 9093478853797024656}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.12747574, y: 1.7908973, z: 1.8904482}
   m_Center: {x: 0.8489932, y: -0.00000035762787, z: -0.0028293133}
+--- !u!65 &5194808751328990653
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9093478853797024656}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0.107757926, z: 0}
 --- !u!1 &9107369847302582848
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +447,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3338159884231868358
 Transform:
   m_ObjectHideFlags: 0

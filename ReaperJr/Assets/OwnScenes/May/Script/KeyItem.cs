@@ -64,7 +64,7 @@ public class KeyItem : ReaperJr
         if (keyItem == this)
         {           
             this.gameObject.SetActive(false);
-            _UI.SetHintPanel();
+            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         }
     }
 }

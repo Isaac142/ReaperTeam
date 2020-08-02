@@ -65,7 +65,6 @@ MonoBehaviour:
   player: {fileID: 0}
   agent: {fileID: 0}
   awareDistance: 8
-  detectRange: 5
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -76,6 +75,9 @@ MonoBehaviour:
   patrolSpeed: 2.5
   chasingSpeed: 8
   touchPlayerDist: 1
+  isMouse: 1
+  isDog: 0
+  isToySoldier: 0
 --- !u!195 &3257470859194891787
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -93,7 +93,7 @@ public class GameManager : Singleton<GameManager>
         _energy = maxEnergy;
         _cDTimer = coolDown;
         onCD = false;
-        _GAME.totalSoulNo = -1;
+        _GAME.totalSoulNo = 0;
         Time.timeScale = 1;
         GameEvents.ReportGameStateChange(GameState.INGAME);
     }
@@ -162,20 +162,21 @@ public class GameManager : Singleton<GameManager>
 
     void PlayerDead()
     {
-        if (isInvincible) //attempt to stop repeat dead-in game state change.
-            GameEvents.ReportGameStateChange(GameState.INGAME); 
         _AUDIO.Play("PlayerReset");
         _timer -= punishmentTime;
+        playerActive = false;
+        _UI.SetHintPanel();
         //_PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
         
         if(checkPoints.Count <= 0) // return to starting point if no saved check point.
         {
-            _PLAYER.transform.position = _PLAYER.startingPos;
+            _PLAYER.Restart();
+            StartCoroutine(DeadtoInGame());
         }
         else
             _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3)
             .OnComplete(() =>
-             GameEvents.ReportGameStateChange(GameState.INGAME));
+             GameEvents.ReportGameStateChange(GameState.RESUME));
  
         deadParticleEffect.SetActive(true);
         StartCoroutine(InvincibleTimer());
@@ -190,7 +191,10 @@ public class GameManager : Singleton<GameManager>
                 deadParticleEffect.SetActive(false);
                 break;
             case GameState.DEAD:
-                PlayerDead();
+                if (isInvincible) //attempt to stop repeat dead-in game state change.
+                    GameEvents.ReportGameStateChange(GameState.INGAME);
+                else
+                    PlayerDead();
                 break;
             case GameState.PAUSED:
                 PauseGame();
@@ -256,5 +260,11 @@ public class GameManager : Singleton<GameManager>
         isInvincible = true;
         yield return new WaitForSeconds(invincibleTime);
         isInvincible = false;
+    }
+
+    IEnumerator DeadtoInGame()
+    {
+        yield return new WaitForSeconds(3f);
+        GameEvents.ReportGameStateChange(GameState.RESUME);
     }
 }

@@ -22,7 +22,6 @@ public class AtticDoorSwitchCollider : ReaperJr
         if (other.tag == "Player")
         {
             controller.playerApproach = false;
-            _UI.SetHintPanel();
         }
     }
 }

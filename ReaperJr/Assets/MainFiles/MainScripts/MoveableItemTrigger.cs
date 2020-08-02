@@ -16,7 +16,8 @@ public class MoveableItemTrigger : ReaperJr
     {
         if (other.tag == "Player")
         {
-            itemMovement.playerIn = true;
+            if(itemMovement != null)
+                itemMovement.playerIn = true;
         }
     }
 
@@ -24,8 +25,8 @@ public class MoveableItemTrigger : ReaperJr
     {
         if (other.tag == "Player")
         {
-            itemMovement.playerIn = false;
-            _UI.SetHintPanel();
+            if (itemMovement != null)
+                itemMovement.playerIn = false;
         }
 
     }

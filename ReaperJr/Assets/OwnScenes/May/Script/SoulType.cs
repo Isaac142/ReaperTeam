@@ -106,7 +106,7 @@ public class SoulType : ReaperJr
             //isCollected = true;
             //UIManager.INSTANCE.UpdateSouls();
             this.gameObject.SetActive(false);
-            _UI.SetHintPanel();
+            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         }      
     }
 }
