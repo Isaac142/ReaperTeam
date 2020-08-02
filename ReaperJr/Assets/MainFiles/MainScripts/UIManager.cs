@@ -40,6 +40,7 @@ public class UIManager : Singleton<UIManager>
     public List<Image> keyItems = new List<Image>();
     [HideInInspector]
     public List<KeyItem> currKeyItems = new List<KeyItem>();
+    public Image crosshairIcon;
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
@@ -217,6 +218,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnScytheThrow += OnScytheThrown;
         GameEvents.OnKeyItemCollected += OnKeyItemCOllected;
         GameEvents.OnSoulCollected += OnSoulCollected;
+        GameEvents.OnCrossHairOut += OnCrossHairOut;
     }
 
     private void OnDisable()
@@ -227,8 +229,16 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnScytheThrow -= OnScytheThrown;
         GameEvents.OnKeyItemCollected -= OnKeyItemCOllected;
         GameEvents.OnSoulCollected -= OnSoulCollected;
+        GameEvents.OnCrossHairOut -= OnCrossHairOut;
     }
-
+    
+    void OnCrossHairOut(bool crosshair)
+    {
+        if (crosshair)
+            crosshairIcon.color = Color.white;
+        else
+            crosshairIcon.color = Color.gray;
+    }
     #region Button Press
     public void Restart()
     {

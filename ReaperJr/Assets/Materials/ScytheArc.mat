@@ -13,15 +13,16 @@ Material:
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2050
+  m_CustomRenderQueue: 3050
   stringTagMap:
-    RenderType: Opaque
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -33,7 +34,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -54,7 +55,7 @@ Material:
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DstBlend: 0
+    - _DstBlend: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -66,14 +67,14 @@ Material:
     - _Smoothness: 0.664
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _Surface: 0
+    - _SrcBlend: 5
+    - _Surface: 1
     - _WorkflowMode: 1
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.7551662, g: 0.48584908, b: 1, a: 1}
+    - _BaseColor: {r: 0.91914004, g: 0.48627448, b: 1, a: 0.5686275}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _EmissionColor: {r: 0.8627451, g: 0.28235295, b: 2.9960785, a: 1}
+    - _EmissionColor: {r: 3.0901961, g: 0.28235295, b: 2.9960785, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
 --- !u!114 &8855059143197401887
 MonoBehaviour:

@@ -70,12 +70,14 @@ public class ScytheController : ReaperJr
     Transform crosshairTransform;
 
     bool lineOut = false;
+    
     // Use this for initialization
     void Start()
     {
         //Gets the line renderer component
         lineRenderer = GetComponent<LineRenderer>();
         lineOut = false;
+        GameEvents.RepoartCrossHairOut(lineOut);
 
         if (crosshair != null)
             crosshairTransform = crosshair.GetComponent<Transform>();
@@ -121,17 +123,12 @@ public class ScytheController : ReaperJr
                 throw new System.OverflowException("Cannot use a negative number in the 'Max Number Of Points' parameter of the Trajectory Predictor script!");
 
             }
-
         }
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (!_GAME.playerActive || _GAME.isPaused || _GAME.onCD)
-        //  return;
-
         //Sets "angle" and "phi" to the Euler equivalent of the object's rotation
         if (hasFired == false)
         {
@@ -204,12 +201,9 @@ public class ScytheController : ReaperJr
                 //Makes sure the current vector point is not intersecting an object with one of the layersToHit layer
                 if (Physics.CheckSphere(vector, 0, layersToHit) == false)
                 {
-
                     if (crosshair != null)
                     {
-
                         crosshair.GetComponent<Renderer>().enabled = false;
-
                     }
 
                     lastVector = vector;
@@ -217,7 +211,6 @@ public class ScytheController : ReaperJr
                     //Iterates i if lineIndex is more than 0 so the
                     if (lineIndex > 0)
                     {
-
                         i += timeBetweenPoints;
 
                         //Sets the y displacement to the kinematic equation including the vertical velocity component								
@@ -286,7 +279,7 @@ public class ScytheController : ReaperJr
                 else
                 {
 
-                    if (crosshair != null)
+                    if (crosshair != null && holdingScythe)
                     {
                         crosshair.GetComponent<Renderer>().enabled = true;
 
@@ -295,8 +288,12 @@ public class ScytheController : ReaperJr
                         crosshairTransform.position = hit.point;
                         crosshairTransform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                         crosshair.transform.position = hit.point;
-                        //crosshair.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                        crosshair.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                     }
+
+                    else if(crosshair != null && !holdingScythe)
+                        crosshair.GetComponent<Renderer>().enabled = true;
+
                     break;
                 }
             }
@@ -328,48 +325,65 @@ public class ScytheController : ReaperJr
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && _GAME.playerActive)
+        {
             lineOut = !lineOut;
+            GameEvents.RepoartCrossHairOut(lineOut);
+        }
+
         if (lineOut)
+        {
             lineRenderer.enabled = true;
+            crosshair.SetActive(true);
+            _CAMERA.scythe = crosshair.transform;   // when showing the renderline, camera stays at the middle between character and crosshair.
+        }
         else
+        {
+            lineRenderer.enabled = false;
+            crosshair.SetActive(false);
+            _CAMERA.scythe = scythe.transform;
+        }
+
+        if (!holdingScythe)
             lineRenderer.enabled = false;
 
-        if (Input.GetMouseButtonDown(0) && _GAME.playerActive)
+        if (Input.GetMouseButtonDown(0) && _GAME.playerActive && _GAME.gameState == GameState.INGAME)
         {
             if (holdingScythe && !_GAME.onCD)
             {
                 _AUDIO.Play("ScytheThrow");
                 _PLAYER.anim.SetTrigger("ScytheThrow");
+                scythe.transform.parent = null;
                 Physics.gravity = new Vector3(0, -gravity.y, 0);
                 scythe.GetComponent<Scythe>().Launch(velocity);
                 holdingScythe = false;
+
                 GameEvents.ReportScytheThrown(true);
             }
 
             else if (!holdingScythe)
             {
-                //Physics.gravity.Set(0, -9.81f, 0);
-                scythe.transform.SetParent(this.transform);
-                scythe.transform.localPosition = Vector3.zero;
-                scythe.transform.localEulerAngles = Vector3.zero;
-                scythe.GetComponent<Rigidbody>().isKinematic = true;
-                scythe.GetComponent<Rigidbody>().velocity.Set(0, 0, 0);
-                holdingScythe = true;
-                GameEvents.ReportScytheThrown(false);
+                StartCoroutine(ResetScythe());
             }
-
-
         }
         #endregion
 
         //float newF = Map(velocity, 10, 50, 0, 1);
         //float 
         //Debug.Log(newF);
-
-
-
     }
 
+    IEnumerator ResetScythe()
+    {
+        yield return new WaitForSeconds(_PLAYER.timeToMove);
+        //Physics.gravity.Set(0, -9.81f, 0);
+        scythe.transform.SetParent(this.transform);
+        scythe.transform.localPosition = Vector3.zero;
+        scythe.transform.localEulerAngles = Vector3.zero;
+        scythe.GetComponent<Rigidbody>().isKinematic = true;
+        scythe.GetComponent<Rigidbody>().velocity.Set(0, 0, 0);
+        holdingScythe = true;
+        GameEvents.ReportScytheThrown(false);
+    }
     /// <summary>
     /// Maps a value from a range to 0f..1f
     /// </summary>

@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class Scythe : MonoBehaviour
+public class Scythe : ReaperJr
 {
     public void Launch(float _velocity)
     {
