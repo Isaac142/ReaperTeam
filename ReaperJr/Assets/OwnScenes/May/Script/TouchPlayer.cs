@@ -13,12 +13,15 @@ public class TouchPlayer : ReaperJr
 
     private void OnTriggerEnter(Collider other)
     {
-        if (parentScript != null && _GAME.gameState == GameState.INGAME)
+        if (parentScript != null)
         {
-            if (parentScript.enabled == true)
+            if (other.tag == "Player")
             {
-                if (other.tag == "Player")
-                    GameEvents.ReportGameStateChange(GameState.DEAD);
+                if (!parentScript.agent.isStopped && _GAME.gameState == GameState.INGAME)
+                {
+                    if (!_GAME.isInvincible)
+                        GameEvents.ReportGameStateChange(GameState.DEAD);
+                }
             }
         }
     }

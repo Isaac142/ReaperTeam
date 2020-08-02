@@ -56,6 +56,7 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
+            _UI.SetSouls(souls);
             if (_UI.hintsPanel.GetComponent<CanvasGroup>().alpha != 1f)
                 _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;
             WallDisappear();
@@ -75,7 +76,6 @@ public class RoomCollider : ReaperJr
                     _CAMERA.SetCameraState(CameraControlScript.CameraState.INROOM);
                     break;
             }
-            _UI.SetSouls(souls);
         }
     }
 
@@ -100,7 +100,10 @@ public class RoomCollider : ReaperJr
             if(souls.Count>0)
             {
                 if (_UI.soulPanel.GetComponent<CanvasGroup>().alpha != 1f)
+                {
                     _UI.SetSouls(souls);
+                    _UI.soulPanel.GetComponent<CanvasGroup>().alpha = 1f;
+                }
             }
             if (_UI.hintsPanel.GetComponent<CanvasGroup>().alpha != 1f)
                 _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;

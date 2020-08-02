@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
     public Sound[] sounds;
 
@@ -22,7 +22,12 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        Play("Theme");   
+        RestartSetting(); 
+    }
+
+    public void RestartSetting()
+    {
+        Play("Theme");
     }
 
     public void Play (string name)

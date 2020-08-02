@@ -81,7 +81,9 @@ public class CameraControlScript : Singleton<CameraControlScript>
 
         player = _PLAYER.gameObject.transform;
         scythe = _PLAYER.scythe.transform;
+        DOTween.SetTweensCapacity(2000, 100);
     }
+
     private void Update()
     {
         #region TurnToTransparent

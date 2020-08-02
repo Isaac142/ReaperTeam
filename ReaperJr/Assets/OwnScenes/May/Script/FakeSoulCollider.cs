@@ -12,12 +12,9 @@ public class FakeSoulCollider : ReaperJr
     void Start()
     {
         foreach (GameObject dummy in dummies)
-        {
             enemyPartrolScripts.Add(dummy.transform.GetComponent<EnemyPatrol>());
-        }
-
         foreach (EnemyPatrol script in enemyPartrolScripts)
-            script.enabled = false;
+            script.agent.isStopped = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,11 +25,7 @@ public class FakeSoulCollider : ReaperJr
             foreach (EnemyPatrol script in enemyPartrolScripts)
             {
                 if (script != null)
-                {
-                    script.enabled = true;
                     script.agent.isStopped = false;
-
-                }
             }
         }
     }
@@ -46,10 +39,7 @@ public class FakeSoulCollider : ReaperJr
             foreach (EnemyPatrol script in enemyPartrolScripts)
             {
                 if (script != null)
-                {
                     script.agent.isStopped = true;
-                    script.enabled = false;                   
-                }
             }
         }
     }

@@ -6,7 +6,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
 {
     #region Variables
     //public TrajectoryPredictor trajectory;
-    AudioManager audioManager;
 
     Rigidbody controller;
     public Transform firePoint;
@@ -52,15 +51,14 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public Animator anim;
 
     public bool walkHack;
+    private bool teleported = false;
     #endregion
 
     #region Start
     //Calling on the CharacterController Component
     void Start()
     {
-        audioManager = FindObjectOfType<AudioManager>();
-
-        Debug.DrawRay(transform.position, transform.right, Color.red);
+        //Debug.DrawRay(transform.position, transform.right, Color.red);
         controller = GetComponent<Rigidbody>();
         controller.mass = _GAME.playerMass;
         scytheController = scythe.GetComponentInParent<ScytheController>();
@@ -80,6 +78,9 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public void Restart()
     {
         transform.position = startingPos;
+        teleported = false;
+        canCollect = false;
+        fallDist = 0f;
     }
     #endregion
 
@@ -92,7 +93,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
         if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
         {
-            audioManager.Play("Jump");
+            _AUDIO.Play("Jump");
             distToGround = 0f;
             isJumping = true;
             if (isGrounded)
@@ -104,7 +105,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             if (_GAME.Energy >= _GAME.teleportingEnergy)
             {
                 anim.SetTrigger("Teleport");
-                audioManager.Play("Teleport1");
+                _AUDIO.Play("Teleport1");
                 StartCoroutine(TeleportToScythe());
                 _GAME.Energy -= _GAME.teleportingEnergy;
                 _GAME.onCD = true;
@@ -459,7 +460,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                         if (hits[i].transform.tag == "Soul")
                         {
-                            audioManager.Play("SoulCollect");
+                            _AUDIO.Play("SoulCollect");
                             GameEvents.ReportScytheEquipped(true);
                             hits[i].transform.GetComponent<SoulType>().isCollected = true;
                             GameEvents.ReportSoulCollected(hits[i].transform.GetComponent<SoulType>());
@@ -476,7 +477,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                         if (hits[i].transform.tag == "HiddenItem")
                         {
-                            audioManager.Play("SpecialCollect");
+                            _AUDIO.Play("SpecialCollect");
                             _GAME.Timer += _GAME.rewardTime;
                             Destroy(hits[i].transform.gameObject);
                             _UI.SetHintPanel();
@@ -486,7 +487,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                         {
                             if (!hits[i].transform.GetComponent<KeyItem>().isCollected)
                             {
-                                audioManager.Play("SpecialCollect");
+                                _AUDIO.Play("SpecialCollect");
                                 hits[i].transform.GetComponent<KeyItem>().isCollected = true;
                                 GameEvents.ReportKeyItemCollected(hits[i].transform.GetComponent<KeyItem>());
                             }
@@ -521,6 +522,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Teleport
     IEnumerator TeleportToScythe()
     {
+        teleported = true;
         //Get position of the player
         Vector3 positionOfPlayer = transform.position;
         //Get position of the scythe
@@ -531,8 +533,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
         {
             transform.position = Vector3.Lerp(positionOfPlayer, positionOfScythe, timer / timeToMove);
             timer += Time.deltaTime;
-            yield return null;
+            //yield return null;
         }
+        yield return new WaitForSeconds(timeToMove);
+        teleported = false;
     }
     #endregion
 
@@ -568,7 +572,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     #region FallDistanceCalculation
     void FallDistCalculate()
-    {
+    {      
         bool groundedCheck = false;
         if(!isGrounded)
         {
@@ -588,6 +592,9 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 fallDist = 0f;
             }
         }
+
+        if (_GAME.isInvincible || teleported)
+            fallDist = 0f;
     }
     #endregion
 

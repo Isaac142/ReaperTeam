@@ -142,7 +142,7 @@ public class ItemMovement : ReaperJr
             onTop = (ver.collider.transform.position == transform.position) ? true : false;
 
         RaycastHit hor;
-        Vector3 topPoint = _PLAYER.transform.position + Vector3.up * (height - 0.01f);
+        Vector3 topPoint = _PLAYER.transform.position + Vector3.up * (height * 0.6f);
         Vector3 bottomPoint = _PLAYER.transform.position + Vector3.up * 0.01f;
         float radius = _PLAYER.GetComponent<CapsuleCollider>().radius - 0.03f;
         //test if player is in front and close enough to the object
@@ -287,7 +287,7 @@ public class ItemMovement : ReaperJr
 
         isHolding = false;
         GameEvents.ReportScytheEquipped(true);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         _GAME.isHolding = false;
 
         DefaultState();

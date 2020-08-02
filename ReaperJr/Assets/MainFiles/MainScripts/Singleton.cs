@@ -9,6 +9,7 @@ public class ReaperJr:MonoBehaviour
     protected static CameraControlScript _CAMERA { get { return CameraControlScript.INSTANCE; } }
     protected static PlayerMovement _PLAYER { get { return PlayerMovement.INSTANCE; } }
     protected static UIManager _UI { get { return UIManager.INSTANCE; } }
+    protected static AudioManager _AUDIO { get { return AudioManager.INSTANCE; } }
 }
 
 public class Singleton <T>:ReaperJr where T:MonoBehaviour

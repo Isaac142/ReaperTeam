@@ -63,6 +63,9 @@ public class GameManager : Singleton<GameManager>
     public List<Vector3> checkPoints = new List<Vector3>();
     public int totalSoulNo = 0;
     public Transform bottomReset;
+    [HideInInspector]
+    public bool isInvincible = false;
+    public float invincibleTime = 5f;
 
     private void OverrideAwke()
     {
@@ -76,11 +79,12 @@ public class GameManager : Singleton<GameManager>
         if (cursor != null)
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         ResetGame();
-        GameEvents.ReportGameStateChange(GameState.INGAME);
     }
 
     public void ResetGame()
     {
+        _UI.StartSetUI();
+        _AUDIO.RestartSetting();
         _PLAYER.Restart();
         holdingLightObject = false;
         isHolding = false;
@@ -89,8 +93,9 @@ public class GameManager : Singleton<GameManager>
         _energy = maxEnergy;
         _cDTimer = coolDown;
         onCD = false;
-        _GAME.totalSoulNo = 0;
+        _GAME.totalSoulNo = -1;
         Time.timeScale = 1;
+        GameEvents.ReportGameStateChange(GameState.INGAME);
     }
 
     // Update is called once per frame
@@ -157,7 +162,9 @@ public class GameManager : Singleton<GameManager>
 
     void PlayerDead()
     {
-        FindObjectOfType<AudioManager>().Play("PlayerReset");
+        if (isInvincible) //attempt to stop repeat dead-in game state change.
+            GameEvents.ReportGameStateChange(GameState.INGAME); 
+        _AUDIO.Play("PlayerReset");
         _timer -= punishmentTime;
         //_PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
         
@@ -166,13 +173,12 @@ public class GameManager : Singleton<GameManager>
             _PLAYER.transform.position = _PLAYER.startingPos;
         }
         else
-            _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3);
-        //    .OnComplete(()=>
-        //     GameEvents.ReportGameStateChange(GameState.INGAME));       
-        //
-
-        StartCoroutine(DeadToInGame());
+            _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3)
+            .OnComplete(() =>
+             GameEvents.ReportGameStateChange(GameState.INGAME));
+ 
         deadParticleEffect.SetActive(true);
+        StartCoroutine(InvincibleTimer());
     }
 
     public void OnGameStateChange(GameState state)
@@ -242,11 +248,13 @@ public class GameManager : Singleton<GameManager>
     {
         GameEvents.OnGameStateChange -= OnGameStateChange;
         GameEvents.OnScytheEquipped -= OnScytheEquipped;
+        GameEvents.OnScytheThrow -= OnScytheThrow;
     }
 
-    IEnumerator DeadToInGame()
+    IEnumerator InvincibleTimer() //invincible after respawn
     {
-        yield return new WaitForSeconds(3f);
-        GameEvents.ReportGameStateChange(GameState.INGAME);
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibleTime);
+        isInvincible = false;
     }
 }

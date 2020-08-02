@@ -5,16 +5,24 @@ using UnityEngine;
 public class ToySoldierAnimationControl : ReaperJr
 {
     public FakeSoulCollider controlScript;
-    public Animator anme;
-    
+    public Animator anim;
+
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+        if (anim == null)
+            this.enabled = false;
+    }
+
     // Update is called once per frame
+
     void Update()
     {
         if(controlScript.isWalking)
         {
-            anme.SetBool("Walking", true);
+            anim.SetBool("Walking", true);
         }
         else
-            anme.SetBool("Walking", false);
+            anim.SetBool("Walking", false);
     }
 }

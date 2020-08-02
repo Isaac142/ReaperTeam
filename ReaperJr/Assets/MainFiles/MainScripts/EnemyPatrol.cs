@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class EnemyPatrol : ReaperJr
 {
-    AudioManager audioManager;
 
     public Transform player;
     [HideInInspector]
@@ -27,7 +26,6 @@ public class EnemyPatrol : ReaperJr
     // Start is called before the first frame update
     void Start()
     {
-        audioManager = FindObjectOfType<AudioManager>();
         agent = GetComponent<NavMeshAgent>();
         if (transform.tag == "Enemy")
         {
@@ -43,6 +41,13 @@ public class EnemyPatrol : ReaperJr
         }
 
         player = _PLAYER.gameObject.transform;
+
+        switch(enemyType)
+        {
+            case EnemyType.DUMMY:
+                agent.isStopped = true;
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -57,23 +62,26 @@ public class EnemyPatrol : ReaperJr
             case EnemyType.ENEMY:
                 if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
                 {
-                    transform.LookAt(player);
-
-                    RaycastHit hit;
-                    if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
+                    if (!_GAME.isInvincible)
                     {
-                        if (hit.transform.tag == "Player")
+                        transform.LookAt(player);
+
+                        RaycastHit hit;
+                        if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
                         {
-                            audioManager.Play("PlayerImpact");
-                            if (toPlayer > touchPlayerDist) //preventing enemy pushes character
+                            if (hit.transform.tag == "Player")
                             {
-                                agent.destination = player.position;
-                                agent.speed = chasingSpeed;
-                            }
-                            else
-                            {
-                                NextPatrolPoint();
-                                agent.speed = patrolSpeed;
+                                _AUDIO.Play("PlayerImpact");
+                                if (toPlayer > touchPlayerDist) //preventing enemy pushes character
+                                {
+                                    agent.destination = player.position;
+                                    agent.speed = chasingSpeed;
+                                }
+                                else
+                                {
+                                    NextPatrolPoint();
+                                    agent.speed = patrolSpeed;
+                                }
                             }
                         }
                     }

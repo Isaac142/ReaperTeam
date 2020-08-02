@@ -71,20 +71,7 @@ public class UIManager : Singleton<UIManager>
     // Start is called before the first frame update
     void Start()
     {
-        energyBar.maxValue = _GAME.maxEnergy;
-        energyBar.minValue = 0f;
-
-        CloseAllPanels();
-        DisableSoulIcons();
-        DisableKeyItems();
-        hintsPanel.GetComponent<CanvasGroup>().alpha = 1;
-        SetHintPanel();
-
-        
-        abilityMask.SetActive(false);
-        scytheMasks.SetActive(false);
-
-        infoPanel.SetActive(false);
+        StartSetUI();
     }
 
     // Update is called once per frame
@@ -115,6 +102,25 @@ public class UIManager : Singleton<UIManager>
 
         totalSoulNo.text = _GAME.totalSoulNo.ToString();
     }
+
+    public void StartSetUI()
+    {
+        energyBar.maxValue = _GAME.maxEnergy;
+        energyBar.minValue = 0f;
+
+        CloseAllPanels();
+        DisableSoulIcons();
+        DisableKeyItems();
+        hintsPanel.GetComponent<CanvasGroup>().alpha = 1;
+        SetHintPanel();
+
+        abilityMask.SetActive(false);
+        scytheMasks.SetActive(false);
+
+        infoPanel.SetActive(false);
+        DOTween.SetTweensCapacity(2000, 100);
+    }
+
     public void FadeOutAllPanels()
     {
         FadeOutPanel(inGamePanel);
@@ -201,8 +207,7 @@ public class UIManager : Singleton<UIManager>
             scytheMasks.SetActive(true);
         else
             scytheMasks.SetActive(false);
-    }
-    
+    }   
 
     private void OnEnable()
     {
