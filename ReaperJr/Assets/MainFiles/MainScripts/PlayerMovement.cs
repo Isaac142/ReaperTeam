@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : Singleton<PlayerMovement>
@@ -455,13 +454,15 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     return;
                 else
                 {
-                    if (hits[i].transform.tag == "Soul" || hits[i].transform.tag == "FakeSoul")
+                    if (hits[i].transform.tag == "HiddenItem" || hits[i].transform.tag == "KeyItem")
+                    {
+                        GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);
+                    }
+                    else
                     {
                         if (_UI.currCollectInfo != HintForItemCollect.FAKESOULWARNING)
                             GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTSOULS);
                     }
-                    else
-                        GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);                   
 
                     if (Input.GetMouseButtonDown(1) && !_GAME.isHolding)
                     {
@@ -481,13 +482,11 @@ public class PlayerMovement : Singleton<PlayerMovement>
                         {
                             GameEvents.ReportScytheEquipped(true);
                             if (hits[i].transform.GetComponent<EnemyPatrol>() != null)
-                            {
                                 GameEvents.ReportOnFakeSoulChasing(hits[i].transform.GetComponent<EnemyPatrol>());
-                            }
+                            else if (hits[i].transform.GetComponent<FakeSoulController>() != null)
+                                GameEvents.ReportOnFakeSoulCollected(hits[i].transform.GetComponent<FakeSoulController>());
                             else
-                            {
                                 GameEvents.ReportGameStateChange(GameState.DEAD);
-                            }
                             //do something --> collected amount, visual clue...
                         }
 

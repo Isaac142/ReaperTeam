@@ -23,6 +23,8 @@ public class EnemyPatrol : ReaperJr
     private EnemyType enemyType;
     public bool isMouse = false, isDog = false, isToySoldier = false, isFakeSoul = false;
     public Animator anim;
+    public float fakeSoulTurnTime = 1f;
+    bool isChasing = false; //for both dog and mouse, if is chasing, play running animation, otherwise play walking animation, unless there's other animations.
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +55,8 @@ public class EnemyPatrol : ReaperJr
                 agent.isStopped = true;
                 break;
             case EnemyType.FAKESOUL:
-               // agent.isStopped = true;
+                agent.isStopped = true;
+                anim.SetBool("Red", false);
                 break;
         }
     }
@@ -66,8 +69,12 @@ public class EnemyPatrol : ReaperJr
 
         toPlayer = Vector3.Distance(player.position, transform.position);
 
+        if (isDog)
+            anim.SetBool("DogChase", isChasing);
 
-        switch(enemyType)
+        //if is Mouse ==> setbool to same as ischasing, when ischasing true, mouse is running
+
+        switch (enemyType)
         {
             case EnemyType.ENEMY:
                 StartCoroutine(Chasing());
@@ -91,7 +98,21 @@ public class EnemyPatrol : ReaperJr
                 break;
 
             case EnemyType.FAKESOUL:
-                Chasing();
+                bool inSight = Physics.Linecast(transform.position, player.position);
+                if (toPlayer >= awareDistance || !inSight || _GAME.gameState == GameState.DEAD)
+                {
+                    agent.SetDestination(patrolPoints[0].position);
+                    agent.speed = patrolSpeed;
+                    if (agent.remainingDistance <= 0f)
+                    {
+                        agent.isStopped = true;
+                        anim.SetBool("Red", false);
+                    }
+                }
+                else
+                {
+                    agent.SetDestination(player.transform.position);
+                }
                 break;
         }            
     }
@@ -103,10 +124,6 @@ public class EnemyPatrol : ReaperJr
             agent.destination = patrolPoints[patrolIndex].position;
             patrolIndex++;
             patrolIndex %= patrolPoints.Count; //cycling index number.
-            isDogChasing = false;
-            isDogWalking = true;
-            _AUDIO.Play("Rattling");
-            anim.SetBool("DogWalk", isDogWalking);
         }
     }
 
@@ -115,10 +132,7 @@ public class EnemyPatrol : ReaperJr
         Vector3 runDirection = Vector3.zero;
         if (toPlayer <= awareDistance)
         {
-            if (isMouse)
-            {
-                _AUDIO.Play("MouseRunning");
-            }
+            isChasing = true;
 
             agent.speed = chasingSpeed;
             runDirection = (transform.position - _PLAYER.gameObject.transform.position);
@@ -126,57 +140,60 @@ public class EnemyPatrol : ReaperJr
             agent.SetDestination(newPosition);
             if (agent.remainingDistance < 0.5f)
                 NextPatrolPoint();
-        } 
+
+            if (isMouse)
+                _AUDIO.Play("MouseRunning"); //only play audios when player is around.
+        }
         else
-            _AUDIO.StopPlay("MouseRunning");
+        {
+            isChasing = false;
+            if(isMouse)
+                _AUDIO.StopPlay("MouseRunning");
+        }
 
         yield return null;
     }
-
-
-    bool isDogChasing;
-    bool isDogWalking;
+    
     public IEnumerator Chasing()
     {
         if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
         {
             if (isDog)
             {
-                isDogChasing = true;
-                isDogWalking = false;
-                _AUDIO.Play("Rattling");
-                anim.SetBool("DogChase", isDogChasing);
+                _AUDIO.StopPlay("DogSnarl");
+                _AUDIO.StopPlay("Rattling");
             }
-
             if (isMouse)
-            {
                 _AUDIO.Play("MouseRunning");
-            }
-            if (!_GAME.isInvincible)
-            {
-                transform.LookAt(player);
 
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
+            isChasing = true;
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
+            {
+                if (hit.transform.tag == "Player")
                 {
-                    if (hit.transform.tag == "Player")
+                    if (!_GAME.isInvincible)
                     {
                         if (toPlayer > touchPlayerDist) //preventing enemy pushes character
                         {
-                            if(isDog)
-                            {
-                                _AUDIO.StopPlay("Rattling");
-                                _AUDIO.Play("DogSnarl");
-                            }
+                            transform.LookAt(player);
                             agent.destination = player.position;
                             agent.speed = chasingSpeed;
-                        }
-                        else
-                        {
-                            NextPatrolPoint();
-                            agent.speed = patrolSpeed;
+                            isChasing = true;
+
+                            if (isDog)
+                                _AUDIO.Play("Rattling");
+
                         }
                     }
+                }
+                else
+                {
+                    _AUDIO.Play("DogSnarl");
+                    NextPatrolPoint();
+                    agent.speed = patrolSpeed;
+                    isChasing = false;
                 }
             }
         }
@@ -190,9 +207,7 @@ public class EnemyPatrol : ReaperJr
             }
 
             if(isMouse)
-            {
                 _AUDIO.StopPlay("MouseRunning");
-            }
 
         }
         yield return null;
@@ -201,23 +216,25 @@ public class EnemyPatrol : ReaperJr
     public IEnumerator FakeSoulActivate()
     {
         GameEvents.ReportCollectHintShown(HintForItemCollect.FAKESOULWARNING);
-        yield return new WaitForSeconds(3f);
+        anim.SetBool("Red", true);
+        yield return new WaitForSeconds(fakeSoulTurnTime);
         agent.isStopped = false;
     }
 
-    //private void OnEnable()
-    //{
-    //    GameEvents.OnFakeSoulChasing += OnFakeSoulChasing;
-    //}
-    //private void OnDisable()
-    //{
-    //    GameEvents.OnFakeSoulChasing -= OnFakeSoulChasing;
-    //}
+    private void OnEnable()
+    {
+        GameEvents.OnFakeSoulChasing += OnFakeSoulChasing;
+    }
+    private void OnDisable()
+    {
+        GameEvents.OnFakeSoulChasing -= OnFakeSoulChasing;
+    }
 
-    //void OnFakeSoulChasing(EnemyPatrol fakesoul)
-    //{
-    //    if(fakesoul == this)
-    //    StartCoroutine(FakeSoulActivate());
-    //    Chasing();
-    //}
+    void OnFakeSoulChasing(EnemyPatrol fakesoul)
+    {
+        if (fakesoul == this)
+        {
+            StartCoroutine(FakeSoulActivate());
+        }
+    }
 }

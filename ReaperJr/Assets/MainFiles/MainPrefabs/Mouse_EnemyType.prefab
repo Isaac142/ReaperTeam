@@ -65,7 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   agent: {fileID: 0}
-  awareDistance: 5
+  awareDistance: 8
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -75,10 +75,13 @@ MonoBehaviour:
   - {fileID: 0}
   patrolSpeed: 2.5
   chasingSpeed: 4.5
-  touchPlayerDist: 1
+  touchPlayerDist: 0.5
   isMouse: 1
   isDog: 0
   isToySoldier: 0
+  isFakeSoul: 0
+  anim: {fileID: 0}
+  fakeSoulTurnTime: 1
 --- !u!195 &3123344614307397544
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -191,6 +194,7 @@ MonoBehaviour:
   isToyGun: 0
   isDog: 0
   isMouse: 1
+  isFakeSoul: 0
 --- !u!1001 &2518896538750341487
 PrefabInstance:
   m_ObjectHideFlags: 0

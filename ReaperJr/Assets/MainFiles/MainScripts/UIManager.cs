@@ -474,8 +474,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     public void OnCollectHintShown(HintForItemCollect action)
-    {
-        
+    {        
         currCollectInfo = action;
         switch (action)
         {
@@ -495,10 +494,13 @@ public class UIManager : Singleton<UIManager>
                 hint4.text = "Right click to collect the object(s).";
                 break;
             case HintForItemCollect.FAKESOULWARNING:
+
                 hint4.text = "Fake Soul! RUN!!!";
                 hint4.color = Color.red;
                 hint4.fontSize = 80f;
                 hint3.text = null;
+
+                StartCoroutine(HintChange());
                 break;
         }
     }
@@ -533,6 +535,15 @@ public class UIManager : Singleton<UIManager>
                 hint6.color = Color.red;
                 break;
         }
+    }
+
+
+    IEnumerator HintChange()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+        hint4.text = null;
+        hint4.color = Color.white;
+        hint4.fontSize = oriFontSize;
     }
 }
 
