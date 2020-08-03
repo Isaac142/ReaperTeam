@@ -103,6 +103,10 @@ public class EnemyPatrol : ReaperJr
             agent.destination = patrolPoints[patrolIndex].position;
             patrolIndex++;
             patrolIndex %= patrolPoints.Count; //cycling index number.
+            isDogChasing = false;
+            isDogWalking = true;
+            _AUDIO.Play("Rattling");
+            anim.SetBool("DogWalk", isDogWalking);
         }
     }
 
@@ -129,13 +133,19 @@ public class EnemyPatrol : ReaperJr
         yield return null;
     }
 
+
+    bool isDogChasing;
+    bool isDogWalking;
     public IEnumerator Chasing()
     {
         if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
         {
             if (isDog)
             {
+                isDogChasing = true;
+                isDogWalking = false;
                 _AUDIO.Play("Rattling");
+                anim.SetBool("DogChase", isDogChasing);
             }
 
             if (isMouse)
