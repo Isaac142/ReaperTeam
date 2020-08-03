@@ -24,15 +24,12 @@ public class FakeSoulCollider : ReaperJr
             isWalking = true;
             foreach (EnemyPatrol script in enemyPartrolScripts)
             {
-                if (script != null)
-                {
-                    script.agent.isStopped = false;
+                script.agent.isStopped = false;
 
-                    if (script.isToySoldier)
-                    {
-                        script.anim.SetBool("Walking", true);
-                        _AUDIO.Play("ToyMove");
-                    }
+                if (script.isToySoldier)
+                {
+                    script.anim.SetBool("Walking", true);
+                    _AUDIO.Play("ToyMove");
                 }
             }
         }
@@ -46,15 +43,12 @@ public class FakeSoulCollider : ReaperJr
             isWalking = false;
             foreach (EnemyPatrol script in enemyPartrolScripts)
             {
-                if (script != null)
+                if (script.isToySoldier)
                 {
-                    if (script.isToySoldier)
-                    {
-                        script.anim.SetBool("Walking", false);
-                        _AUDIO.StopPlay("ToyMove");
-                    }
-                    script.agent.isStopped = true;                  
+                    script.anim.SetBool("Walking", false);
+                    _AUDIO.StopPlay("ToyMove");
                 }
+                script.agent.isStopped = true;
             }
         }
     }

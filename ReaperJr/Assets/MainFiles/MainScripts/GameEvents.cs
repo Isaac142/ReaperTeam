@@ -14,6 +14,7 @@ public static class GameEvents
     public static event Action<HintForItemCollect> OnCollectHintShown = null;
     public static event Action<KeyItem> OnKeyItemCollected = null;
     public static event Action<bool> OnCrossHairOut = null;
+    public static event Action<EnemyPatrol> OnFakeSoulChasing = null;
 
     public static void ReportGameStateChange(GameState gameState)
     {
@@ -67,5 +68,11 @@ public static class GameEvents
     {
         if (OnCrossHairOut != null)
             OnCrossHairOut(crosshair);
+    }
+
+    public static void ReportOnFakeSoulChasing(EnemyPatrol fakeSoul)
+    {
+        if (OnFakeSoulChasing != null)
+            OnFakeSoulChasing(fakeSoul);
     }
 }

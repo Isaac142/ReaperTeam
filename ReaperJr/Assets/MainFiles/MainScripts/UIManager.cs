@@ -7,7 +7,7 @@ using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 public enum HintForMovingBoxes {DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE}
-public enum HintForItemCollect {DEFAULT, COLLECTSOULS, COLLECTITEMS}
+public enum HintForItemCollect {DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING}
 public enum HintForInteraction {DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM}
 
 public class UIManager : Singleton<UIManager>
@@ -42,6 +42,7 @@ public class UIManager : Singleton<UIManager>
     public TextMeshProUGUI hint1, hint2; //moving object hint
     public TextMeshProUGUI hint3, hint4; // collecting object hint
     public TextMeshProUGUI hint5, hint6; //interact hint
+    float oriFontSize;
     public GameObject keyItemPanel;
     public List<Image> keyItems = new List<Image>();
     [HideInInspector]
@@ -114,6 +115,8 @@ public class UIManager : Singleton<UIManager>
     {
         energyBar.maxValue = _GAME.maxEnergy;
         energyBar.minValue = 0f;
+
+        oriFontSize = hint4.fontSize;
 
         CloseAllPanels();
         DisableSoulIcons();
@@ -472,12 +475,14 @@ public class UIManager : Singleton<UIManager>
 
     public void OnCollectHintShown(HintForItemCollect action)
     {
+        
         currCollectInfo = action;
         switch (action)
         {
             case HintForItemCollect.DEFAULT:
                 hint4.text = null;
                 hint4.color = Color.white;
+                hint4.fontSize = oriFontSize;
                 hint3.text = null;
                 hint3.color = Color.white;
                 break;
@@ -488,6 +493,12 @@ public class UIManager : Singleton<UIManager>
                 break;
             case HintForItemCollect.COLLECTITEMS:
                 hint4.text = "Right click to collect the object(s).";
+                break;
+            case HintForItemCollect.FAKESOULWARNING:
+                hint4.text = "Fake Soul! RUN!!!";
+                hint4.color = Color.red;
+                hint4.fontSize = 80f;
+                hint3.text = null;
                 break;
         }
     }

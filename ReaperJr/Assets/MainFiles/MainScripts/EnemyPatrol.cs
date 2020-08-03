@@ -19,9 +19,9 @@ public class EnemyPatrol : ReaperJr
     private float toPlayer;
     private int patrolIndex = 0;
     
-    private enum EnemyType { ENEMY, DUMMY, FLEE}
+    private enum EnemyType { ENEMY, DUMMY, FLEE, FAKESOUL}
     private EnemyType enemyType;
-    public bool isMouse = false, isDog = false, isToySoldier = false;
+    public bool isMouse = false, isDog = false, isToySoldier = false, isFakeSoul = false;
     public Animator anim;
 
     // Start is called before the first frame update
@@ -40,6 +40,10 @@ public class EnemyPatrol : ReaperJr
         {
             enemyType = EnemyType.FLEE;
         }
+        if (transform.tag == "FakeSoul")
+        {
+            enemyType = EnemyType.FAKESOUL;
+        }
 
         player = _PLAYER.gameObject.transform;
 
@@ -47,6 +51,9 @@ public class EnemyPatrol : ReaperJr
         {
             case EnemyType.DUMMY:
                 agent.isStopped = true;
+                break;
+            case EnemyType.FAKESOUL:
+               // agent.isStopped = true;
                 break;
         }
     }
@@ -81,6 +88,10 @@ public class EnemyPatrol : ReaperJr
                     NextPatrolPoint();
                     agent.speed = patrolSpeed;
                 }
+                break;
+
+            case EnemyType.FAKESOUL:
+                Chasing();
                 break;
         }            
     }
@@ -176,4 +187,27 @@ public class EnemyPatrol : ReaperJr
         }
         yield return null;
     }
+
+    public IEnumerator FakeSoulActivate()
+    {
+        GameEvents.ReportCollectHintShown(HintForItemCollect.FAKESOULWARNING);
+        yield return new WaitForSeconds(3f);
+        agent.isStopped = false;
+    }
+
+    //private void OnEnable()
+    //{
+    //    GameEvents.OnFakeSoulChasing += OnFakeSoulChasing;
+    //}
+    //private void OnDisable()
+    //{
+    //    GameEvents.OnFakeSoulChasing -= OnFakeSoulChasing;
+    //}
+
+    //void OnFakeSoulChasing(EnemyPatrol fakesoul)
+    //{
+    //    if(fakesoul == this)
+    //    StartCoroutine(FakeSoulActivate());
+    //    Chasing();
+    //}
 }

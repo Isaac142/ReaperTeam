@@ -5,7 +5,7 @@ using UnityEngine;
 public class TouchPlayer : ReaperJr
 {
     private EnemyPatrol parentScript;
-    public bool isToyGun, isDog, isMouse;
+    public bool isToyGun = false, isDog = false, isMouse = false, isFakeSoul = false;
 
     private void Start()
     {
@@ -23,8 +23,8 @@ public class TouchPlayer : ReaperJr
                     if (!_GAME.isInvincible)
                     {
                         GameEvents.ReportGameStateChange(GameState.DEAD);
-                        if(isDog || isMouse)
-                        _AUDIO.Play("PlayerImpact");
+                        if(isDog || isMouse || isFakeSoul)
+                            _AUDIO.Play("PlayerImpact");
                         if (isToyGun)
                             _AUDIO.Play("ToyGun");
                     }

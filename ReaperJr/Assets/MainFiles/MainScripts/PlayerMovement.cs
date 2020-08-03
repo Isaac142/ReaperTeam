@@ -440,7 +440,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Collecting
     void Collect()
     {
-        GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
+        if(_UI.currCollectInfo != HintForItemCollect.FAKESOULWARNING)
+            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         RaycastHit[] hits;
 
         Vector3 centre = transform.position + Vector3.up * collectableDist + transform.right * collectableDist;
@@ -455,7 +456,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 else
                 {
                     if (hits[i].transform.tag == "Soul" || hits[i].transform.tag == "FakeSoul")
-                        GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTSOULS);
+                    {
+                        if (_UI.currCollectInfo != HintForItemCollect.FAKESOULWARNING)
+                            GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTSOULS);
+                    }
                     else
                         GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);                   
 
@@ -476,7 +480,14 @@ public class PlayerMovement : Singleton<PlayerMovement>
                         if (hits[i].transform.tag == "FakeSoul")
                         {
                             GameEvents.ReportScytheEquipped(true);
-                            GameEvents.ReportGameStateChange(GameState.DEAD);
+                            if (hits[i].transform.GetComponent<EnemyPatrol>() != null)
+                            {
+                                GameEvents.ReportOnFakeSoulChasing(hits[i].transform.GetComponent<EnemyPatrol>());
+                            }
+                            else
+                            {
+                                GameEvents.ReportGameStateChange(GameState.DEAD);
+                            }
                             //do something --> collected amount, visual clue...
                         }
 
