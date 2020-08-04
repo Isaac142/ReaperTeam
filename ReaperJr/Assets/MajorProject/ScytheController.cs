@@ -346,7 +346,7 @@ public class ScytheController : ReaperJr
         if (!holdingScythe)
             lineRenderer.enabled = false;
 
-        if (Input.GetMouseButtonDown(0) && _GAME.playerActive && _GAME.gameState == GameState.INGAME)
+        if (Input.GetMouseButtonDown(0) && _GAME.playerActive && _GAME.gameState == GameState.INGAME && _GAME.scytheEquiped)
         {
             if (holdingScythe && !_GAME.onCD)
             {

@@ -6,46 +6,78 @@ public class SwitchControl : ReaperJr
 {
     //on ignore raycast layer
 
-    public GameObject pLight, soul;
+    public List<GameObject> pLights = new List<GameObject>();
+    public List<SoulType> souls = new List<SoulType>();
     private bool canClick = false, lightsOn = false;
+    private float playerDist;
+    public float clickDist;
+    public Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
-        pLight.SetActive(false);
-        soul.SetActive(false);       
+        foreach(GameObject light in pLights)
+            light.SetActive(false);
+        foreach(SoulType soul in souls)
+            soul.gameObject.SetActive(false);       
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(canClick && !_GAME.scytheEquiped)
+        playerDist = Vector3.Distance(_PLAYER.transform.position, this.transform.position);
+
+        if (canClick)
         {
-            if (Input.GetMouseButtonDown(0))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
+                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+
+                if (hit.transform.tag == "Switch")
                 {
-                    if (hit.transform.tag == "Switch")
-                    {
-                        lightsOn = !lightsOn;
-                    }
+                    if (playerDist <= clickDist)
+                        GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
+
+                    else
+                        GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
+                }
+            }
+
+            if(Input.GetMouseButtonDown(1))
+            {
+                if (playerDist <= clickDist)
+                {
+                    lightsOn = !lightsOn;
                 }
             }
         }
 
         if(lightsOn)
         {
-            pLight.SetActive(true);
-            if(soul != null)
-                soul.SetActive(true);
+            anim.SetBool("SwitchOn", true);
+            foreach (GameObject light in pLights)
+                light.SetActive(true);
+            if (souls.Count > 0)
+            {
+                foreach (SoulType soul in souls)
+                {
+                    if(!soul.isCollected)
+                        soul.gameObject.SetActive(true);
+                }
+            }
         }
         else
         {
-            pLight.SetActive(false);
-            if(soul != null)
-            soul.SetActive(false);
+            anim.SetBool("SwitchOn", false);
+            foreach (GameObject light in pLights)
+                light.SetActive(false);
+            if (souls.Count > 0)
+            {
+                foreach (SoulType soul in souls)
+                    soul.gameObject.SetActive(false);
+            }
         }
     }
 
