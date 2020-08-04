@@ -73,7 +73,8 @@ public class EnemyPatrol : ReaperJr
             anim.SetBool("DogChase", isChasing);
 
         //if is Mouse ==> setbool to same as ischasing, when ischasing true, mouse is running
-
+        if(isMouse)
+            anim.SetBool("MouseChase", isChasing);
         switch (enemyType)
         {
             case EnemyType.ENEMY:
