@@ -10,7 +10,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public Transform firePoint;
     public GameObject scythe;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Vector3 startingPos;
 
     private ScytheController scytheController;
