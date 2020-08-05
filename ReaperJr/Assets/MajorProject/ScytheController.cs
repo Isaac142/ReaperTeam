@@ -325,7 +325,7 @@ public class ScytheController : ReaperJr
             this.transform.localRotation = Quaternion.Euler(0, 0, this.transform.rotation.eulerAngles.z - rateOfRotation);
 
         }
-
+        
         if (Input.GetKeyDown(KeyCode.Q) && _GAME.playerActive)
         {
             lineOut = !lineOut;

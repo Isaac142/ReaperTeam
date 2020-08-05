@@ -10,9 +10,7 @@ public class GameManager : Singleton<GameManager>
     
     public GameState gameState;
     private float lastStateChange = 0f;
-    //public static GameManager Instance;
-
-    public Texture2D cursor;
+    public Light lightSource;
     
     // character rigidbody reference
     public float playerMass = 1f;
@@ -67,18 +65,13 @@ public class GameManager : Singleton<GameManager>
     public bool isInvincible = false;
     public float invincibleTime = 5f;
 
-    private void OverrideAwke()
-    {
-
-        checkPoints.Add(_PLAYER.transform.position);
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        if (cursor != null)
-            Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         ResetGame();
+
+        if (lightSource != null)
+            DontDestroyOnLoad(lightSource.gameObject);
     }
 
     public void ResetGame()
@@ -203,6 +196,12 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.MENU:
                 PauseGame();
+
+                _GAME.lightSource.intensity = _UI.brightnessSlider.value;
+                _AUDIO.MuteMusic(_UI.musicToggle.isOn);
+                _AUDIO.MusicVolume(_UI.musicSlider.value);
+                _AUDIO.MuteSoundFX(_UI.soundFXToggle.isOn);
+                _AUDIO.SoundFXVolume(_UI.soundFXSlider.value);
                 break;
             case GameState.GAMEOVER:
                 PauseGame();

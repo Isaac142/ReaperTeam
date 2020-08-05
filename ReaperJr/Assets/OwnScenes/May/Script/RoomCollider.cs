@@ -43,15 +43,20 @@ public class RoomCollider : ReaperJr
         roomHeight = new Vector2(roomCollider.transform.position.y - roomCollider.bounds.size.y / 2f, roomCollider.transform.position.y + roomCollider.bounds.size.y / 2f);
         roomDepth = new Vector2(roomCollider.transform.position.z - roomCollider.bounds.size.z / 2f, roomCollider.transform.position.z + roomCollider.bounds.size.z / 2f);
 
-        if(atticRoom)
+        if (atticRoom)
             roomSides = new Vector2(roomCollider.transform.position.x - roomCollider.bounds.size.x / 2f + offset, roomCollider.transform.position.x + roomCollider.bounds.size.x / 2f - offset);
 
-        for (int i = 0; i <souls.Count; i ++)
+        for (int i = 0; i < souls.Count; i++)
         {
             soulSprite.Add(souls[i].soulIcon);
         }
         _GAME.totalSoulNo += souls.Count;
-        
+
+        if (_UI.hintsPanel.GetComponent<CanvasGroup>().alpha != 1f)
+            _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;
+
+        _UI.SetSouls(souls);
+
     }
 
     private void OnTriggerEnter(Collider other)

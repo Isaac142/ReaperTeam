@@ -1,15 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿
+using UnityEngine.EventSystems;
 
-public class Buttons : ReaperJr
+public class Buttons : ReaperJr, IPointerEnterHandler, IPointerExitHandler
 {
-    private void OnMouseOver()
+
+    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
         _GAME.playerActive = false;
     }
-    private void OnMouseExit()
+
+    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
         _GAME.playerActive = true;
     }

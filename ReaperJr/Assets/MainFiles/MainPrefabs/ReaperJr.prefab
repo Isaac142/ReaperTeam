@@ -4085,6 +4085,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6910244790152763369, guid: 728c913f59340ee4dad451986bc58e4d,
+        type: 3}
+      propertyPath: LightsModule.rangeCurve.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6910244790152763369, guid: 728c913f59340ee4dad451986bc58e4d,
+        type: 3}
+      propertyPath: LightsModule.intensityCurve.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 728c913f59340ee4dad451986bc58e4d, type: 3}
 --- !u!1 &5373930650462368082 stripped
@@ -4170,6 +4180,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6910244790152763369, guid: 728c913f59340ee4dad451986bc58e4d,
+        type: 3}
+      propertyPath: LightsModule.rangeCurve.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6910244790152763369, guid: 728c913f59340ee4dad451986bc58e4d,
+        type: 3}
+      propertyPath: LightsModule.intensityCurve.scalar
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 728c913f59340ee4dad451986bc58e4d, type: 3}

@@ -12,6 +12,9 @@ public enum HintForInteraction { DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUI
 
 public class UIManager : Singleton<UIManager>
 {
+
+    public Texture2D cursor;
+
     [HideInInspector]
     public HintForMovingBoxes currMovingInfo;
     [HideInInspector]
@@ -61,6 +64,9 @@ public class UIManager : Singleton<UIManager>
     public GameObject wonPanel;
     public GameObject deadPanel;
 
+    public Slider brightnessSlider, musicSlider, soundFXSlider;
+    public Toggle musicToggle, soundFXToggle;
+
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
 
@@ -79,6 +85,8 @@ public class UIManager : Singleton<UIManager>
     // Start is called before the first frame update
     void Start()
     {
+        if (cursor != null)
+            Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         StartSetUI();
     }
 
@@ -109,6 +117,17 @@ public class UIManager : Singleton<UIManager>
         abilityCD.fillAmount = _GAME.CDTimer / _GAME.coolDown;
 
         totalSoulNo.text = _GAME.totalSoulNo.ToString();
+
+        switch(_GAME.gameState)
+        {
+            case GameState.MENU:
+                _GAME.lightSource.intensity = brightnessSlider.value;
+                _AUDIO.MuteMusic(musicToggle.isOn);
+                _AUDIO.MusicVolume(musicSlider.value);
+                _AUDIO.MuteSoundFX(soundFXToggle.isOn);
+                _AUDIO.SoundFXVolume(soundFXSlider.value);
+                break;
+        }
     }
 
     public void StartSetUI()
@@ -129,7 +148,28 @@ public class UIManager : Singleton<UIManager>
 
         infoPanel.SetActive(false);
         DOTween.SetTweensCapacity(2000, 100);
+
+        brightnessSlider.minValue = 0;
+        brightnessSlider.maxValue = 2f;
+
+        musicToggle.isOn = false;
+        musicSlider.minValue = 0;
+        musicSlider.maxValue = 5;
+
+        soundFXToggle.isOn = false;
+        soundFXSlider.minValue = 0;
+        soundFXSlider.maxValue = 5;
+
+        OptionPanelDefault();
     }
+
+    public void OptionPanelDefault()
+    {
+        brightnessSlider.value = 0.3f;
+        soundFXSlider.value = 1;
+        musicSlider.value = 1;
+    }
+
 
     public void FadeOutAllPanels()
     {
@@ -268,10 +308,7 @@ public class UIManager : Singleton<UIManager>
     public void Menu()
     {
         GameEvents.ReportGameStateChange(GameState.MENU);
-        instructionPanel.GetComponent<CanvasGroup>().alpha = 1;
-        controlsInfoPanel.GetComponent<CanvasGroup>().alpha = 1;
-        uiInfoPanel.GetComponent<CanvasGroup>().alpha = 0;
-        optionPanel.GetComponent<CanvasGroup>().alpha = 0;
+        InstructionPanel();
     }
 
     public void ControlsPanel()
