@@ -51,6 +51,7 @@ public class RoomCollider : ReaperJr
             soulSprite.Add(souls[i].soulIcon);
         }
         _GAME.totalSoulNo += souls.Count;
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -87,20 +88,6 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
-            //switch (roomType)
-            //{
-            //    case RoomType.LEVEL:
-            //        //set up level boundaries
-            //        _CAMERA.levelHorBoundaries = new Vector2(roomSides.x, roomSides.y);
-            //        _CAMERA.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
-            //        _CAMERA.levelDepthBoundaries = new Vector2(roomDepth.x, +roomDepth.y);
-            //        break;
-
-            //    case RoomType.ROOM:
-            //        _CAMERA.roomPosition = roomPosition;
-            //        StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
-            //        break;
-            //}
             if(souls.Count>0)
             {
                 if (_UI.soulPanel.GetComponent<CanvasGroup>().alpha != 1f)

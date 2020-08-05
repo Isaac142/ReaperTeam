@@ -39,7 +39,7 @@ public class ItemMovement : ReaperJr
     public bool isKeyItem = false;
 
     private GameObject centerMarker;
-    bool stable = false;
+    public bool justReleased = false;
 
     private void Start()
     {
@@ -180,6 +180,7 @@ public class ItemMovement : ReaperJr
             if (isKeyItem)
                 GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
         }
+
     }
 
     void PickUp()
@@ -188,7 +189,7 @@ public class ItemMovement : ReaperJr
         GameEvents.ReportScytheEquipped(false);
         ReaperJr._PLAYER.movable = (ReaperJr._PLAYER.isGrounded) ? true : false;
         _GAME.isHolding = true;
-        
+
         if (transform.parent != null)
             transform.parent = null;
         ReaperJr._PLAYER.speedFactor -= mass * massModifier;
@@ -200,7 +201,7 @@ public class ItemMovement : ReaperJr
         {
             transform.position = new Vector3(transform.position.x, _PLAYER.GetComponent<CapsuleCollider>().height / 2f + (GetComponent<Collider>().bounds.min.y), transform.position.z); //can change to hand position
             transform.eulerAngles = Vector3.zero;
-            _GAME.holdingLightObject = true;   
+            _GAME.holdingLightObject = true;
         }
         else
         {
@@ -231,9 +232,12 @@ public class ItemMovement : ReaperJr
             if (!isLigther)
             {
                 CurrDist = Vector3.Distance(centerMarker.transform.position, _PLAYER.transform.position); //if object rotat further enough, object falls.
-                
-                if(!Physics.Raycast(centerMarker.transform.position, Vector3.down, (centerMarker.transform.position.y - _PLAYER.transform.position.y) + 0.05f))
+
+                if (!Physics.Raycast(centerMarker.transform.position, Vector3.down, (centerMarker.transform.position.y - _PLAYER.transform.position.y) + 0.05f))
+                {
+                    justReleased = true;
                     StartCoroutine(Release());
+                }
             }
         }
         if (isKeyItem && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
@@ -295,23 +299,26 @@ public class ItemMovement : ReaperJr
     {
         if (other.tag == "Player" || other.tag == "Scythe")
         {
-            if (objectRB != null && !isLigther && !isHolding)
+            if (hasRB && !isLigther && !isHolding && !justReleased)
             {
-                stable = true;
+                objectRB.isKinematic = true;
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (objectRB != null && !isLigther)
+        if (hasRB && !isLigther)
         {
             if (other.tag == "Player" || other.tag == "Scythe")
-                stable = false;
+            {
+                justReleased = false;
+                objectRB.isKinematic = false;
+            }
         }
     }
 
-    
+
 
     //private void OnCollisionEnter(Collision other)
     //{

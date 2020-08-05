@@ -29,35 +29,37 @@ public class AtticKeyHoleControl : ReaperJr
 
         if (controller.playerApproach)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
-                if (hit.transform == this.transform)
-                {
-                    if (controller.keyItems[keyIndex].isCollected )
-                    {
-                        if (!controller.keyItems[keyIndex].isInPosition)
-                        {
-                            GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
-                            if (playerDist <= clickDist)
-                                GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
-                        }
-                    }
-                    else
-                        GameEvents.ReportInteractHintShown(HintForInteraction.REQUIRKEY);
-                }
-            }
 
             if (playerDist <= clickDist && controller.keyItems[keyIndex].isCollected && !controller.keyItems[keyIndex].isInPosition)
             {
                 if (Input.GetMouseButtonDown(1))
                 {
                     controller.SetKey(controller.keyItems[keyIndex], keyPos);
-                    controller.keyItems[keyIndex].isInPosition = true;
                 }
             }
         }
+    }
+
+    private void OnMouseEnter()
+    {
+        if (controller.playerApproach)
+        {
+            if (controller.keyItems[keyIndex].isCollected)
+            {
+                if (!controller.keyItems[keyIndex].isInPosition)
+                {
+                    GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
+                    if (playerDist <= clickDist)
+                        GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
+                }
+            }
+            else
+                GameEvents.ReportInteractHintShown(HintForInteraction.REQUIRKEY);
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
     }
 }

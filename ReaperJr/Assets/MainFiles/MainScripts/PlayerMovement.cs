@@ -51,6 +51,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     public bool walkHack;
     private bool teleported = false;
+    public GameObject teleportStart, teleportEnd;
     #endregion
 
     #region Start
@@ -78,6 +79,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
         teleported = false;
         canCollect = false;
         fallDist = 0f;
+        teleportStart.SetActive(false);
+        teleportEnd.SetActive(false);
     }
     #endregion
 
@@ -523,6 +526,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
             scythe.transform.parent = firePoint;
             scythe.transform.localEulerAngles = Vector3.zero;
             scythe.transform.localPosition = Vector3.zero;
+            teleportEnd.SetActive(false);
+            scythe.transform.position = scythe.transform.position;
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
@@ -537,6 +542,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Teleport
     IEnumerator TeleportToScythe()
     {
+        teleportStart.SetActive(false);
+        teleportEnd.SetActive(true);
         teleported = true;
         //Get position of the player
         Vector3 positionOfPlayer = transform.position;
@@ -552,6 +559,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         }
         yield return new WaitForSeconds(timeToMove);
         teleported = false;
+        teleportEnd.SetActive(false);
     }
     #endregion
 

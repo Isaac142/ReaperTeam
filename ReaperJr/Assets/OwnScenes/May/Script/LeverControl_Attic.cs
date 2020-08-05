@@ -22,31 +22,9 @@ public class LeverControl_Attic : ReaperJr
         {
             playerDist = Vector3.Distance(_PLAYER.transform.position, this.transform.position);
         }
-        
+
         if (controller.playerApproach)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
-
-                if (hit.transform == this.transform)
-                {
-                    if (controller.allKeysIn)
-                    {
-                        if (playerDist <= clickDist)
-                            GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
-
-                        else
-                            GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
-                    }
-
-                    else
-                        GameEvents.ReportInteractHintShown(HintForInteraction.REQUIRKEY);
-                }
-            }
-
             if (playerDist <= clickDist && controller.allKeysIn)
             {
                 if (Input.GetMouseButtonDown(1))
@@ -57,5 +35,30 @@ public class LeverControl_Attic : ReaperJr
                 }
             }
         }
+    }
+
+
+    private void OnMouseEnter()
+    {
+        if (controller.playerApproach)
+        {
+
+            if (controller.allKeysIn)
+            {
+                if (playerDist <= clickDist)
+                    GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
+
+                else
+                    GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
+            }
+
+            else
+                GameEvents.ReportInteractHintShown(HintForInteraction.REQUIRKEY);
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
     }
 }

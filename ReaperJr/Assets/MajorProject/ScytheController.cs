@@ -291,8 +291,10 @@ public class ScytheController : ReaperJr
                         crosshair.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                     }
 
-                    else if(crosshair != null && !holdingScythe)
-                        crosshair.GetComponent<Renderer>().enabled = true;
+                    else if (crosshair != null && !holdingScythe)
+                    {
+                        crosshair.GetComponent<Renderer>().enabled = false;
+                    }
 
                     break;
                 }
@@ -330,7 +332,7 @@ public class ScytheController : ReaperJr
             GameEvents.RepoartCrossHairOut(lineOut);
         }
 
-        if (lineOut)
+        if (lineOut && _GAME.scytheEquiped)
         {
             lineRenderer.enabled = true;
             crosshair.SetActive(true);
@@ -352,10 +354,10 @@ public class ScytheController : ReaperJr
             {
                 _AUDIO.Play("ScytheThrow");
                 _PLAYER.anim.SetTrigger("ScytheThrow");
-                scythe.transform.parent = null;
                 Physics.gravity = new Vector3(0, -gravity.y, 0);
                 scythe.GetComponent<Scythe>().Launch(velocity);
                 holdingScythe = false;
+                _PLAYER.teleportStart.SetActive(true);
 
                 GameEvents.ReportScytheThrown(true);
             }

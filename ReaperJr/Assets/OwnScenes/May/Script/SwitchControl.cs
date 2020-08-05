@@ -16,10 +16,10 @@ public class SwitchControl : ReaperJr
     // Start is called before the first frame update
     void Start()
     {
-        foreach(GameObject light in pLights)
+        foreach (GameObject light in pLights)
             light.SetActive(false);
-        foreach(SoulType soul in souls)
-            soul.gameObject.SetActive(false);       
+        foreach (SoulType soul in souls)
+            soul.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -29,23 +29,7 @@ public class SwitchControl : ReaperJr
 
         if (canClick)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
-
-                if (hit.transform.tag == "Switch")
-                {
-                    if (playerDist <= clickDist)
-                        GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
-
-                    else
-                        GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
-                }
-            }
-
-            if(Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1))
             {
                 if (playerDist <= clickDist)
                 {
@@ -54,7 +38,7 @@ public class SwitchControl : ReaperJr
             }
         }
 
-        if(lightsOn)
+        if (lightsOn)
         {
             anim.SetBool("SwitchOn", true);
             foreach (GameObject light in pLights)
@@ -63,7 +47,7 @@ public class SwitchControl : ReaperJr
             {
                 foreach (SoulType soul in souls)
                 {
-                    if(!soul.isCollected)
+                    if (!soul.isCollected)
                         soul.gameObject.SetActive(true);
                 }
             }
@@ -81,9 +65,26 @@ public class SwitchControl : ReaperJr
         }
     }
 
+    private void OnMouseOver()
+    {
+        if (canClick)
+        {
+            if (playerDist <= clickDist)
+                GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
+
+            else
+                GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             canClick = true;
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FakeSoulCollider : ReaperJr
 {
@@ -14,7 +15,7 @@ public class FakeSoulCollider : ReaperJr
         foreach (GameObject dummy in dummies)
             enemyPartrolScripts.Add(dummy.transform.GetComponent<EnemyPatrol>());
         foreach (EnemyPatrol script in enemyPartrolScripts)
-            script.agent.isStopped = true;
+            script.transform.GetComponent<NavMeshAgent>().isStopped = true;
     }
 
     private void OnTriggerEnter(Collider other)

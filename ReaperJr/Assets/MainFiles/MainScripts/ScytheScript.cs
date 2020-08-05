@@ -10,5 +10,6 @@ public class ScytheScript : ReaperJr
     {
         activated = false;
         GetComponent<Rigidbody>().isKinematic = true;
+        _PLAYER.teleportEnd.SetActive(true);
     }
 }

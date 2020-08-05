@@ -29,20 +29,20 @@ public class AtticDoorSwitch : ReaperJr
         if (!doorLocked)
             return;
 
-        if (!allKeysIn)
-            KeysCheck();
     }
 
-    public void SetKey (KeyItem key, Vector3 keyPos)
+    public void SetKey(KeyItem key, Vector3 keyPos)
     {
         key.transform.position = keyPos;
         key.transform.eulerAngles = inRot;
         key.gameObject.SetActive(true);
+        key.isInPosition = true;
+        KeysCheck();
     }
 
-    public void FinalPos ()
+    public void FinalPos()
     {
-        foreach(KeyItem key in keyItems)
+        foreach (KeyItem key in keyItems)
             key.transform.DOMove(new Vector3(key.transform.position.x, key.transform.position.y, finalPos), 0.5f).OnComplete
                 (() => key.transform.DORotate(finalRot, 0.5f));
         doorLocked = false;
@@ -50,12 +50,8 @@ public class AtticDoorSwitch : ReaperJr
 
     void KeysCheck()
     {
-        for (int i = 0; i < keyItems.Count; i++)
-        {
-            if (!keyItems[i].isInPosition)
-                allKeysIn = false;
-            else
-                allKeysIn = true;
-        }
+        List<KeyItem> temp = keyItems.FindAll(x => x.isInPosition == true);
+        if (temp.Count == keyItems.Count)
+            allKeysIn = true;
     }
 }

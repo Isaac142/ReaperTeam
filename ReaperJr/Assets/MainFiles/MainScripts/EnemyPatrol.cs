@@ -18,13 +18,14 @@ public class EnemyPatrol : ReaperJr
 
     private float toPlayer;
     private int patrolIndex = 0;
-    
-    private enum EnemyType { ENEMY, DUMMY, FLEE, FAKESOUL}
+
+    private enum EnemyType { ENEMY, DUMMY, FLEE, FAKESOUL }
     private EnemyType enemyType;
     public bool isMouse = false, isDog = false, isToySoldier = false, isFakeSoul = false;
     public Animator anim;
     public float fakeSoulTurnTime = 1f;
     bool isChasing = false; //for both dog and mouse, if is chasing, play running animation, otherwise play walking animation, unless there's other animations.
+    bool following = false;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +39,7 @@ public class EnemyPatrol : ReaperJr
         {
             enemyType = EnemyType.DUMMY;
         }
-        if(transform.tag == "Flee")
+        if (transform.tag == "Flee")
         {
             enemyType = EnemyType.FLEE;
         }
@@ -49,7 +50,7 @@ public class EnemyPatrol : ReaperJr
 
         player = _PLAYER.gameObject.transform;
 
-        switch(enemyType)
+        switch (enemyType)
         {
             case EnemyType.DUMMY:
                 agent.isStopped = true;
@@ -73,7 +74,7 @@ public class EnemyPatrol : ReaperJr
             anim.SetBool("DogChase", isChasing);
 
         //if is Mouse ==> setbool to same as ischasing, when ischasing true, mouse is running
-        if(isMouse)
+        if (isMouse)
             anim.SetBool("MouseChase", isChasing);
         switch (enemyType)
         {
@@ -84,7 +85,7 @@ public class EnemyPatrol : ReaperJr
                 break;
 
             case EnemyType.DUMMY:
-                
+
                 if (agent.remainingDistance < 0.5f)
                     NextPatrolPoint();
                 break;
@@ -102,6 +103,8 @@ public class EnemyPatrol : ReaperJr
                 bool inSight = Physics.Linecast(transform.position, player.position);
                 if (toPlayer >= awareDistance || !inSight || _GAME.gameState == GameState.DEAD)
                 {
+                    following = false;
+                    StartCoroutine(HintOff());
                     agent.SetDestination(patrolPoints[0].position);
                     agent.speed = patrolSpeed;
                     if (agent.remainingDistance <= 0f)
@@ -111,16 +114,14 @@ public class EnemyPatrol : ReaperJr
                     }
                 }
                 else
-                {
                     agent.SetDestination(player.transform.position);
-                }
                 break;
-        }            
+        }
     }
 
     void NextPatrolPoint()
     {
-        if(patrolPoints.Count > 0)
+        if (patrolPoints.Count > 0)
         {
             agent.destination = patrolPoints[patrolIndex].position;
             patrolIndex++;
@@ -148,13 +149,13 @@ public class EnemyPatrol : ReaperJr
         else
         {
             isChasing = false;
-            if(isMouse)
+            if (isMouse)
                 _AUDIO.StopPlay("MouseRunning");
         }
 
         yield return null;
     }
-    
+
     public IEnumerator Chasing()
     {
         if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
@@ -168,25 +169,20 @@ public class EnemyPatrol : ReaperJr
                 _AUDIO.Play("MouseRunning");
 
             isChasing = true;
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit)) //check if character is in sight
+            if (Physics.Linecast(transform.position, _PLAYER.transform.position)) //check if character is in sight
             {
-                if (hit.transform.tag == "Player")
+                if (!_GAME.isInvincible)
                 {
-                    if (!_GAME.isInvincible)
+                    if (toPlayer > touchPlayerDist) //preventing enemy pushes character
                     {
-                        if (toPlayer > touchPlayerDist) //preventing enemy pushes character
-                        {
-                            transform.LookAt(player);
-                            agent.destination = player.position;
-                            agent.speed = chasingSpeed;
-                            isChasing = true;
+                        transform.LookAt(player);
+                        agent.destination = player.position;
+                        agent.speed = chasingSpeed;
+                        isChasing = true;
 
-                            if (isDog)
-                                _AUDIO.Play("Rattling");
+                        if (isDog)
+                            _AUDIO.Play("Rattling");
 
-                        }
                     }
                 }
                 else
@@ -207,7 +203,7 @@ public class EnemyPatrol : ReaperJr
                 _AUDIO.StopPlay("Rattling");
             }
 
-            if(isMouse)
+            if (isMouse)
                 _AUDIO.StopPlay("MouseRunning");
 
         }
@@ -220,6 +216,15 @@ public class EnemyPatrol : ReaperJr
         anim.SetBool("Red", true);
         yield return new WaitForSeconds(fakeSoulTurnTime);
         agent.isStopped = false;
+        following = true;
+    }
+
+    IEnumerator HintOff()
+    {
+        if(!following && !agent.isStopped)
+            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
+        yield return new WaitForSeconds(0.2f);
+        StopCoroutine(HintOff());
     }
 
     private void OnEnable()

@@ -162,6 +162,8 @@ public class GameManager : Singleton<GameManager>
 
     void PlayerDead()
     {
+        _PLAYER.teleportStart.SetActive(false);
+        _PLAYER.teleportEnd.SetActive(false);
         _AUDIO.Play("PlayerReset");
         _timer -= punishmentTime;
         playerActive = false;

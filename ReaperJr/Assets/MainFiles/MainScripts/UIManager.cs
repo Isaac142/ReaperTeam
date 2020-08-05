@@ -6,9 +6,9 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
-public enum HintForMovingBoxes {DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE}
-public enum HintForItemCollect {DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING}
-public enum HintForInteraction {DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM}
+public enum HintForMovingBoxes { DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE }
+public enum HintForItemCollect { DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING }
+public enum HintForInteraction { DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM }
 
 public class UIManager : Singleton<UIManager>
 {
@@ -39,9 +39,9 @@ public class UIManager : Singleton<UIManager>
     public Image abilityCD;
     public GameObject scytheMasks, abilityMask;  //scythe icon masks
     public GameObject hintsPanel;
-    public TextMeshProUGUI hint1, hint2; //moving object hint
-    public TextMeshProUGUI hint3, hint4; // collecting object hint
-    public TextMeshProUGUI hint5, hint6; //interact hint
+    public TextMeshProUGUI MovingObjHint; //moving object hint
+    public TextMeshProUGUI CollectingHint; // collecting object hint
+    public TextMeshProUGUI InteractionHint1, InteractionHint2; //interact hint
     float oriFontSize;
     public GameObject keyItemPanel;
     public List<Image> keyItems = new List<Image>();
@@ -116,7 +116,7 @@ public class UIManager : Singleton<UIManager>
         energyBar.maxValue = _GAME.maxEnergy;
         energyBar.minValue = 0f;
 
-        oriFontSize = hint4.fontSize;
+        oriFontSize = CollectingHint.fontSize;
 
         CloseAllPanels();
         DisableSoulIcons();
@@ -217,7 +217,7 @@ public class UIManager : Singleton<UIManager>
             scytheMasks.SetActive(true);
         else
             scytheMasks.SetActive(false);
-    }   
+    }
 
     private void OnEnable()
     {
@@ -244,7 +244,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnCollectHintShown -= OnCollectHintShown;
         GameEvents.OnInteractHintShown -= OnInterActionHintShown;
     }
-    
+
     void OnCrossHairOut(bool crosshair)
     {
         if (crosshair)
@@ -397,7 +397,7 @@ public class UIManager : Singleton<UIManager>
         {
             if (currKeyItems[i] == key)
             {
-                keyItems[i].DOColor(Color.white , 0.5f);
+                keyItems[i].DOColor(Color.white, 0.5f);
                 keyItems[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
                 StartCoroutine(ReturnKeyItemIcon(keyItems[i]));
             }
@@ -447,60 +447,50 @@ public class UIManager : Singleton<UIManager>
         GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
         GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
     }
-    
-    public void OnMovableHintShown (HintForMovingBoxes action)
+
+    public void OnMovableHintShown(HintForMovingBoxes action)
     {
         currMovingInfo = action;
-        switch(action)
+        switch (action)
         {
             case HintForMovingBoxes.DEFAULT:
-                hint1.text = null;
-                hint1.color = Color.white;
-                hint2.text = null;
-                hint2.color = Color.white;
+                FadeOutText(MovingObjHint);
                 break;
             case HintForMovingBoxes.CANHOLD:
-                hint1.text = "Press E key to Hold Object in front.";
+                MovingObjHint.text = "<color=#FFFFFF> Press E key to Hold Object in front.";
+                FadeInText(MovingObjHint);
                 break;
             case HintForMovingBoxes.RELEASING:
-                hint1.text = "Press E key to Release Object in front.";
+                MovingObjHint.text = "<color=#FFFFFF> Press E key to Release Object in front.";
+                FadeInText(MovingObjHint);
                 break;
             case HintForMovingBoxes.HEAVYOBJNOTE:
-                hint1.text = "Press E key to Release Object in front.";
-                hint2.text = "You can ONLY drag or push this object.";
-                hint2.color = new Color(237f / 255f, 195f / 255f, 1);
+                MovingObjHint.text = "<color=#FFFFFF> Press <b> E key </b> to Release Object in front. \n <color=#EDC3FF> You can ONLY drag or push this object.";
+                FadeInText(MovingObjHint);
                 break;
         }
     }
 
     public void OnCollectHintShown(HintForItemCollect action)
-    {        
+    {
         currCollectInfo = action;
         switch (action)
         {
             case HintForItemCollect.DEFAULT:
-                hint4.text = null;
-                hint4.color = Color.white;
-                hint4.fontSize = oriFontSize;
-                hint3.text = null;
-                hint3.color = Color.white;
+                FadeOutText(CollectingHint);
                 break;
             case HintForItemCollect.COLLECTSOULS:
-                hint4.text = "Right click to collect the soul(s).";
-                hint3.text = "Don't collect fake soul(s).";
-                hint3.color = new Color(237f / 255f, 195f / 255f, 1f);
+                CollectingHint.text = "<color=#FFFFFF> Right click to collect the soul(s).\n <color=#EDC3FF> Don't collect fake soul(s).";
+                FadeInText(CollectingHint);
                 break;
             case HintForItemCollect.COLLECTITEMS:
-                hint4.text = "Right click to collect the object(s).";
+                CollectingHint.text = "<color=#FFFFFF> Right click to collect the object(s).";
+                FadeInText(CollectingHint);
                 break;
             case HintForItemCollect.FAKESOULWARNING:
 
-                hint4.text = "Fake Soul! RUN!!!";
-                hint4.color = Color.red;
-                hint4.fontSize = 80f;
-                hint3.text = null;
-
-                StartCoroutine(HintChange());
+                CollectingHint.text = "<color=red> <size=80> Fake Soul! RUN!!!";
+                FadeInText(CollectingHint);
                 break;
         }
     }
@@ -511,39 +501,40 @@ public class UIManager : Singleton<UIManager>
         switch (action)
         {
             case HintForInteraction.DEFAULT:
-                hint5.text = null;
-                hint5.color = Color.white;
-                hint6.text = null;
-                hint6.color = Color.white;
+                FadeOutText(InteractionHint1);
+                FadeOutText(InteractionHint2);
                 break;
             case HintForInteraction.SWITCH:
-                hint5.text = "Right click to initiating it";
+                InteractionHint1.text = "<color=#FFFFFF> Right click initiating it";
+                FadeInText(InteractionHint1);
                 break;
             case HintForInteraction.OPEN:
-                hint6.text = "Right click to open it";
+                InteractionHint2.text = "<color=#FFFFFF> Right click to open it";
+                FadeInText(InteractionHint2);
                 break;
             case HintForInteraction.REQUIRKEY:
-                hint5.text = "Requir Keyitems!";
-                hint5.color = new Color(237f / 255f, 195f / 255f, 1);
+                InteractionHint1.text = "<color=#EDC3FF> Require Key Items!";
+                FadeInText(InteractionHint1);
                 break;
             case HintForInteraction.DISTANCEREQUIRED:
-                hint5.text = "You need to get closer.";
-                hint5.color = new Color(237f / 255f, 195f / 255f, 1);
+                InteractionHint1.text = "<color=#EDC3FF> You need to get closer.";
+                FadeInText(InteractionHint1);
                 break;
             case HintForInteraction.KEYITEM:
-                hint6.text = "This is a Key Item!";
-                hint6.color = Color.red;
+                InteractionHint2.text = "<color=red> This is a Key Item!";
+                FadeInText(InteractionHint2);
                 break;
         }
     }
 
-
-    IEnumerator HintChange()
+    void FadeInText(TextMeshProUGUI textUI)
     {
-        yield return new WaitForSecondsRealtime(5f);
-        hint4.text = null;
-        hint4.color = Color.white;
-        hint4.fontSize = oriFontSize;
+        textUI.DOFade(1, fadeInTime);
+
+    }
+    void FadeOutText(TextMeshProUGUI textUI)
+    {
+        textUI.DOFade(0, fadeOutTime);
     }
 }
 
