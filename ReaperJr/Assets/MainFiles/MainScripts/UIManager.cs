@@ -151,12 +151,8 @@ public class UIManager : Singleton<UIManager>
 
         brightnessSlider.minValue = 0;
         brightnessSlider.maxValue = 2f;
-
-        musicToggle.isOn = false;
         musicSlider.minValue = 0;
         musicSlider.maxValue = 5;
-
-        soundFXToggle.isOn = false;
         soundFXSlider.minValue = 0;
         soundFXSlider.maxValue = 5;
 
@@ -168,6 +164,8 @@ public class UIManager : Singleton<UIManager>
         brightnessSlider.value = 0.3f;
         soundFXSlider.value = 1;
         musicSlider.value = 1;
+        musicToggle.isOn = false;
+        soundFXToggle.isOn = false;
     }
 
 

@@ -23,7 +23,7 @@ public class RoomCollider : ReaperJr
 
     private enum RoomType { LEVEL, ROOM }
     private RoomType roomType;
-    public bool notCalculate = false;
+    public bool notCalculate = false, startArea = false;
 
     private void Awake()
     {
@@ -55,8 +55,8 @@ public class RoomCollider : ReaperJr
         if (_UI.hintsPanel.GetComponent<CanvasGroup>().alpha != 1f)
             _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;
 
-        _UI.SetSouls(souls);
-
+        if (startArea)
+            _UI.SetSouls(souls);
     }
 
     private void OnTriggerEnter(Collider other)
