@@ -6482,6 +6482,7 @@ GameObject:
   - component: {fileID: 5540154156179016698}
   - component: {fileID: 5540154156179016693}
   - component: {fileID: 5540154156179016697}
+  - component: {fileID: 1754489408}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -6625,6 +6626,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 250, y: 250}
   m_EdgeRadius: 0
+--- !u!114 &1754489408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5540154156179016695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb88f01a61b05ce4e8f0456fe01d5f37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5540154156179758425
 GameObject:
   m_ObjectHideFlags: 0
@@ -16312,6 +16325,7 @@ MonoBehaviour:
   fadeOutTime: 0.3
   fadeInEase: 0
   fadeOutEase: 0
+  volume: {fileID: 0}
   timerCount: {fileID: 6836637424243178677}
   timer: {fileID: 8408644915464581822}
   souls:

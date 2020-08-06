@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1508057266360297100}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -205,7 +205,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9163753215537361336}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -291,7 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44294dee064694841946b36853d4f304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movingstate: 0
   mass: 1
   massModifier: 2
   drag: 5
@@ -307,3 +306,5 @@ MonoBehaviour:
   emiColorCanHold: {x: 0, y: 157, z: 255}
   emiColorHold: {x: 0, y: 157, z: 152}
   objectRB: {fileID: 0}
+  isKeyItem: 0
+  justReleased: 0

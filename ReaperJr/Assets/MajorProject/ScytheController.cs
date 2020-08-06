@@ -363,10 +363,11 @@ public class ScytheController : ReaperJr
             }
 
             else if (!holdingScythe)
-            {
                 StartCoroutine(ResetScythe());
-            }
         }
+
+        if (_GAME.gameState == GameState.DEAD)
+            StartCoroutine(ResetScythe());
         #endregion
 
         //float newF = Map(velocity, 10, 50, 0, 1);

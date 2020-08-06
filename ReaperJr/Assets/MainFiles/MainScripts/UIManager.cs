@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public enum HintForMovingBoxes { DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE }
 public enum HintForItemCollect { DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING }
@@ -25,6 +27,8 @@ public class UIManager : Singleton<UIManager>
     public float fadeOutTime = 0.2f;
     public Ease fadeInEase;
     public Ease fadeOutEase;
+    public Volume volume;
+    ColorAdjustments colorAdj;
 
     [Header("InGameUI")]
 
@@ -88,6 +92,8 @@ public class UIManager : Singleton<UIManager>
         if (cursor != null)
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         StartSetUI();
+        colorAdj.active = volume.profile.TryGet<ColorAdjustments>(out colorAdj);
+
     }
 
     // Update is called once per frame
@@ -120,8 +126,10 @@ public class UIManager : Singleton<UIManager>
 
         switch(_GAME.gameState)
         {
-            case GameState.MENU:
-                _GAME.lightSource.intensity = brightnessSlider.value;
+            case GameState.MENU:;
+                colorAdj.postExposure.value = brightnessSlider.value;
+
+                //_GAME.lightSource.intensity = brightnessSlider.value;
                 _AUDIO.MuteMusic(musicToggle.isOn);
                 _AUDIO.MusicVolume(musicSlider.value);
                 _AUDIO.MuteSoundFX(soundFXToggle.isOn);
@@ -161,6 +169,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OptionPanelDefault()
     {
+        
         brightnessSlider.value = 0.3f;
         soundFXSlider.value = 1;
         musicSlider.value = 1;

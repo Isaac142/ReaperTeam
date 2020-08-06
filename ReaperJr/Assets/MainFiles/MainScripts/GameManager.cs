@@ -72,6 +72,8 @@ public class GameManager : Singleton<GameManager>
 
         if (lightSource != null)
             DontDestroyOnLoad(lightSource.gameObject);
+        if (bottomReset != null)
+            DontDestroyOnLoad(bottomReset.gameObject);
     }
 
     public void ResetGame()
@@ -157,6 +159,8 @@ public class GameManager : Singleton<GameManager>
     {
         _PLAYER.teleportStart.SetActive(false);
         _PLAYER.teleportEnd.SetActive(false);
+        _cDTimer = coolDown;
+        onCD = false;
         _AUDIO.Play("PlayerReset");
         _timer -= punishmentTime;
         playerActive = false;
@@ -196,12 +200,6 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.MENU:
                 PauseGame();
-
-                _GAME.lightSource.intensity = _UI.brightnessSlider.value;
-                _AUDIO.MuteMusic(_UI.musicToggle.isOn);
-                _AUDIO.MusicVolume(_UI.musicSlider.value);
-                _AUDIO.MuteSoundFX(_UI.soundFXToggle.isOn);
-                _AUDIO.SoundFXVolume(_UI.soundFXSlider.value);
                 break;
             case GameState.GAMEOVER:
                 PauseGame();
