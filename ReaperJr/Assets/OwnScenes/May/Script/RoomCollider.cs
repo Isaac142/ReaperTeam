@@ -93,7 +93,20 @@ public class RoomCollider : ReaperJr
     {
         if (other.tag == "Player")
         {
-            if(souls.Count>0)
+            switch (roomType)
+            {
+                case RoomType.LEVEL:
+                    //set up level boundaries
+                    if (_CAMERA.levelVerBoundaries.x != roomHeight.x)
+                    _CAMERA.levelVerBoundaries = new Vector2(roomHeight.x, roomHeight.y);
+                    break;
+                case RoomType.ROOM:
+                    if(_CAMERA.levelDepthBoundaries.x != roomDepth.x)
+                        StartCoroutine(_CAMERA.RoomSwitch(roomSides, roomHeight, roomDepth));
+                    break;
+            }
+
+            if (souls.Count > 0)
             {
                 if (_UI.soulPanel.GetComponent<CanvasGroup>().alpha != 1f)
                 {

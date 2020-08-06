@@ -176,7 +176,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657181397219186520}
-  m_LocalRotation: {x: 0.017366175, y: 0.60113275, z: 0.0036556355, w: 0.79895204}
+  m_LocalRotation: {x: 0.017366176, y: 0.6011328, z: 0.0036556358, w: 0.7989521}
   m_LocalPosition: {x: 12.222047, y: 0.000004124773, z: -0.00004948575}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3000,6 +3000,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5360967726984610464}
+  - component: {fileID: 2723190542567364994}
   m_Layer: 0
   m_Name: Mouse_Model
   m_TagString: Untagged
@@ -3023,6 +3024,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2723190542567364994
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8952771670726586547}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 230cafe6e741786489aa9618986a83a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8972831285333326000
 GameObject:
   m_ObjectHideFlags: 0

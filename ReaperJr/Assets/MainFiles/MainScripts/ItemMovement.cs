@@ -297,7 +297,7 @@ public class ItemMovement : ReaperJr
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" || other.tag == "Scythe")
+        if (other.tag == "Player" || other.tag == "Scythe" || other.GetComponent<EnemyPatrol>() != null)
         {
             if (hasRB && !isLigther && !isHolding && !justReleased)
             {
@@ -310,11 +310,8 @@ public class ItemMovement : ReaperJr
     {
         if (hasRB && !isLigther)
         {
-            if (other.tag == "Player" || other.tag == "Scythe")
-            {
-                justReleased = false;
-                objectRB.isKinematic = false;
-            }
+            justReleased = false;
+            objectRB.isKinematic = false;
         }
     }
 

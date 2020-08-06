@@ -92,7 +92,7 @@ public class UIManager : Singleton<UIManager>
         if (cursor != null)
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         StartSetUI();
-        colorAdj.active = volume.profile.TryGet<ColorAdjustments>(out colorAdj);
+
 
     }
 
@@ -140,6 +140,8 @@ public class UIManager : Singleton<UIManager>
 
     public void StartSetUI()
     {
+        if(volume != null)
+            colorAdj.active = volume.profile.TryGet<ColorAdjustments>(out colorAdj);
         energyBar.maxValue = _GAME.maxEnergy;
         energyBar.minValue = 0f;
 
