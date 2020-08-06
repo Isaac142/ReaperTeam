@@ -157,8 +157,8 @@ public class UIManager : Singleton<UIManager>
         infoPanel.SetActive(false);
         DOTween.SetTweensCapacity(2000, 100);
 
-        brightnessSlider.minValue = 0;
-        brightnessSlider.maxValue = 2f;
+        brightnessSlider.minValue = -1;
+        brightnessSlider.maxValue = 1f;
         musicSlider.minValue = 0;
         musicSlider.maxValue = 5;
         soundFXSlider.minValue = 0;
@@ -170,7 +170,7 @@ public class UIManager : Singleton<UIManager>
     public void OptionPanelDefault()
     {
         
-        brightnessSlider.value = 0.3f;
+        brightnessSlider.value = 0.5f;
         soundFXSlider.value = 1;
         musicSlider.value = 1;
         musicToggle.isOn = false;

@@ -227,19 +227,19 @@ public class ItemMovement : ReaperJr
         else
             GameEvents.ReportMovableHintShown(HintForMovingBoxes.RELEASING);
 
-        if (hasRB) //dynamic events
-        {
-            if (!isLigther)
-            {
-                CurrDist = Vector3.Distance(centerMarker.transform.position, _PLAYER.transform.position); //if object rotat further enough, object falls.
+        //if (hasRB) //dynamic events
+        //{
+        //    if (!isLigther)
+        //    {
+        //        CurrDist = Vector3.Distance(centerMarker.transform.position, _PLAYER.transform.position); //if object rotat further enough, object falls.
 
-                if (!Physics.Raycast(centerMarker.transform.position, Vector3.down, (centerMarker.transform.position.y - _PLAYER.transform.position.y) + 0.05f))
-                {
-                    justReleased = true;
-                    StartCoroutine(Release());
-                }
-            }
-        }
+        //        if (!Physics.Raycast(centerMarker.transform.position, Vector3.down, (centerMarker.transform.position.y - _PLAYER.transform.position.y) + 0.05f))
+        //        {
+        //            justReleased = true;
+        //            StartCoroutine(Release());
+        //        }
+        //    }
+        //}
         if (isKeyItem && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
             GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
         if (_GAME.gameState == GameState.DEAD)
