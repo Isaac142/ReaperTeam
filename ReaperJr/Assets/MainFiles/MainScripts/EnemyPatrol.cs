@@ -79,7 +79,6 @@ public class EnemyPatrol : ReaperJr
         switch (enemyType)
         {
             case EnemyType.ENEMY:
-                StartCoroutine(Chasing());
                 if (agent.remainingDistance < 0.5f)
                     NextPatrolPoint();
                 break;
@@ -160,11 +159,6 @@ public class EnemyPatrol : ReaperJr
     {
         if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
         {
-            if (isDog)
-            {
-                _AUDIO.StopPlay("DogSnarl");
-                _AUDIO.StopPlay("Rattling");
-            }
             if (isMouse)
                 _AUDIO.Play("MouseRunning");
 
@@ -181,13 +175,20 @@ public class EnemyPatrol : ReaperJr
                         isChasing = true;
 
                         if (isDog)
-                            _AUDIO.Play("Rattling");
+                        {
+                            _AUDIO.Play("DogSnarl");
+                            _AUDIO.StopPlay("Rattling");
+                        }
 
                     }
                 }
                 else
                 {
-                    _AUDIO.Play("DogSnarl");
+                    if (isDog)
+                    {
+                        _AUDIO.Play("Rattling");
+                        _AUDIO.StopPlay("DogSnarl");
+                    }
                     NextPatrolPoint();
                     agent.speed = patrolSpeed;
                     isChasing = false;
