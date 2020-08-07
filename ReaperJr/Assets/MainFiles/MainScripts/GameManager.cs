@@ -79,7 +79,6 @@ public class GameManager : Singleton<GameManager>
     public void ResetGame()
     {
         _UI.StartSetUI();
-        _AUDIO.RestartSetting();
         _PLAYER.Restart();
         holdingLightObject = false;
         isHolding = false;
@@ -161,7 +160,6 @@ public class GameManager : Singleton<GameManager>
         _PLAYER.teleportEnd.SetActive(false);
         _cDTimer = coolDown;
         onCD = false;
-        _AUDIO.Play("PlayerReset");
         _timer -= punishmentTime;
         playerActive = false;
         _UI.SetHintPanel();
@@ -188,23 +186,31 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.INGAME:
                 deadParticleEffect.SetActive(false);
+                _AUDIO.PlayMusic("Theme");
                 break;
             case GameState.DEAD:
                 if (isInvincible) //attempt to stop repeat dead-in game state change.
                     GameEvents.ReportGameStateChange(GameState.INGAME);
                 else
+                {
                     PlayerDead();
+                    _AUDIO.PlayMusic("PlayerReset");
+                }
                 break;
             case GameState.PAUSED:
+                _AUDIO.PlayMusic("Theme");
                 PauseGame();
                 break;
             case GameState.MENU:
+                _AUDIO.PlayMusic("Theme");
                 PauseGame();
                 break;
             case GameState.GAMEOVER:
+                _AUDIO.PlayMusic("Theme");
                 PauseGame();
                 break;
             case GameState.WON:
+                _AUDIO.PlayMusic("Theme");
                 PauseGame();
                 break;
             case GameState.RESUME:

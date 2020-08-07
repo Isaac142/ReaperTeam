@@ -61,6 +61,13 @@ public class EnemyPatrol : ReaperJr
                 anim.SetBool("Red", false);
                 break;
         }
+
+        if (isMouse)
+
+            _AUDIO.Play(this.GetComponent<AudioSource>(), "MouseRunning", awareDistance);
+
+        if (isDog)
+            _AUDIO.Play(this.GetComponent<AudioSource>(), "Rattling", awareDistance);
     }
 
     // Update is called once per frame
@@ -72,16 +79,23 @@ public class EnemyPatrol : ReaperJr
         toPlayer = Vector3.Distance(player.position, transform.position);
 
         if (isDog)
+        {
             anim.SetBool("DogChase", isChasing);
+            if(isChasing)
+                _AUDIO.Play(this.GetComponent<AudioSource>(), "DogSnarl", awareDistance);
+            else
+                _AUDIO.Play(this.GetComponent<AudioSource>(), "Rattling", awareDistance);
+        }
 
         //if is Mouse ==> setbool to same as ischasing, when ischasing true, mouse is running
-        if (isMouse)
-            anim.SetBool("MouseChase", isChasing);
+       
         switch (enemyType)
         {
             case EnemyType.ENEMY:
+                agent.speed = patrolSpeed;
                 if (agent.remainingDistance < 0.5f)
                     NextPatrolPoint();
+                isChasing = false;
                 break;
 
             case EnemyType.DUMMY:
@@ -142,15 +156,6 @@ public class EnemyPatrol : ReaperJr
             agent.SetDestination(newPosition);
             if (agent.remainingDistance < 0.5f)
                 NextPatrolPoint();
-
-            if (isMouse)
-                _AUDIO.Play("MouseRunning"); //only play audios when player is around.
-        }
-        else
-        {
-            isChasing = false;
-            if (isMouse)
-                _AUDIO.StopPlay("MouseRunning");
         }
 
         yield return null;
@@ -160,10 +165,6 @@ public class EnemyPatrol : ReaperJr
     {
         if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
         {
-            if (isMouse)
-                _AUDIO.Play("MouseRunning");
-
-            isChasing = true;
             if (Physics.Linecast(transform.position, _PLAYER.transform.position)) //check if character is in sight
             {
                 if (!_GAME.isInvincible)
@@ -174,40 +175,9 @@ public class EnemyPatrol : ReaperJr
                         agent.destination = player.position;
                         agent.speed = chasingSpeed;
                         isChasing = true;
-
-                        if (isDog)
-                        {
-                            _AUDIO.Play("DogSnarl");
-                            _AUDIO.StopPlay("Rattling");
-                        }
-
                     }
                 }
-                else
-                {
-                    if (isDog)
-                    {
-                        _AUDIO.Play("Rattling");
-                        _AUDIO.StopPlay("DogSnarl");
-                    }
-                    NextPatrolPoint();
-                    agent.speed = patrolSpeed;
-                    isChasing = false;
-                }
             }
-        }
-
-        else
-        {
-            if (isDog)
-            {
-                _AUDIO.StopPlay("DogSnarl");
-                _AUDIO.StopPlay("Rattling");
-            }
-
-            if (isMouse)
-                _AUDIO.StopPlay("MouseRunning");
-
         }
         yield return null;
     }

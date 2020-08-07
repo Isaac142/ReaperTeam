@@ -33,29 +33,39 @@ public class AudioManager : Singleton<AudioManager>
 
     void Start()
     {
-        RestartSetting(); 
+        foreach (Sound s in sounds)
+            s.source.Stop();
     }
 
-    public void RestartSetting()
+    //public void RestartSetting()
+    //{
+    //    PlayMusic("Theme");
+    //}
+
+    public void Play (AudioSource obj, string name, float distance)
     {
-        PlayMusic("Theme");
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        obj.clip = s.clip;
+        obj.loop = s.loop;
+        obj.volume = s.volume;
+        obj.mute = s.source.mute;
+        obj.maxDistance = distance;
+        obj.Play();
     }
 
-    public void Play (string name)
+    public void StopPlay(GameObject obj)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.Play();
-    }
-    public void StopPlay(string name)
-    {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.Stop();
+        obj.GetComponent<AudioSource>().Stop();
     }
 
     public void PlayMusic(string name)
     {
-        Sound s = Array.Find(musicClips, sound => sound.name == name);
-        s.source.Play();
+        Sound s = Array.Find(musicClips, musicClips => musicClips.name == name);
+        _CAMERA.GetComponent<AudioSource>().clip = s.clip;
+        _CAMERA.GetComponent<AudioSource>().loop = s.loop;
+        _CAMERA.GetComponent<AudioSource>().volume = s.volume;
+        _CAMERA.GetComponent<AudioSource>().mute = s.source.mute;
+        _CAMERA.GetComponent<AudioSource>().Play();
     }
     public void StopPlayMusic(string name)
     {

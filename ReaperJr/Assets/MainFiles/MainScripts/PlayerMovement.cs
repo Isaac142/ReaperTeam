@@ -97,7 +97,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
         if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
         {
-            _AUDIO.Play("Jump");
+            _AUDIO.Play(this.GetComponent<AudioSource>(), "Jump", 10);
             distToGround = 0f;
             isJumping = true;
             if (isGrounded)
@@ -109,7 +109,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             if (_GAME.Energy >= _GAME.teleportingEnergy)
             {
                 anim.SetTrigger("Teleport");
-                _AUDIO.Play("Teleport1");
+                _AUDIO.Play(this.GetComponent<AudioSource>(), "Teleport1", 10);
                 StartCoroutine(TeleportToScythe());
                 _GAME.Energy -= _GAME.teleportingEnergy;
                 _GAME.onCD = true;
@@ -156,9 +156,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (walkHack)
         {
             if (dragging || pushing)
-                _AUDIO.Play("BoxMove");
-            else
-                GetComponent<AudioSource>().clip = null;
+                _AUDIO.Play(this.GetComponent<AudioSource>(), "BoxMove", 10);
         }
     }
 
@@ -490,7 +488,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                         if (hits[i].transform.tag == "Soul")
                         {
-                            _AUDIO.Play("SoulCollect");
+                            _AUDIO.Play(this.GetComponent<AudioSource>(), "SoulCollect", 10);
                             GameEvents.ReportScytheEquipped(true);
                             hits[i].transform.GetComponent<SoulType>().isCollected = true;
                             GameEvents.ReportSoulCollected(hits[i].transform.GetComponent<SoulType>());
@@ -512,7 +510,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                         if (hits[i].transform.tag == "HiddenItem")
                         {
-                            _AUDIO.Play("SpecialCollect");
+                            _AUDIO.Play(this.GetComponent<AudioSource>(), "SpecialCollect", 10);
                             _GAME.Timer += _GAME.rewardTime;
                             Destroy(hits[i].transform.gameObject);
                             GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
@@ -522,7 +520,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                         {
                             if (!hits[i].transform.GetComponent<KeyItem>().isCollected)
                             {
-                                _AUDIO.Play("SpecialCollect");
+                                _AUDIO.Play(this.GetComponent<AudioSource>(), "SpecialCollect", 10);
                                 hits[i].transform.GetComponent<KeyItem>().isCollected = true;
                                 GameEvents.ReportKeyItemCollected(hits[i].transform.GetComponent<KeyItem>());
                             }

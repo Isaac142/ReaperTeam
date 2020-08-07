@@ -23,10 +23,10 @@ public class TouchPlayer : ReaperJr
                     if (!_GAME.isInvincible)
                     {
                         GameEvents.ReportGameStateChange(GameState.DEAD);
-                        //if(isDog || isMouse || isFakeSoul)
-                           // _AUDIO.Play("PlayerImpact");
-                        //if (isToyGun)
-                           // _AUDIO.Play("ToyGun");
+                        if (isDog || isMouse || isFakeSoul)
+                            _AUDIO.Play(_PLAYER.GetComponent<AudioSource>(), "PlayerImpact", 10);
+                        if (isToyGun)
+                            _AUDIO.Play(_PLAYER.GetComponent<AudioSource>(), "ToyGun", 10);
                     }
                 }
             }
