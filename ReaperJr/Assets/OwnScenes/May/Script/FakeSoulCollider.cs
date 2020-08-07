@@ -30,7 +30,7 @@ public class FakeSoulCollider : ReaperJr
                 if (script.isToySoldier)
                 {
                     script.anim.SetBool("Walking", true);
-                    _AUDIO.Play("ToyMove");
+                   // _AUDIO.Play("ToyMove");
                 }
             }
         }
@@ -47,7 +47,7 @@ public class FakeSoulCollider : ReaperJr
                 if (script.isToySoldier)
                 {
                     script.anim.SetBool("Walking", false);
-                    _AUDIO.StopPlay("ToyMove");
+                    //_AUDIO.StopPlay("ToyMove");
                 }
                 script.agent.isStopped = true;
             }

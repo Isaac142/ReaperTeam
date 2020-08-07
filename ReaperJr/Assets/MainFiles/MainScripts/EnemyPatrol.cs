@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,8 +15,9 @@ public class EnemyPatrol : ReaperJr
     public float patrolSpeed = 3f;
     public float chasingSpeed = 3f;
     public float touchPlayerDist = 1f;
-
-    private float toPlayer;
+    
+    [HideInInspector]
+    public float toPlayer;
     private int patrolIndex = 0;
 
     private enum EnemyType { ENEMY, DUMMY, FLEE, FAKESOUL }

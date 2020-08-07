@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : Singleton<PlayerMovement>
@@ -52,6 +52,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public bool walkHack;
     private bool teleported = false;
     public GameObject teleportStart, teleportEnd;
+
+    [HideInInspector]
+    public bool dragging = false, pushing = false;
+
     #endregion
 
     #region Start
@@ -138,10 +142,24 @@ public class PlayerMovement : Singleton<PlayerMovement>
             }
         }
 
-        bool holding = _GAME.isHolding;
-        bool carrying = _GAME.holdingLightObject;
-        anim.SetBool("Holding", holding);
-        anim.SetBool("Carrying", carrying);
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            GameEvents.ReportOnMovingObject(_GAME.isHolding);
+        }
+        
+        anim.SetBool("Holding", _GAME.isHolding);
+        anim.SetBool("Carrying", _GAME.holdingLightObject);
+        anim.SetBool("Drag", dragging);
+        anim.SetBool("Push", pushing);
+        anim.SetBool("WalkHack", walkHack);
+
+        if (walkHack)
+        {
+            if (dragging || pushing)
+                _AUDIO.Play("BoxMove");
+            else
+                GetComponent<AudioSource>().clip = null;
+        }
     }
 
     private void FixedUpdate() //prevent character walking into walls.
@@ -225,22 +243,16 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #endregion
 
     #region PlayerMovement
-
-    bool dragging;
-    bool pushing;
-
     //Creating the player jumping, and player movement function.
     void Movement()
     {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-        anim.SetBool("Drag", dragging);
-        anim.SetBool("Push", pushing);
-        if (dragging || pushing)
-            _AUDIO.Play("BoxMove");
-        else
+        if(!_GAME.isHolding)
+        {
+            dragging = false;
+            pushing = false;
+        }
 
-            _AUDIO.StopPlay("BoxMove");
+        float h = Input.GetAxis("Horizontal"), v = Input.GetAxis("Vertical");
 
 
         if (Mathf.Abs(h) > 0.1f)
@@ -253,14 +265,19 @@ public class PlayerMovement : Singleton<PlayerMovement>
         else
             StartCoroutine(ResetMovement());
 
-        anim.SetBool("WalkHack",walkHack);
-
         if (_GAME.isHolding && !_GAME.holdingLightObject)
         #region MovingHeavyObject
         {
             speed = speedFactor;
             pushing = false;
             dragging = false;
+
+            if(!movable)
+            {
+                h = 0;
+                v = 0;
+            }
+
             if (facingF)
             {
                 h = 0; //stop side way walk
