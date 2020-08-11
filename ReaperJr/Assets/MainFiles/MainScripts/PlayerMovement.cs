@@ -253,13 +253,13 @@ public class PlayerMovement : Singleton<PlayerMovement>
         float h = Input.GetAxis("Horizontal"), v = Input.GetAxis("Vertical");
 
 
-        if (Mathf.Abs(h) > 0.1f)
+        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f)
             walkHack = true;
-        else
-            StartCoroutine(ResetMovement());
+        //else
+        //    StartCoroutine(ResetMovement());
 
-        if (Mathf.Abs(v) > 0.1f)
-            walkHack = true;
+        //if (Mathf.Abs(v) > 0.1f)
+        //    walkHack = true;
         else
             StartCoroutine(ResetMovement());
 
