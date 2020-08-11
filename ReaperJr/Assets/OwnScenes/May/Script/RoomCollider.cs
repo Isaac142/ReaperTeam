@@ -56,7 +56,8 @@ public class RoomCollider : ReaperJr
             _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;
 
         if (startArea)
-            _UI.SetSouls(souls);
+            OnTriggerStay(_PLAYER.GetComponent<Collider>());
+           //_UI.SetSouls(souls);
     }
 
     private void OnTriggerEnter(Collider other)
