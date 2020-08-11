@@ -129,8 +129,6 @@ public class UIManager : Singleton<UIManager>
         {
             case GameState.MENU:;
                 colorAdj.postExposure.value = brightnessSlider.value;
-
-                //_GAME.lightSource.intensity = brightnessSlider.value;
                 _AUDIO.MuteMusic(musicToggle.isOn);
                 _AUDIO.MusicVolume(musicSlider.value);
                 _AUDIO.MuteSoundFX(soundFXToggle.isOn);
@@ -173,7 +171,7 @@ public class UIManager : Singleton<UIManager>
     public void OptionPanelDefault()
     {
         
-        brightnessSlider.value = 0.5f;
+        brightnessSlider.value = 0f;
         soundFXSlider.value = 1;
         musicSlider.value = 1;
         musicToggle.isOn = false;
@@ -381,25 +379,7 @@ public class UIManager : Singleton<UIManager>
             else
                 souls[i].color = Color.white;
         }
-        //UpdateSouls();
     }
-
-    //public void UpdateSouls()
-    //{
-    //    for (int i = 0; i < currSouls.Count; i++)
-    //    {
-    //        if (currSouls[i].isCollected)
-    //        {
-    //            //souls[i].color = Color.gray;
-    //            souls[i].DOColor(Color.red, 0.5f);
-    //            souls[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
-    //            StartCoroutine(ReturnSouldIcon(souls[i]));
-    //        }
-
-    //        else
-    //            souls[i].color = Color.white;
-    //    }
-    //}
 
     public void OnSoulCollected(SoulType soul)
     {
@@ -413,7 +393,6 @@ public class UIManager : Singleton<UIManager>
             }
         }
         List<SoulType> collected = currSouls.FindAll(x => x.isCollected == true);
-        Debug.Log(collected.Count);
         if(currSouls.Count == collected.Count)
         {
             FadeInPanel(roomClearPanel);

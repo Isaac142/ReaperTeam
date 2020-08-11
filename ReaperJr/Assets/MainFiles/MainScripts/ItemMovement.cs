@@ -79,7 +79,7 @@ public class ItemMovement : ReaperJr
 
     void Update()
     {
-        if (_GAME.playerActive == false)
+        if (_GAME.gameState != GameState.INGAME)
             return;
         if (_PLAYER.isCrouching == true)
             return;

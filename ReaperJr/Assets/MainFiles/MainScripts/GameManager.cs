@@ -221,14 +221,14 @@ public class GameManager : Singleton<GameManager>
 
     public void PauseGame()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         playerActive = false;
         isPaused = true;
     }
 
     IEnumerator ResumeGame()
     {
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
         yield return new WaitForSeconds(0.5f);
 
         isPaused = false;
