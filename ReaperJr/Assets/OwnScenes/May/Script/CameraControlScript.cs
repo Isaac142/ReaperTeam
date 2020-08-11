@@ -61,6 +61,9 @@ public class CameraControlScript : Singleton<CameraControlScript>
     public enum CameraState { INROOM, OUTROOM}
     public CameraState camState;
 
+    public enum CameraPosition { GAMEPLAY, ZOOMOUT, ZOOMIN}
+    public CameraPosition camPos;
+
     private void Awake()
     {
         screenConcersInWorld[0] = Camera.main.ScreenToWorldPoint(new Vector3(0f, Camera.main.pixelHeight, miniCamToEdgeDist));
@@ -82,6 +85,8 @@ public class CameraControlScript : Singleton<CameraControlScript>
         player = _PLAYER.gameObject.transform;
         scythe = _PLAYER.scythe.transform;
         DOTween.SetTweensCapacity(2000, 100);
+
+        camPos = CameraPosition.GAMEPLAY;
     }
 
     private void Update()
@@ -104,9 +109,10 @@ public class CameraControlScript : Singleton<CameraControlScript>
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            isViewingAll = !isViewingAll;
+            camPos = camPos == CameraPosition.GAMEPLAY ? CameraPosition.ZOOMOUT : CameraPosition.GAMEPLAY;
+            //isViewingAll = !isViewingAll;
 
-            if (isViewingAll)
+            if (camPos == CameraPosition.ZOOMOUT)
             {
                 transform.DOMove(zoomOutPos, zoomSpeed).SetEase(zoomEase);
             }
@@ -119,7 +125,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
 
     private void FixedUpdate()
     {
-        if (!isViewingAll)
+        if (camPos == CameraPosition.GAMEPLAY)
         {
             playerPos = _PLAYER.gameObject.transform.position;
             scythePos = scythe.position;
@@ -227,5 +233,32 @@ public class CameraControlScript : Singleton<CameraControlScript>
     public void SetCameraState(CameraState state)
     {
         camState = state;
+    }
+
+    public void RoomClear()
+    {
+        camPos = camPos == CameraPosition.GAMEPLAY ? CameraPosition.ZOOMIN : CameraPosition.GAMEPLAY;
+
+        if (camPos == CameraPosition.ZOOMIN)
+        {
+            GameEvents.ReportGameStateChange(GameState.VICTORY);
+            // Grab a free Sequence to use
+            Sequence mySequence = DOTween.Sequence();
+            // Add a movement tween at the beginning
+            mySequence.Append(transform.DOMove(_PLAYER.transform.position + new Vector3(0, 1, -2), zoomSpeed).SetEase(zoomEase));
+            // Add a rotation tween as soon as the previous one is finished
+            //mySequence.Append(transform.DORotate(new Vector3(0, 180, 0), 1));
+            // Delay the whole Sequence by 1 second
+            //mySequence.PrependInterval(1);
+            // Insert a scale tween for the whole duration of the Sequence
+            //mySequence.Insert(0, transform.DOScale(new Vector3(3, 3, 3), mySequence.Duration()));
+            mySequence.AppendInterval(3);
+            mySequence.Append(transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase)).OnComplete(() =>
+            {
+                camPos = CameraPosition.GAMEPLAY;
+                GameEvents.ReportGameStateChange(GameState.INGAME);
+                
+            });
+        }
     }
 }

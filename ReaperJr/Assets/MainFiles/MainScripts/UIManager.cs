@@ -67,6 +67,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject gameOverPanel;
     public GameObject wonPanel;
     public GameObject deadPanel;
+    public GameObject roomClearPanel;
 
     public Slider brightnessSlider, musicSlider, soundFXSlider;
     public Toggle musicToggle, soundFXToggle;
@@ -188,6 +189,7 @@ public class UIManager : Singleton<UIManager>
         FadeOutPanel(menuPanel);
         FadeOutPanel(wonPanel);
         FadeOutPanel(deadPanel);
+        FadeOutPanel(roomClearPanel);
     }
     public void CloseAllPanels()
     {
@@ -198,6 +200,7 @@ public class UIManager : Singleton<UIManager>
         InstantOffPanel(wonPanel);
         InstantOffPanel(deadPanel);
         InstantOffPanel(hintsPanel);
+        InstantOffPanel(roomClearPanel);
     }
 
     public void DisableSoulIcons()
@@ -242,6 +245,9 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.DEAD:
                 FadeInPanel(deadPanel);
+                break;
+            case GameState.VICTORY:
+                FadeInPanel(roomClearPanel);
                 break;
         }
     }
@@ -405,6 +411,13 @@ public class UIManager : Singleton<UIManager>
                 souls[i].rectTransform.DOScale(Vector3.one * 1.5f, 0.5f);
                 StartCoroutine(ReturnSoulIcon(souls[i]));
             }
+        }
+        List<SoulType> collected = currSouls.FindAll(x => x.isCollected == true);
+        Debug.Log(collected.Count);
+        if(currSouls.Count == collected.Count)
+        {
+            FadeInPanel(roomClearPanel);
+            _CAMERA.RoomClear();
         }
     }
 
