@@ -189,6 +189,7 @@ public class UIManager : Singleton<UIManager>
         FadeOutPanel(menuPanel);
         FadeOutPanel(wonPanel);
         FadeOutPanel(deadPanel);
+        FadeOutPanel(roomClearPanel);
     }
     public void CloseAllPanels()
     {
@@ -244,6 +245,9 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.DEAD:
                 FadeInPanel(deadPanel);
+                break;
+            case GameState.VICTORY:
+                FadeInPanel(roomClearPanel);
                 break;
         }
     }
@@ -413,6 +417,7 @@ public class UIManager : Singleton<UIManager>
         if(currSouls.Count == collected.Count)
         {
             FadeInPanel(roomClearPanel);
+            _CAMERA.RoomClear();
         }
     }
 

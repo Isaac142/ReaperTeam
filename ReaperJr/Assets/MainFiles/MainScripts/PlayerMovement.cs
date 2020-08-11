@@ -162,6 +162,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     private void FixedUpdate() //prevent character walking into walls.
     {
+        if (_GAME.gameState != GameState.INGAME)
+            return;
         if (_GAME.isPaused)
             return;
         Grounded();

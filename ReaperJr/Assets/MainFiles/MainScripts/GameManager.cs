@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-public enum GameState { TITLE, INGAME, PAUSED, DEAD, RESUME, GAMEOVER, WON, MENU }
+public enum GameState { TITLE, INGAME, PAUSED, DEAD, RESUME, GAMEOVER, WON, MENU, VICTORY }
 
 public class GameManager : Singleton<GameManager>
 {
