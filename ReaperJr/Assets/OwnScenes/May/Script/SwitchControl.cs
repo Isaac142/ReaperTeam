@@ -12,6 +12,8 @@ public class SwitchControl : ReaperJr
     private float playerDist;
     public float clickDist;
     public Animator anim;
+    public GameObject particle;
+    private Material mat;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,9 @@ public class SwitchControl : ReaperJr
             light.SetActive(false);
         foreach (SoulType soul in souls)
             soul.gameObject.SetActive(false);
+        mat = GetComponentInChildren<Renderer>().material;
+        mat.DisableKeyword("_EMISSION");
+        particle.SetActive(false);
     }
 
     // Update is called once per frame
@@ -87,6 +92,8 @@ public class SwitchControl : ReaperJr
         if (other.tag == "Player")
         {
             canClick = true;
+            mat.EnableKeyword("_EMISSION");
+            particle.SetActive(true);
         }
     }
 
@@ -95,6 +102,8 @@ public class SwitchControl : ReaperJr
         if (other.tag == "Player")
         {
             canClick = false;
+            mat.DisableKeyword("_EMISSION");
+            particle.SetActive(false);
         }
     }
 }
