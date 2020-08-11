@@ -204,8 +204,9 @@ public class ItemMovement : ReaperJr
 
         if (objectRB != null)
         {
-            iniDistance = Vector3.Distance(centerMarker.transform.position, _PLAYER.transform.position) + relasingThreshold;
             Destroy(objectRB);
+            if(!isLigther)
+                iniDistance = Vector3.Distance(centerMarker.transform.position, _PLAYER.transform.position) + relasingThreshold;          
         }
     }
 
