@@ -7,10 +7,13 @@ public class LeverControl_Attic : ReaperJr
     private AtticDoorSwitch controller;
     public float clickDist = 1.5f;
     private float playerDist;
+    private Material mat;
+    public GameObject particles;
 
     private void Start()
     {
         controller = GetComponentInParent<AtticDoorSwitch>();
+        mat = GetComponentInChildren<Renderer>().material;
     }
 
     void Update()
@@ -34,6 +37,17 @@ public class LeverControl_Attic : ReaperJr
                     controller.FinalPos();
                 }
             }
+        }
+
+        if (controller.allKeysIn && !controller.switchActivated)
+        {
+            mat.EnableKeyword("_EMISSION");
+            particles.SetActive(true);
+        }
+        else
+        {
+            mat.DisableKeyword("_EMISSION");
+            particles.SetActive(false);
         }
     }
 
