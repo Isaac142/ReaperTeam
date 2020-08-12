@@ -113,13 +113,9 @@ public class CameraControlScript : Singleton<CameraControlScript>
             //isViewingAll = !isViewingAll;
 
             if (camPos == CameraPosition.ZOOMOUT)
-            {
                 transform.DOMove(zoomOutPos, zoomSpeed).SetEase(zoomEase);
-            }
             else
-            {
                 transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase);
-            }
         }
     }
 
@@ -132,9 +128,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
             betweenDist = Vector3.Distance(playerPos, scythePos); //calculate difference between player and scythe
 
             offset = (betweenDist > chaseThreshold) ? //camera chasing scythe if distance over threshold
-                 new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f) : Vector3.zero;
-
-            
+                 new Vector3((scythePos.x - playerPos.x) / 2f, (scythePos.y - playerPos.y) / 2f, 0f) : Vector3.zero;           
 
             switch(camState)
             {
@@ -245,14 +239,14 @@ public class CameraControlScript : Singleton<CameraControlScript>
             // Grab a free Sequence to use
             Sequence mySequence = DOTween.Sequence();
             // Add a movement tween at the beginning
-            mySequence.Append(transform.DOMove(_PLAYER.transform.position + new Vector3(0, 1, -2), zoomSpeed).SetEase(zoomEase));
+            mySequence.Append(transform.DOMove(_PLAYER.transform.position + new Vector3(0, 1.5f, -3f), zoomSpeed).SetEase(zoomEase));
             // Add a rotation tween as soon as the previous one is finished
             //mySequence.Append(transform.DORotate(new Vector3(0, 180, 0), 1));
             // Delay the whole Sequence by 1 second
             //mySequence.PrependInterval(1);
             // Insert a scale tween for the whole duration of the Sequence
             //mySequence.Insert(0, transform.DOScale(new Vector3(3, 3, 3), mySequence.Duration()));
-            mySequence.AppendInterval(3);
+            mySequence.AppendInterval(3f);
             mySequence.Append(transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase)).OnComplete(() =>
             {
                 camPos = CameraPosition.GAMEPLAY;

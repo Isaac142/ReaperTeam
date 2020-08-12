@@ -17,6 +17,7 @@ public static class GameEvents
     public static event Action<EnemyPatrol> OnFakeSoulChasing = null;
     public static event Action<FakeSoulController> OnFakeSoulCollected = null;
     public static event Action<bool> OnMovingObject = null;
+    public static event Action<bool> OnFallDeath = null;
 
     public static void ReportGameStateChange(GameState gameState)
     {
@@ -88,5 +89,11 @@ public static class GameEvents
     {
         if (OnMovingObject != null)
             OnMovingObject(holding);
+    }
+
+    public static void ReportOnFallDeath(bool fall)
+    {
+        if (OnFallDeath != null)
+            OnFallDeath(fall);
     }
 }

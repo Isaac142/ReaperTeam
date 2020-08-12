@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal;
 
 public enum HintForMovingBoxes { DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE }
 public enum HintForItemCollect { DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING }
-public enum HintForInteraction { DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM }
+public enum HintForInteraction { DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM, MOUSETRAP }
 
 public class UIManager : Singleton<UIManager>
 {
@@ -246,6 +246,8 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.VICTORY:
                 FadeInPanel(roomClearPanel);
+                roomClearPanel.GetComponentInChildren<TextMeshProUGUI>().text = "All Souls Collected in the Room." 
+                    + "\n <size=120> <color=#9C00FF> " + (_GAME.totalSoulNo - 1 ).ToString() + "<size=80> <color=white> to Collect.";
                 break;
         }
     }
@@ -283,6 +285,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnCollectHintShown += OnCollectHintShown;
         GameEvents.OnInteractHintShown += OnInterActionHintShown;
         GameEvents.OnCrossHairOut += OnCrossHairOut;
+        GameEvents.OnFallDeath += OnFallDeath;
     }
 
     private void OnDisable()
@@ -296,6 +299,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnCrossHairOut -= OnCrossHairOut;
         GameEvents.OnCollectHintShown -= OnCollectHintShown;
         GameEvents.OnInteractHintShown -= OnInterActionHintShown;
+        GameEvents.OnFallDeath -= OnFallDeath;
     }
 
     void OnCrossHairOut(bool crosshair)
@@ -308,7 +312,8 @@ public class UIManager : Singleton<UIManager>
     #region Button Press
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameEvents.ReportOnMovingObject(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         _GAME.ResetGame();
         GameEvents.ReportGameStateChange(GameState.RESUME);
     }
@@ -562,6 +567,10 @@ public class UIManager : Singleton<UIManager>
                 InteractionHint2.text = "<color=red> This is a Key Item!";
                 FadeInText(InteractionHint2);
                 break;
+            case HintForInteraction.MOUSETRAP:
+                InteractionHint1.text = "<color=#9C00FF> Require Special Object to Activate Trap!";
+                FadeInText(InteractionHint1);
+                break;
         }
     }
 
@@ -573,6 +582,14 @@ public class UIManager : Singleton<UIManager>
     void FadeOutText(TextMeshProUGUI textUI)
     {
         textUI.DOFade(0, fadeOutTime);
+    }
+
+    void OnFallDeath(bool fall)
+    {
+        if (fall == true)
+            deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You Have Fell \n Return to Last Check Point";
+        else
+            deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You are in Danger \n Return to Last Check Point";
     }
 }
 

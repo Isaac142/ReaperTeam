@@ -41,7 +41,7 @@ public class MouseTrap : MonoBehaviour
         {
             playerIn = true;
             if (!lureIn)
-                GameEvents.ReportInteractHintShown(HintForInteraction.REQUIRKEY);
+                GameEvents.ReportInteractHintShown(HintForInteraction.MOUSETRAP);
             GetComponentInChildren<Renderer>().sharedMaterial.EnableKeyword("_EMISSION");
         }
     }

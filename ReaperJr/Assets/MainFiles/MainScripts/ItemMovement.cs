@@ -40,9 +40,12 @@ public class ItemMovement : ReaperJr
 
     private GameObject centerMarker;
     public bool justReleased = false;
+    private GameObject oriParent;
 
     private void Start()
     {
+        if(transform.parent != null)
+        oriParent = transform.parent.gameObject;
         isHolding = false;
         canHold = false;
         playerIn = false;
@@ -101,7 +104,7 @@ public class ItemMovement : ReaperJr
 
     void DefaultState()
     {
-        transform.parent = null;
+        transform.parent = oriParent.transform;
         if (hasRB)
         {
             GetComponent<Rigidbody>().isKinematic = false;
@@ -224,8 +227,6 @@ public class ItemMovement : ReaperJr
 
         if (isKeyItem && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
             GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
-        if (_GAME.gameState == GameState.DEAD)
-            StartCoroutine(Release());
     }
 
     void AutoDrop()

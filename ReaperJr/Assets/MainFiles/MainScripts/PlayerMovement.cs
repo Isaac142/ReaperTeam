@@ -627,7 +627,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
             if (isGrounded)
             {
                 if (fallDist >= _GAME.maxSafeFallDist)
+                {
+                    GameEvents.ReportOnFallDeath(true);
                     GameEvents.ReportGameStateChange(GameState.DEAD);
+                }
 
                 fallDist = 0f;
             }

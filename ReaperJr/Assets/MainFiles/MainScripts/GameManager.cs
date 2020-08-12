@@ -10,7 +10,6 @@ public class GameManager : Singleton<GameManager>
     
     public GameState gameState;
     private float lastStateChange = 0f;
-    public Light lightSource;
     
     // character rigidbody reference
     public float playerMass = 1f;
@@ -70,14 +69,13 @@ public class GameManager : Singleton<GameManager>
     {
         ResetGame();
 
-        if (lightSource != null)
-            DontDestroyOnLoad(lightSource.gameObject);
         if (bottomReset != null)
             DontDestroyOnLoad(bottomReset.gameObject);
     }
 
     public void ResetGame()
     {
+        checkPoints = new List<Vector3>();
         _UI.StartSetUI();
         _PLAYER.Restart();
         holdingLightObject = false;
@@ -88,7 +86,7 @@ public class GameManager : Singleton<GameManager>
         _cDTimer = coolDown;
         onCD = false;
         _GAME.totalSoulNo = 0;
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
         GameEvents.ReportGameStateChange(GameState.INGAME);
     }
 
@@ -186,6 +184,7 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.INGAME:
                 deadParticleEffect.SetActive(false);
+                GameEvents.ReportOnFallDeath(false);
                 _AUDIO.PlayMusic("Theme");
                 break;
             case GameState.DEAD:
@@ -215,6 +214,9 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.RESUME:
                 StartCoroutine(ResumeGame());
+                break;
+            case GameState.VICTORY:
+                _PLAYER.transform.eulerAngles = new Vector3(0, 90, 0);
                 break;
         }
     }
