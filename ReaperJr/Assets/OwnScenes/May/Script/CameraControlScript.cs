@@ -246,7 +246,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
             //mySequence.PrependInterval(1);
             // Insert a scale tween for the whole duration of the Sequence
             //mySequence.Insert(0, transform.DOScale(new Vector3(3, 3, 3), mySequence.Duration()));
-            mySequence.AppendInterval(3f);
+            mySequence.AppendInterval(1f);
             mySequence.Append(transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase)).OnComplete(() =>
             {
                 camPos = CameraPosition.GAMEPLAY;
