@@ -629,7 +629,7 @@ public class UIManager : Singleton<UIManager>
 
     IEnumerator StartGame()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         Restart();
     }
 }
