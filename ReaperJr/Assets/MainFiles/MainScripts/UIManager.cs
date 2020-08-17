@@ -55,9 +55,12 @@ public class UIManager : Singleton<UIManager>
     [HideInInspector]
     public List<KeyItem> currKeyItems = new List<KeyItem>();
     public Image crosshairIcon;
+    public Animator openningAnim;
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
+    public GameObject titlePanel;
+    public GameObject openningPanel;
     public GameObject menuPanel;
     public GameObject instructionPanel;
     public GameObject controlsInfoPanel;
@@ -71,6 +74,7 @@ public class UIManager : Singleton<UIManager>
 
     public Slider brightnessSlider, musicSlider, soundFXSlider;
     public Toggle musicToggle, soundFXToggle;
+    public int currSlide = 0;
 
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
@@ -93,40 +97,48 @@ public class UIManager : Singleton<UIManager>
         if (cursor != null)
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         StartSetUI();
-
+        currSlide = 0;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        #region TimerDisplay
-        //Timer display set up
-        timerCount.text = FormatTimeMMSS(_GAME.Timer);
-        timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
-
-        if (_GAME.Timer < _GAME.warningTimeInSeconds)  //Timer low display
-        {
-            //texture set up
-            timerCount.text = FormatTimeSSMilS(_GAME.Timer);
-            timerCount.GetComponent<Text>().color = Color.yellow;
-            timerCount.fontSize = 45;
-
-            //clock set up
-
-            timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
-            timer.GetComponent<Image>().color = Color.red;
-        }
-        #endregion
-
-        energyBar.value = _GAME.Energy;
-
-        abilityCD.fillAmount = _GAME.CDTimer / _GAME.coolDown;
-
-        totalSoulNo.text = _GAME.totalSoulNo.ToString();
-
         switch(_GAME.gameState)
         {
+            case GameState.OPENNING:
+                if (currSlide == 8)
+                {
+                    currSlide = 0;
+                    StartCoroutine(StartGame());
+                }
+                break;
+            case GameState.INGAME:
+                #region TimerDisplay
+                //Timer display set up
+                timerCount.text = FormatTimeMMSS(_GAME.Timer);
+                timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
+
+                if (_GAME.Timer < _GAME.warningTimeInSeconds)  //Timer low display
+                {
+                    //texture set up
+                    timerCount.text = FormatTimeSSMilS(_GAME.Timer);
+                    timerCount.GetComponent<Text>().color = Color.yellow;
+                    timerCount.fontSize = 45;
+
+                    //clock set up
+
+                    timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
+                    timer.GetComponent<Image>().color = Color.red;
+                }
+                #endregion
+                energyBar.value = _GAME.Energy;
+
+                abilityCD.fillAmount = _GAME.CDTimer / _GAME.coolDown;
+
+                totalSoulNo.text = _GAME.totalSoulNo.ToString();
+                break;
+
             case GameState.MENU:;
                 colorAdj.postExposure.value = brightnessSlider.value;
                 _AUDIO.MuteMusic(musicToggle.isOn);
@@ -181,6 +193,8 @@ public class UIManager : Singleton<UIManager>
 
     public void FadeOutAllPanels()
     {
+        FadeOutPanel(titlePanel);
+        FadeOutPanel(openningPanel);
         FadeOutPanel(inGamePanel);
         FadeOutPanel(pausePanel);
         FadeOutPanel(gameOverPanel);
@@ -191,6 +205,9 @@ public class UIManager : Singleton<UIManager>
     }
     public void CloseAllPanels()
     {
+        InstantOffPanel(titlePanel);
+        InstantOffPanel(openningPanel);
+        InstantOffPanel(inGamePanel);
         InstantOffPanel(hintsPanel);
         InstantOffPanel(pausePanel);
         InstantOffPanel(gameOverPanel);
@@ -226,6 +243,12 @@ public class UIManager : Singleton<UIManager>
         FadeOutAllPanels();
         switch (state)
         {
+            case GameState.TITLE:
+                FadeInPanel(titlePanel);
+                break;
+            case GameState.OPENNING:
+                FadeInPanel(openningPanel);
+                break;
             case GameState.INGAME:
                 FadeInPanel(inGamePanel);
                 break;
@@ -310,6 +333,18 @@ public class UIManager : Singleton<UIManager>
             crosshairIcon.color = Color.gray;
     }
     #region Button Press
+
+    public void StartButton()
+    {
+        GameEvents.ReportGameStateChange(GameState.OPENNING);
+    }
+
+    public void OpenningNext()
+    {
+        openningAnim.SetInteger("Steps", currSlide + 1);
+        currSlide ++;
+    }
+
     public void Restart()
     {
         GameEvents.ReportOnMovingObject(false);
@@ -590,6 +625,12 @@ public class UIManager : Singleton<UIManager>
             deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You Have Fell \n Return to Last Check Point";
         else
             deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You are in Danger \n Return to Last Check Point";
+    }
+
+    IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Restart();
     }
 }
 

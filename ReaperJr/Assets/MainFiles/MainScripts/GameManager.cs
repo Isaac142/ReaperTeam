@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-public enum GameState { TITLE, INGAME, PAUSED, DEAD, RESUME, GAMEOVER, WON, MENU, VICTORY }
+public enum GameState { TITLE, OPENNING, INGAME, PAUSED, DEAD, RESUME, GAMEOVER, WON, MENU, VICTORY }
 
 public class GameManager : Singleton<GameManager>
 {
@@ -67,7 +67,7 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        ResetGame();
+        GameEvents.ReportGameStateChange(GameState.TITLE);
 
         if (bottomReset != null)
             DontDestroyOnLoad(bottomReset.gameObject);
@@ -182,6 +182,14 @@ public class GameManager : Singleton<GameManager>
         gameState = state;
         switch (state)
         {
+            case GameState.TITLE:
+                _AUDIO.PlayMusic("Theme");
+                PauseGame();
+                break;
+            case GameState.OPENNING:
+                _AUDIO.PlayMusic("Theme");
+                PauseGame();
+                break;
             case GameState.INGAME:
                 deadParticleEffect.SetActive(false);
                 GameEvents.ReportOnFallDeath(false);
