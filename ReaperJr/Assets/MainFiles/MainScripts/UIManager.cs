@@ -253,6 +253,8 @@ public class UIManager : Singleton<UIManager>
         {
             case GameState.TITLE:
                 FadeInPanel(titlePanel);
+               // openningAnim.SetTrigger("Play");
+                //StartCoroutine(StartGame());
                 break;
             case GameState.OPENNING:
                 FadeInPanel(openningPanel);
