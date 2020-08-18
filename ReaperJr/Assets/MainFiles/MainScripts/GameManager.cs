@@ -18,7 +18,7 @@ public class GameManager : Singleton<GameManager>
     public bool playerActive = true, isPaused =  false;
     [HideInInspector] //holding object states
     public bool isHolding = false, holdingLightObject = false;
-    //[HideInInspector] //scythe and its ability state
+    [HideInInspector] //scythe and its ability state
     public bool scytheEquiped = true, scytheaThrown = false, onCD = false;
     [HideInInspector] //grounding states
     public bool onSpecialGround = false;
@@ -87,7 +87,6 @@ public class GameManager : Singleton<GameManager>
         onCD = false;
         _GAME.totalSoulNo = 0;
         //Time.timeScale = 1;
-        GameEvents.ReportGameStateChange(GameState.INGAME);
     }
 
     // Update is called once per frame
@@ -133,6 +132,14 @@ public class GameManager : Singleton<GameManager>
                 break;
 
             case GameState.MENU:
+                if (Input.GetKeyDown(KeyCode.Escape))
+                    GameEvents.ReportGameStateChange(GameState.RESUME);
+                break;
+            case GameState.VICTORY:
+                if (Input.GetKeyDown(KeyCode.Escape))
+                    GameEvents.ReportGameStateChange(GameState.RESUME);
+                break;
+            case GameState.OPENNING:
                 if (Input.GetKeyDown(KeyCode.Escape))
                     GameEvents.ReportGameStateChange(GameState.RESUME);
                 break;

@@ -32,7 +32,7 @@ public class UIManager : Singleton<UIManager>
 
     [Header("InGameUI")]
 
-    public Text timerCount;
+    public TextMeshProUGUI timerCount;
     public Image timer;
 
     public List<Image> souls = new List<Image>();
@@ -74,7 +74,7 @@ public class UIManager : Singleton<UIManager>
 
     public Slider brightnessSlider, musicSlider, soundFXSlider;
     public Toggle musicToggle, soundFXToggle;
-    public int currSlide = 0;
+    private int currSlide = 0;
 
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
@@ -123,14 +123,22 @@ public class UIManager : Singleton<UIManager>
                 {
                     //texture set up
                     timerCount.text = FormatTimeSSMilS(_GAME.Timer);
-                    timerCount.GetComponent<Text>().color = Color.yellow;
-                    timerCount.fontSize = 45;
+                    timerCount.color = Color.yellow;
+                    timerCount.fontSize = 45f;
 
                     //clock set up
 
                     timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
                     timer.GetComponent<Image>().color = Color.red;
                 }
+
+                else
+                {
+                    timerCount.color = Color.white;
+                    timerCount.fontSize = 35f;
+                    timer.GetComponent<Image>().color = Color.cyan;
+                }
+
                 #endregion
                 energyBar.value = _GAME.Energy;
 
