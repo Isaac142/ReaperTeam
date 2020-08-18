@@ -56,6 +56,7 @@ public class UIManager : Singleton<UIManager>
     public List<KeyItem> currKeyItems = new List<KeyItem>();
     public Image crosshairIcon;
     public Animator openningAnim;
+    public TextMeshPro checkPointInfo;
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
@@ -98,6 +99,8 @@ public class UIManager : Singleton<UIManager>
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         StartSetUI();
         currSlide = 0;
+        if (checkPointInfo != null)
+            DontDestroyOnLoad(checkPointInfo.gameObject);
 
     }
 
