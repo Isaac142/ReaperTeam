@@ -232,6 +232,7 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.VICTORY:
                 _PLAYER.transform.eulerAngles = new Vector3(0, 90, 0);
+                _PLAYER.anim.SetTrigger("Victory");
                 break;
         }
     }
