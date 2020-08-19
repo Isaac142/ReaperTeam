@@ -22,6 +22,8 @@ public class GameManager : Singleton<GameManager>
     public bool scytheEquiped = true, scytheaThrown = false, onCD = false;
     [HideInInspector] //grounding states
     public bool onSpecialGround = false;
+    [HideInInspector]
+    public bool returnSouls = false;
 
     public float maxSafeFallDist = 8f;
 
@@ -67,6 +69,7 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
+        ResetGame();
         GameEvents.ReportGameStateChange(GameState.TITLE);
 
         if (bottomReset != null)
@@ -86,6 +89,7 @@ public class GameManager : Singleton<GameManager>
         _cDTimer = coolDown;
         onCD = false;
         _GAME.totalSoulNo = 0;
+        returnSouls = false;
         //Time.timeScale = 1;
     }
 
@@ -100,8 +104,8 @@ public class GameManager : Singleton<GameManager>
 
                 _timer -= Time.deltaTime; //Count down timer.
 
-                _energy += energyReturnFactor * Time.deltaTime;
-                _energy = Mathf.Clamp(_energy, 0f, maxEnergy);
+                _energy += energyReturnFactor * Time.deltaTime; //engergy recovery overtime
+                _energy = Mathf.Clamp(_energy, 0f, maxEnergy);  //energy value clamping
 
                 if (onCD) 
                 {

@@ -15,7 +15,7 @@ public class WonGame : ReaperJr
 
     private void Update()
     {
-        if (_GAME.totalSoulNo == 0)
+        if (_GAME.totalSoulNo == 0 && _GAME.returnSouls)
             mark.Play();
         else
             mark.Stop();
@@ -25,7 +25,7 @@ public class WonGame : ReaperJr
     {
         if(other.tag == "Player")
         {
-            if (_GAME.totalSoulNo == 0)
+            if (_GAME.totalSoulNo == 0 && _GAME.returnSouls)
                 GameEvents.ReportGameStateChange(GameState.WON);
         }
     }

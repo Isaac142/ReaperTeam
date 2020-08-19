@@ -52,9 +52,8 @@ public class RoomCollider : ReaperJr
         }
         _GAME.totalSoulNo += souls.Count;
 
-        //if (startArea)
-        //   // OnTriggerEnter(_PLAYER.GetComponent<Collider>());
-        //_UI.SetSouls(souls);
+        if (startArea)
+         _UI.SetSouls(souls);
 
         if (_UI.hintsPanel.GetComponent<CanvasGroup>().alpha != 1f)
             _UI.hintsPanel.GetComponent<CanvasGroup>().alpha = 1f;

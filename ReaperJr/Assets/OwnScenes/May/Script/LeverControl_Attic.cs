@@ -52,7 +52,7 @@ public class LeverControl_Attic : ReaperJr
     }
 
 
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
         if (controller.playerApproach)
         {

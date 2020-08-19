@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal;
 
 public enum HintForMovingBoxes { DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE }
 public enum HintForItemCollect { DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING }
-public enum HintForInteraction { DEFAULT, SWITCH, OPEN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM, MOUSETRAP }
+public enum HintForInteraction { DEFAULT, SWITCH, RETURN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM, MOUSETRAP, RETURNSOULS, FINISH }
 
 public class UIManager : Singleton<UIManager>
 {
@@ -55,12 +55,13 @@ public class UIManager : Singleton<UIManager>
     [HideInInspector]
     public List<KeyItem> currKeyItems = new List<KeyItem>();
     public Image crosshairIcon;
-    public Animator openningAnim;
+    public Animator storyAnim, openningAnim;
     public TextMeshPro checkPointInfo;
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
     public GameObject titlePanel;
+    public GameObject storyPanel;
     public GameObject openningPanel;
     public GameObject menuPanel;
     public GameObject instructionPanel;
@@ -102,19 +103,23 @@ public class UIManager : Singleton<UIManager>
         if (checkPointInfo != null)
             DontDestroyOnLoad(checkPointInfo.gameObject);
 
+        OptionPanelDefault();
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch(_GAME.gameState)
+        colorAdj.postExposure.value = brightnessSlider.value;
+        _AUDIO.MuteMusic(musicToggle.isOn);
+        _AUDIO.MusicVolume(musicSlider.value);
+        _AUDIO.MuteSoundFX(soundFXToggle.isOn);
+        _AUDIO.SoundFXVolume(soundFXSlider.value);
+
+        switch (_GAME.gameState)
         {
-            case GameState.OPENNING:
+            case GameState.MENU:
                 if (currSlide == 8)
-                {
                     currSlide = 0;
-                    StartCoroutine(StartGame());
-                }
                 break;
             case GameState.INGAME:
                 #region TimerDisplay
@@ -149,14 +154,6 @@ public class UIManager : Singleton<UIManager>
 
                 totalSoulNo.text = _GAME.totalSoulNo.ToString();
                 break;
-
-            case GameState.MENU:;
-                colorAdj.postExposure.value = brightnessSlider.value;
-                _AUDIO.MuteMusic(musicToggle.isOn);
-                _AUDIO.MusicVolume(musicSlider.value);
-                _AUDIO.MuteSoundFX(soundFXToggle.isOn);
-                _AUDIO.SoundFXVolume(soundFXSlider.value);
-                break;
         }
     }
 
@@ -187,8 +184,6 @@ public class UIManager : Singleton<UIManager>
         musicSlider.maxValue = 5;
         soundFXSlider.minValue = 0;
         soundFXSlider.maxValue = 5;
-
-        OptionPanelDefault();
     }
 
     public void OptionPanelDefault()
@@ -205,6 +200,7 @@ public class UIManager : Singleton<UIManager>
     public void FadeOutAllPanels()
     {
         FadeOutPanel(titlePanel);
+        FadeOutPanel(storyPanel);
         FadeOutPanel(openningPanel);
         FadeOutPanel(inGamePanel);
         FadeOutPanel(pausePanel);
@@ -217,6 +213,7 @@ public class UIManager : Singleton<UIManager>
     public void CloseAllPanels()
     {
         InstantOffPanel(titlePanel);
+        InstantOffPanel(storyPanel);
         InstantOffPanel(openningPanel);
         InstantOffPanel(inGamePanel);
         InstantOffPanel(hintsPanel);
@@ -256,11 +253,11 @@ public class UIManager : Singleton<UIManager>
         {
             case GameState.TITLE:
                 FadeInPanel(titlePanel);
-               // openningAnim.SetTrigger("Play");
-                //StartCoroutine(StartGame());
+                StartCoroutine(StartGame());
                 break;
             case GameState.OPENNING:
                 FadeInPanel(openningPanel);
+                openningAnim.SetTrigger("Play");
                 break;
             case GameState.INGAME:
                 FadeInPanel(inGamePanel);
@@ -352,9 +349,14 @@ public class UIManager : Singleton<UIManager>
         GameEvents.ReportGameStateChange(GameState.OPENNING);
     }
 
+    public void SkipButton()
+    {
+        GameEvents.ReportGameStateChange(GameState.RESUME);
+    }
+
     public void OpenningNext()
     {
-        openningAnim.SetInteger("Steps", currSlide + 1);
+        storyAnim.SetInteger("Steps", currSlide + 1);
         currSlide ++;
     }
 
@@ -393,17 +395,26 @@ public class UIManager : Singleton<UIManager>
     public void OptionPanel()
     {
         FadeOutPanel(instructionPanel);
+        FadeOutPanel(storyPanel);
         FadeInPanel(optionPanel);
     }
 
     public void InstructionPanel()
     {
         FadeOutPanel(optionPanel);
+        FadeOutPanel(storyPanel);
         FadeInPanel(instructionPanel);
         controlsInfoPanel.GetComponent<CanvasGroup>().alpha = 1;
         uiInfoPanel.GetComponent<CanvasGroup>().alpha = 0;
         optionPanel.GetComponent<CanvasGroup>().alpha = 0;
 
+    }
+
+    public void StoryPanel()
+    {
+        FadeOutPanel(instructionPanel);
+        FadeOutPanel(optionPanel);
+        FadeInPanel(storyPanel);
     }
 
     public void ExitGame()
@@ -446,11 +457,15 @@ public class UIManager : Singleton<UIManager>
             }
         }
         List<SoulType> collected = currSouls.FindAll(x => x.isCollected == true);
-        if(currSouls.Count == collected.Count)
+
+        if(currSouls.Count == collected.Count) //play room clear animation after collect all souls in a room.
         {
             FadeInPanel(roomClearPanel);
             _CAMERA.RoomClear();
         }
+
+        if (_GAME.totalSoulNo == 0) //show return soul info after collect all souls.
+            GameEvents.ReportInteractHintShown(HintForInteraction.RETURNSOULS);
     }
 
     IEnumerator ReturnSoulIcon(Image _soul)
@@ -599,8 +614,8 @@ public class UIManager : Singleton<UIManager>
                 InteractionHint1.text = "<color=#FFFFFF> Right click initiating it";
                 FadeInText(InteractionHint1);
                 break;
-            case HintForInteraction.OPEN:
-                InteractionHint2.text = "<color=#FFFFFF> Right click to open it";
+            case HintForInteraction.RETURN:
+                InteractionHint2.text = "<color=#FFFFFF> Right click on the Jar to return Souls";
                 FadeInText(InteractionHint2);
                 break;
             case HintForInteraction.REQUIRKEY:
@@ -619,7 +634,29 @@ public class UIManager : Singleton<UIManager>
                 InteractionHint1.text = "<color=#9C00FF> Require Special Object to Activate Trap!";
                 FadeInText(InteractionHint1);
                 break;
+            case HintForInteraction.RETURNSOULS:
+                StartCoroutine(ReturnSoulsMessage());
+                break;
+            case HintForInteraction.FINISH:
+                StartCoroutine(FinishMessage());
+                break;
         }
+    }
+
+    IEnumerator ReturnSoulsMessage()
+    {
+        InteractionHint1.text = "<color=#FFFFFF> <size=80> Quickly Return them back to Soul Jar in the Office!";
+        FadeInText(InteractionHint1);
+        yield return new WaitForSeconds(5f);
+        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+    }
+
+    IEnumerator FinishMessage()
+    {
+        InteractionHint1.text = "<color=#FFFFFF> <size=80> Parents are back, wait them at Front Door";
+        FadeInText(InteractionHint1);
+        yield return new WaitForSeconds(5f);
+        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
     }
 
     void FadeInText(TextMeshProUGUI textUI)
@@ -642,7 +679,7 @@ public class UIManager : Singleton<UIManager>
 
     IEnumerator StartGame()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(55f);
         Restart();
     }
 }
