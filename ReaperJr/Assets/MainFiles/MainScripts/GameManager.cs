@@ -145,7 +145,7 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.OPENNING:
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    GameEvents.ReportGameStateChange(GameState.RESUME);
+                    _UI.Restart();
                 break;
         }
 
