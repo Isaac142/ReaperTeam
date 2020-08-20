@@ -77,6 +77,7 @@ public class UIManager : Singleton<UIManager>
     public Slider brightnessSlider, musicSlider, soundFXSlider;
     public Toggle musicToggle, soundFXToggle;
     private int currSlide = 0;
+    private float openningTimer = 0;
 
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
@@ -120,6 +121,11 @@ public class UIManager : Singleton<UIManager>
             case GameState.MENU:
                 if (currSlide == 8)
                     currSlide = 0;
+                break;
+            case GameState.OPENNING:
+                openningTimer += Time.deltaTime;
+                if (openningTimer >= 54f)
+                    Restart();
                 break;
             case GameState.INGAME:
                 #region TimerDisplay
@@ -253,7 +259,6 @@ public class UIManager : Singleton<UIManager>
         {
             case GameState.TITLE:
                 FadeInPanel(titlePanel);
-                StartCoroutine(StartGame());
                 break;
             case GameState.OPENNING:
                 FadeInPanel(openningPanel);
@@ -347,11 +352,6 @@ public class UIManager : Singleton<UIManager>
     public void StartButton()
     {
         GameEvents.ReportGameStateChange(GameState.OPENNING);
-    }
-
-    public void SkipButton()
-    {
-        GameEvents.ReportGameStateChange(GameState.RESUME);
     }
 
     public void OpenningNext()
@@ -675,12 +675,6 @@ public class UIManager : Singleton<UIManager>
             deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You Have Fell \n Return to Last Check Point";
         else
             deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You are in Danger \n Return to Last Check Point";
-    }
-
-    IEnumerator StartGame()
-    {
-        yield return new WaitForSeconds(55f);
-        Restart();
     }
 }
 
