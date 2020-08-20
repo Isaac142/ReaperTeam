@@ -211,7 +211,7 @@ public class GameManager : Singleton<GameManager>
                     GameEvents.ReportGameStateChange(GameState.INGAME);
                 else
                 {
-                    PlayerDead();
+                    StartCoroutine(DeathTimer());
                     _AUDIO.PlayMusic("PlayerReset");
                 }
                 break;
@@ -293,5 +293,12 @@ public class GameManager : Singleton<GameManager>
     {
         yield return new WaitForSeconds(3f);
         GameEvents.ReportGameStateChange(GameState.RESUME);
+    }
+
+    public IEnumerator DeathTimer()
+    {
+        _PLAYER.anim.SetTrigger("Death");
+        yield return new WaitForSeconds(2f);
+        PlayerDead();
     }
 }

@@ -22,8 +22,7 @@ public class TouchPlayer : ReaperJr
                 {
                     if (!_GAME.isInvincible)
                     {
-                        StartCoroutine(_PLAYER.DeathTimer());
-                        //GameEvents.ReportGameStateChange(GameState.DEAD);
+                        GameEvents.ReportGameStateChange(GameState.DEAD);
                         if (isDog || isMouse || isFakeSoul)
                             _AUDIO.Play(_PLAYER.GetComponent<AudioSource>(), "PlayerImpact", 10);
                         if (isToyGun)
