@@ -506,7 +506,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             else if (hits[i].transform.GetComponent<FakeSoulController>() != null)
                                 GameEvents.ReportOnFakeSoulCollected(hits[i].transform.GetComponent<FakeSoulController>());
                             else
-                                GameEvents.ReportGameStateChange(GameState.DEAD);
+                                StartCoroutine(DeathTimer());
+                                //GameEvents.ReportGameStateChange(GameState.DEAD);
                             //do something --> collected amount, visual clue...
                         }
 
@@ -662,5 +663,12 @@ public class PlayerMovement : Singleton<PlayerMovement>
     {
         yield return new WaitForSeconds(0.1f);
         walkHack = false;
+    }
+
+    public IEnumerator DeathTimer()
+    {
+        anim.SetTrigger("Death");
+        yield return new WaitForSeconds(2f);
+        GameEvents.ReportGameStateChange(GameState.DEAD);
     }
 }

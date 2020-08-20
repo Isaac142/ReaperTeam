@@ -10,8 +10,9 @@ public class DamagePlayer : ReaperJr
         {
             if (other.tag == "Player" && !_GAME.isInvincible)
             {
-                GameEvents.ReportGameStateChange(GameState.DEAD);
-               _AUDIO.Play(_PLAYER.GetComponent<AudioSource>(), "PlayerImpact", 10);
+                StartCoroutine(_PLAYER.DeathTimer());
+                //GameEvents.ReportGameStateChange(GameState.DEAD);
+                _AUDIO.Play(_PLAYER.GetComponent<AudioSource>(), "PlayerImpact", 10);
             }
         }
     }
