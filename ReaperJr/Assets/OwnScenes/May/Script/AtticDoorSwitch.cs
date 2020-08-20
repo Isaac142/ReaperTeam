@@ -23,14 +23,6 @@ public class AtticDoorSwitch : ReaperJr
         switchActivated = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!doorLocked)
-            return;
-
-    }
-
     public void SetKey(KeyItem key, Vector3 keyPos)
     {
         key.transform.position = keyPos;

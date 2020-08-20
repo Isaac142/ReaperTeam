@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1439106823512601780}
-  - component: {fileID: 1439106823512601782}
   - component: {fileID: 1439106823512601783}
+  - component: {fileID: 395447289}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -32,20 +32,6 @@ Transform:
   m_Father: {fileID: 6551601889124659390}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1439106823512601782
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439106823512601781}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 1
-  m_Height: 4
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1439106823512601783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +48,19 @@ MonoBehaviour:
   isDog: 1
   isMouse: 0
   isFakeSoul: 0
+--- !u!65 &395447289
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439106823512601781}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1718353, y: 1.9240131, z: 1.2036027}
+  m_Center: {x: 0.010261632, y: 0.0138937, z: 1.0615531}
 --- !u!1 &6551601889124659391
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,9 +90,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6551601889124659391}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.653, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children:
   - {fileID: 5719228369606197350}
   - {fileID: 1439106823512601780}
@@ -122,7 +121,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  patrolSpeed: 3.5
+  patrolSpeed: 3
   chasingSpeed: 7
   touchPlayerDist: 0.1
   toPlayer: 0

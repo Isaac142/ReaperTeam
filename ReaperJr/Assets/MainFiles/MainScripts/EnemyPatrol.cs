@@ -128,7 +128,10 @@ public class EnemyPatrol : ReaperJr
                     }
                 }
                 else
-                    agent.SetDestination(player.transform.position);
+                {
+                    agent.speed = chasingSpeed;
+                    agent.SetDestination(_PLAYER.transform.position);
+                }
                 break;
         }
     }

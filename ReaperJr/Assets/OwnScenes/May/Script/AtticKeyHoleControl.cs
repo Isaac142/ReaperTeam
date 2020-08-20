@@ -9,6 +9,7 @@ public class AtticKeyHoleControl : ReaperJr
     public float clickDist = 1.5f;
     private float playerDist;
     public Vector3 keyPos;
+    public GameObject particle;
 
     private void Start()
     {
@@ -21,6 +22,18 @@ public class AtticKeyHoleControl : ReaperJr
     {
         if (!controller.doorLocked)
             return;
+
+
+        if (controller.keyItems[keyIndex].isCollected && !controller.keyItems[keyIndex].isInPosition)
+        {
+            GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+            particle.SetActive(true);
+        }
+        else
+        {
+            GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+            particle.SetActive(false);
+        }
 
         if (controller.playerApproach && controller.keyItems[keyIndex].isCollected)
         {

@@ -42,7 +42,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0, g: 0.6655486, b: 1, a: 1}
+  m_Color: {r: 0.19607843, g: 0.9647059, b: 0.972549, a: 1}
   m_Intensity: 1
   m_Range: 1
   m_SpotAngle: 30
@@ -220,7 +220,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b218aea52d67f52409bdd9a8d9e1b199, type: 3}
-  m_Color: {r: 0.011764705, g: 0.66193986, b: 1, a: 1}
+  m_Color: {r: 0.20392157, g: 0.9882353, b: 0.99607843, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -239,8 +239,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2374707954186115617}
-  - component: {fileID: 4933925134901570306}
-  - component: {fileID: 8825086066294276664}
   - component: {fileID: 446944840569164360}
   - component: {fileID: 3831743077962201193}
   - component: {fileID: 3831743077962201194}
@@ -272,53 +270,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4933925134901570306
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7752951462572805686}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8825086066294276664
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7752951462572805686}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 819fd6e4c768190499574d766e4fbacf, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!135 &446944840569164360
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -365,9 +316,10 @@ MonoBehaviour:
   awareDistance: 8
   patrolPoints:
   - {fileID: 0}
-  patrolSpeed: 5
-  chasingSpeed: 7
+  patrolSpeed: 4
+  chasingSpeed: 5
   touchPlayerDist: 1
+  toPlayer: 0
   isMouse: 0
   isDog: 0
   isToySoldier: 0
@@ -394,7 +346,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.8
   m_BaseOffset: 1.2
-  m_WalkableMask: 185
+  m_WalkableMask: 248
   m_ObstacleAvoidanceType: 4
 --- !u!95 &1257239337
 Animator:
@@ -698,7 +650,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.2431373, g: 0.8980392, b: 0.9058824, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
