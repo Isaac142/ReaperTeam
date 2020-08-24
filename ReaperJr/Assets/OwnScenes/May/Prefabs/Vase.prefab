@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 625176413662542541}
   - component: {fileID: 2077755336130251273}
   - component: {fileID: 1392360490974465219}
-  - component: {fileID: 6820796687092209430}
   - component: {fileID: 9110840273965814051}
   m_Layer: 0
   m_Name: VaseLid
@@ -113,19 +112,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6820796687092209430
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7861078663309278225}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.54644156, y: 0.23786967, z: 0.54644156}
-  m_Center: {x: 0.000000014901161, y: 0.06893482, z: 0}
 --- !u!64 &9110840273965814051
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -232,8 +218,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.0442815, y: 1.5525768, z: 1.0442815}
-  m_Center: {x: -0.000000029802322, y: 0.7792175, z: 0.000000029802322}
+  m_Size: {x: 1.1698592, y: 1.8037323, z: 1.1777078}
+  m_Center: {x: 0.000000029802322, y: 0.9047952, z: -0.00392431}
 --- !u!64 &6960747326968415873
 MeshCollider:
   m_ObjectHideFlags: 0
