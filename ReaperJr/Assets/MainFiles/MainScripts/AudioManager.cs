@@ -6,7 +6,6 @@ public class AudioManager : Singleton<AudioManager>
 {
     public Sound[] musicClips;
     public Sound[] sounds;
-    private float currVol, currSFVol;
 
     // Start is called before the first frame update
     void Awake()
@@ -39,7 +38,7 @@ public class AudioManager : Singleton<AudioManager>
         Sound s = Array.Find(sounds, sound => sound.name == name);
         obj.clip = s.clip;
         obj.loop = s.loop;
-        obj.volume = s.volume * currSFVol;
+        obj.volume = s.volume * _UI.soundFXSlider.value;
         obj.mute = s.source.mute;
         obj.maxDistance = distance;
         obj.Play();

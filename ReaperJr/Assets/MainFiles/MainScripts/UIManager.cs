@@ -168,6 +168,13 @@ public class UIManager : Singleton<UIManager>
                         gameOverPanel.GetComponent<Animator>().SetTrigger("Skip");
                 }
                 break;
+            case GameState.WON:
+                if (wonPanel.GetComponent<Animator>() != null)
+                {
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                        wonPanel.GetComponent<Animator>().SetTrigger("Skip");
+                }
+                break;
         }
     }
 
@@ -289,6 +296,8 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.WON:
                 FadeInPanel(wonPanel);
+                if (wonPanel.GetComponent<Animator>() != null)
+                    wonPanel.GetComponent<Animator>().SetTrigger("Play");
                 break;
             case GameState.DEAD:
                 FadeInPanel(deadPanel);
