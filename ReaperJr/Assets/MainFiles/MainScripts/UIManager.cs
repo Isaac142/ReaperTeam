@@ -160,6 +160,14 @@ public class UIManager : Singleton<UIManager>
 
                 totalSoulNo.text = _GAME.totalSoulNo.ToString();
                 break;
+
+            case GameState.GAMEOVER:
+                if(gameOverPanel.GetComponent<Animator>() != null)
+                {
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                        gameOverPanel.GetComponent<Animator>().SetTrigger("Skip");
+                }
+                break;
         }
     }
 
@@ -265,6 +273,7 @@ public class UIManager : Singleton<UIManager>
                 openningAnim.SetTrigger("Play");
                 break;
             case GameState.INGAME:
+                AnimationReset();
                 FadeInPanel(inGamePanel);
                 break;
             case GameState.PAUSED:
@@ -275,6 +284,8 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.GAMEOVER:
                 FadeInPanel(gameOverPanel);
+                if (gameOverPanel.GetComponent<Animator>() != null)
+                    gameOverPanel.GetComponent<Animator>().SetTrigger("Play");
                 break;
             case GameState.WON:
                 FadeInPanel(wonPanel);
@@ -288,6 +299,15 @@ public class UIManager : Singleton<UIManager>
                     + "\n <size=120> <color=#9C00FF> " + (_GAME.totalSoulNo - 1 ).ToString() + "<size=80> <color=white> to Collect.";
                 break;
         }
+    }
+
+    void AnimationReset()  //reset ending animation
+    {
+        if (wonPanel.GetComponent<Animator>() != null)
+            wonPanel.GetComponent<Animator>().SetTrigger("New");
+
+        if (gameOverPanel.GetComponent<Animator>() != null)
+            gameOverPanel.GetComponent<Animator>().SetTrigger("New");
     }
 
     void OnScytheEquipped(bool scythe)
