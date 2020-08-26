@@ -41,7 +41,8 @@ public class AudioManager : Singleton<AudioManager>
         obj.volume = s.volume * _UI.soundFXSlider.value;
         obj.mute = s.source.mute;
         obj.maxDistance = distance;
-        obj.Play();
+        if(!obj.isPlaying)
+            obj.Play();
     }
 
     public void StopPlay(GameObject obj)
@@ -56,7 +57,8 @@ public class AudioManager : Singleton<AudioManager>
         _CAMERA.GetComponent<AudioSource>().loop = s.loop;
         _CAMERA.GetComponent<AudioSource>().volume = s.volume * _UI.musicSlider.value;
         _CAMERA.GetComponent<AudioSource>().mute = s.source.mute;
-        _CAMERA.GetComponent<AudioSource>().Play();
+        if (!_CAMERA.GetComponent<AudioSource>().isPlaying)
+            _CAMERA.GetComponent<AudioSource>().Play();
     }
 
     public void MuteMusic(bool toggle)

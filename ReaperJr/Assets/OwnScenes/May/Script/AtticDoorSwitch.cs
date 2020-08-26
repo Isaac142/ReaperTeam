@@ -23,6 +23,17 @@ public class AtticDoorSwitch : ReaperJr
         switchActivated = false;
     }
 
+    private void Update()
+    {
+        for(int i = 0; i < keyItems.Count; i ++) // preventing holding more than one key at anytime
+        {
+            if (keyItems[i].isCollected && !keyItems[i].isInPosition)
+                _PLAYER.keyCollect = false;
+            else
+                _PLAYER.keyCollect = true;
+        }
+    }
+
     public void SetKey(KeyItem key, Vector3 keyPos)
     {
         key.transform.position = keyPos;
@@ -40,7 +51,7 @@ public class AtticDoorSwitch : ReaperJr
         doorLocked = false;
     }
 
-    void KeysCheck()
+    void KeysCheck() // check if all key has been collected
     {
         List<KeyItem> temp = keyItems.FindAll(x => x.isInPosition == true);
         if (temp.Count == keyItems.Count)

@@ -14,6 +14,7 @@ public class LeverControl_Attic : ReaperJr
     {
         controller = GetComponentInParent<AtticDoorSwitch>();
         mat = GetComponentInChildren<Renderer>().material;
+        particles.SetActive(false);
     }
 
     void Update()

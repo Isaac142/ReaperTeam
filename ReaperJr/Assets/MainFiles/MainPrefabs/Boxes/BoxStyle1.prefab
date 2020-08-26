@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 8154308780011078013}
   - component: {fileID: 712471412730255131}
   - component: {fileID: 7041761344598732940}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -508,6 +508,7 @@ GameObject:
   - component: {fileID: 1656350510493491775}
   - component: {fileID: 4380792723045881632}
   - component: {fileID: 3756562220562459067}
+  - component: {fileID: 4856656997804089942}
   m_Layer: 0
   m_Name: BoxStyle1Lid
   m_TagString: Untagged
@@ -577,6 +578,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &4856656997804089942
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7157343293516656959}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9976777, y: 0.4190003, z: 1.3922713}
+  m_Center: {x: 0, y: 0.18926604, z: 0.67835283}
 --- !u!1001 &4060914861936347160
 PrefabInstance:
   m_ObjectHideFlags: 0

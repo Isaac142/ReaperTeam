@@ -15,6 +15,7 @@ public class AtticKeyHoleControl : ReaperJr
     {
         controller = GetComponentInParent<AtticDoorSwitch>();
         this.gameObject.layer = 0;
+        particle.SetActive(false);
     }
 
     // Update is called once per frame

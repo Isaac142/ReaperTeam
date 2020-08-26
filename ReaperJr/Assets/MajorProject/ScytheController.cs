@@ -366,6 +366,14 @@ public class ScytheController : ReaperJr
                 StartCoroutine(ResetScythe());
         }
 
+        if (Input.GetAxis("Mouse ScrollWheel") != 0 && !holdingScythe)
+        {
+            StartCoroutine(ResetScythe());
+            GameEvents.ReportScytheThrown(false);
+            holdingScythe = true;
+            _PLAYER.teleportStart.SetActive(false);
+        }
+
         if (_GAME.gameState == GameState.DEAD)
             StartCoroutine(ResetScythe());
         #endregion

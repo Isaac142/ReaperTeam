@@ -43,7 +43,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     [HideInInspector]
     public FacingDirection facingDirection;
     [HideInInspector]
-    public bool canCollect = false;
+    public bool canCollect = false, keyCollect = true;
     
     private float timeToGround = 0;
 
@@ -257,11 +257,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
         if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f)
             walkHack = true;
-        //else
-        //    StartCoroutine(ResetMovement());
-
-        //if (Mathf.Abs(v) > 0.1f)
-        //    walkHack = true;
         else
             StartCoroutine(ResetMovement());
 
@@ -423,8 +418,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
         {
             bodyCollider.center = new Vector3(0f, bodyCentre.y / 2f, 0f);
             bodyCollider.height = bodyHeight / 2f;
-
-            //visual, replace by animation
             bodyMesh.localScale = new Vector3(bodyScale.x, bodyScale.y / 2f, bodyScale.z);
             bodyMesh.localPosition = new Vector3(bodyPos.x, bodyPos.y / 2f, bodyPos.z);
         }
@@ -432,8 +425,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         {
             bodyCollider.center = bodyCentre;
             bodyCollider.height = bodyHeight;
-
-            //visual, replace by animation
+            
             bodyMesh.localScale = bodyScale;
             bodyMesh.localPosition = bodyPos;
         }
@@ -474,10 +466,17 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     return;
                 else
                 {
-                    if (hits[i].transform.tag == "HiddenItem" || hits[i].transform.tag == "KeyItem")
-                    {
+                    if (hits[i].transform.tag == "HiddenItem")
                         GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);
+
+                    else if (hits[i].transform.tag == "KeyItem")
+                    {
+                        if(keyCollect)
+                            GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);
+                        else
+                            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
                     }
+
                     else
                     {
                         if (_UI.currCollectInfo != HintForItemCollect.FAKESOULWARNING)
@@ -495,7 +494,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             hits[i].transform.GetComponent<SoulType>().isCollected = true;
                             GameEvents.ReportSoulCollected(hits[i].transform.GetComponent<SoulType>());
                             _GAME.totalSoulNo -= 1;
-                            //do something --> collected amount, visual clue...
                         }
 
                         if (hits[i].transform.tag == "FakeSoul")
@@ -507,7 +505,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
                                 GameEvents.ReportOnFakeSoulCollected(hits[i].transform.GetComponent<FakeSoulController>());
                             else
                                 GameEvents.ReportGameStateChange(GameState.DEAD);
-                            //do something --> collected amount, visual clue...
                         }
 
                         if (hits[i].transform.tag == "HiddenItem")
@@ -518,7 +515,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
                         }
 
-                        if (hits[i].transform.tag == "KeyItem")
+                        if (hits[i].transform.tag == "KeyItem" && keyCollect)
                         {
                             if (!hits[i].transform.GetComponent<KeyItem>().isCollected)
                             {
@@ -528,7 +525,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             }
                         }
                     }
-                    //if there's other collectables
                 }
             }
         }
@@ -547,7 +543,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             scythe.transform.position = scythe.transform.position;
         }
 
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        if (Input.GetAxis("Mouse ScrollWheel") != 0 && !_GAME.scytheaThrown)
         {
             _GAME.scytheEquiped = !_GAME.scytheEquiped;
             GameEvents.ReportScytheEquipped(_GAME.scytheEquiped);
@@ -663,11 +659,4 @@ public class PlayerMovement : Singleton<PlayerMovement>
         yield return new WaitForSeconds(0.1f);
         walkHack = false;
     }
-
-    //public IEnumerator DeathTimer()
-    //{
-    //    anim.SetTrigger("Death");
-    //    yield return new WaitForSeconds(2f);
-    //    GameEvents.ReportGameStateChange(GameState.DEAD);
-    //}
 }

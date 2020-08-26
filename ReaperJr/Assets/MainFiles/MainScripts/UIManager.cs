@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal;
 
 public enum HintForMovingBoxes { DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE }
 public enum HintForItemCollect { DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING }
-public enum HintForInteraction { DEFAULT, SWITCH, RETURN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM, MOUSETRAP, RETURNSOULS, FINISH }
+public enum HintForInteraction { DEFAULT, SWITCH, RETURN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM, MOUSETRAP, RETURNSOULS, FINISH, JAR, CROUCH }
 
 public class UIManager : Singleton<UIManager>
 {
@@ -40,7 +40,6 @@ public class UIManager : Singleton<UIManager>
     public List<SoulType> currSouls = new List<SoulType>();
     public GameObject soulPanel;
     public Text totalSoulNo;
-    public GameObject infoPanel;
     public Text itemName, itemType, itemDescription;
     public Slider energyBar;
     public Image abilityCD;
@@ -68,6 +67,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject controlsInfoPanel;
     public GameObject optionPanel;
     public GameObject uiInfoPanel;
+    public GameObject creditPanel;
     public GameObject pausePanel;
     public GameObject gameOverPanel;
     public GameObject wonPanel;
@@ -124,9 +124,14 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.OPENNING:
                 openningTimer += Time.deltaTime;
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                    openningTimer = 54f;
+
                 if (openningTimer >= 54f)
                     Restart();
                 break;
+
             case GameState.INGAME:
                 #region TimerDisplay
                 //Timer display set up
@@ -139,7 +144,7 @@ public class UIManager : Singleton<UIManager>
                     timerCount.text = FormatTimeSSMilS(_GAME.Timer);
                     timerCount.color = Color.yellow;
                     timerCount.fontSize = 45f;
-
+                    _AUDIO.PlayMusic("TimeStressed");
                     //clock set up
 
                     timer.fillAmount = _GAME.Timer / _GAME.maxTimerInSeconds;
@@ -195,8 +200,6 @@ public class UIManager : Singleton<UIManager>
 
         abilityMask.SetActive(false);
         scytheMasks.SetActive(false);
-
-        infoPanel.SetActive(false);
         DOTween.SetTweensCapacity(2000, 100);
 
         brightnessSlider.minValue = -1;
@@ -277,6 +280,7 @@ public class UIManager : Singleton<UIManager>
                 break;
             case GameState.OPENNING:
                 FadeInPanel(openningPanel);
+                openningTimer = 0f;
                 openningAnim.SetTrigger("Play");
                 break;
             case GameState.INGAME:
@@ -391,6 +395,7 @@ public class UIManager : Singleton<UIManager>
 
     public void Restart()
     {
+        openningTimer = 54f;
         GameEvents.ReportOnMovingObject(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         _GAME.ResetGame();
@@ -426,12 +431,14 @@ public class UIManager : Singleton<UIManager>
         FadeOutPanel(instructionPanel);
         FadeOutPanel(storyPanel);
         FadeInPanel(optionPanel);
+        FadeOutPanel(creditPanel);
     }
 
     public void InstructionPanel()
     {
         FadeOutPanel(optionPanel);
         FadeOutPanel(storyPanel);
+        FadeOutPanel(creditPanel);
         FadeInPanel(instructionPanel);
         controlsInfoPanel.GetComponent<CanvasGroup>().alpha = 1;
         uiInfoPanel.GetComponent<CanvasGroup>().alpha = 0;
@@ -444,6 +451,15 @@ public class UIManager : Singleton<UIManager>
         FadeOutPanel(instructionPanel);
         FadeOutPanel(optionPanel);
         FadeInPanel(storyPanel);
+        FadeOutPanel(creditPanel);
+    }
+
+    public void CreditPanel()
+    {
+        FadeOutPanel(instructionPanel);
+        FadeOutPanel(optionPanel);
+        FadeInPanel(creditPanel);
+        FadeOutPanel(storyPanel);
     }
 
     public void ExitGame()
@@ -455,7 +471,6 @@ public class UIManager : Singleton<UIManager>
     public void SetSouls(List<SoulType> _souls)
     {
         FadeInPanel(soulPanel);
-        //currSouls.Clear();
         currSouls = _souls;
         foreach (Image im in souls)
         {
@@ -492,9 +507,6 @@ public class UIManager : Singleton<UIManager>
             FadeInPanel(roomClearPanel);
             _CAMERA.RoomClear();
         }
-
-        if (_GAME.totalSoulNo == 0) //show return soul info after collect all souls.
-            GameEvents.ReportInteractHintShown(HintForInteraction.RETURNSOULS);
     }
 
     IEnumerator ReturnSoulIcon(Image _soul)
@@ -656,36 +668,31 @@ public class UIManager : Singleton<UIManager>
                 FadeInText(InteractionHint1);
                 break;
             case HintForInteraction.KEYITEM:
-                InteractionHint2.text = "<color=red> This is a Key Item!";
-                FadeInText(InteractionHint2);
+                InteractionHint1.text = "<color=red> This is a Key Item!";
+                FadeInText(InteractionHint1);
                 break;
             case HintForInteraction.MOUSETRAP:
                 InteractionHint1.text = "<color=#9C00FF> Require Special Object to Activate Trap!";
                 FadeInText(InteractionHint1);
                 break;
             case HintForInteraction.RETURNSOULS:
-                StartCoroutine(ReturnSoulsMessage());
+                InteractionHint1.text = "<color=#FFFFFF> <size=60> Quickly Return them back to Soul Jar in the Office!";
+                FadeInText(InteractionHint1);
                 break;
             case HintForInteraction.FINISH:
-                StartCoroutine(FinishMessage());
+                InteractionHint1.text = "<color=#FFFFFF> <size=60> Parents are back, wait them at Front Door";
+                FadeInText(InteractionHint1);
                 break;
+            case HintForInteraction.JAR:
+                InteractionHint2.text = "<color=#FFFFFF> Return ALL Souls back here.";
+                FadeInText(InteractionHint2);
+                break;
+            case HintForInteraction.CROUCH:
+                InteractionHint2.text = "<color=#FFFFFF> Left Shift Key to Crouch";
+                FadeInText(InteractionHint2);
+                break;
+
         }
-    }
-
-    IEnumerator ReturnSoulsMessage()
-    {
-        InteractionHint1.text = "<color=#FFFFFF> <size=80> Quickly Return them back to Soul Jar in the Office!";
-        FadeInText(InteractionHint1);
-        yield return new WaitForSeconds(5f);
-        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
-    }
-
-    IEnumerator FinishMessage()
-    {
-        InteractionHint1.text = "<color=#FFFFFF> <size=80> Parents are back, wait them at Front Door";
-        FadeInText(InteractionHint1);
-        yield return new WaitForSeconds(5f);
-        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
     }
 
     void FadeInText(TextMeshProUGUI textUI)

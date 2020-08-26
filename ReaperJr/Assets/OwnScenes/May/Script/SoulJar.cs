@@ -49,7 +49,8 @@ public class SoulJar : ReaperJr
             else
                 GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
         }
-        else return;
+        else
+            GameEvents.ReportInteractHintShown(HintForInteraction.JAR); ;
     }
     private void OnMouseExit()
     {
@@ -67,8 +68,6 @@ public class SoulJar : ReaperJr
         if (other.transform.tag == "Player")
         {
             playerIn = false;
-            if (_GAME.returnSouls)
-                GameEvents.ReportInteractHintShown(HintForInteraction.FINISH);
         }
     }
 }

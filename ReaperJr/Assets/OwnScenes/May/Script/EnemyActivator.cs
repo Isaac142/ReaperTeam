@@ -11,7 +11,7 @@ public class EnemyActivator : ReaperJr
         if(other.tag == "Player")
         {
             foreach (EnemyPatrol enemy in enemies)
-                StartCoroutine(enemy.Chasing());
+               enemy.Chasing();
         }
     }
 
@@ -20,7 +20,7 @@ public class EnemyActivator : ReaperJr
         if (other.tag == "Player")
         {
             foreach (EnemyPatrol enemy in enemies)
-                StopCoroutine(enemy.Chasing());
+                enemy.NextPatrolPoint();
         }
     }
 }

@@ -65,6 +65,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector]
     public bool isInvincible = false;
     public float invincibleTime = 5f;
+    private float timerReturnSoul = 0, timerFinish = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -89,6 +90,8 @@ public class GameManager : Singleton<GameManager>
         _cDTimer = coolDown;
         onCD = false;
         _GAME.totalSoulNo = 0;
+        timerReturnSoul = 0;
+        timerFinish = 0;
         returnSouls = false;
         //Time.timeScale = 1;
     }
@@ -128,6 +131,27 @@ public class GameManager : Singleton<GameManager>
                     GameEvents.ReportGameStateChange(GameState.GAMEOVER);
                     _timer = 0;
                 }
+
+                if (totalSoulNo == 0 && !returnSouls) //show return soul info after collect all souls.
+                {
+                    GameEvents.ReportInteractHintShown(HintForInteraction.RETURNSOULS);
+                    timerReturnSoul += Time.deltaTime;
+                    if(timerReturnSoul == 5f)
+                    {
+                        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+                    }
+                }
+
+                if(returnSouls)
+                {
+                    GameEvents.ReportInteractHintShown(HintForInteraction.FINISH);
+                    timerFinish += Time.deltaTime;
+                    if (timerFinish == 5f)
+                    {
+                        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+                    }
+                }
+
                 break;
 
             case GameState.PAUSED:
@@ -138,14 +162,6 @@ public class GameManager : Singleton<GameManager>
             case GameState.MENU:
                 if (Input.GetKeyDown(KeyCode.Escape))
                     GameEvents.ReportGameStateChange(GameState.RESUME);
-                break;
-            case GameState.VICTORY:
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    GameEvents.ReportGameStateChange(GameState.RESUME);
-                break;
-            case GameState.OPENNING:
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    _UI.Restart();
                 break;
         }
 
@@ -194,11 +210,11 @@ public class GameManager : Singleton<GameManager>
         switch (state)
         {
             case GameState.TITLE:
-                _AUDIO.PlayMusic("Theme");
+                _AUDIO.PlayMusic("Title");
                 PauseGame();
                 break;
             case GameState.OPENNING:
-                _AUDIO.PlayMusic("Theme");
+                _AUDIO.PlayMusic("Opening");
                 PauseGame();
                 break;
             case GameState.INGAME:
@@ -216,19 +232,19 @@ public class GameManager : Singleton<GameManager>
                 }
                 break;
             case GameState.PAUSED:
-                _AUDIO.PlayMusic("Theme");
+                _AUDIO.PlayMusic("Pause");
                 PauseGame();
                 break;
             case GameState.MENU:
-                _AUDIO.PlayMusic("Theme");
+                _AUDIO.PlayMusic("Menu");
                 PauseGame();
                 break;
             case GameState.GAMEOVER:
-                _AUDIO.PlayMusic("Theme");
+                _AUDIO.PlayMusic("Fail");
                 PauseGame();
                 break;
             case GameState.WON:
-                _AUDIO.PlayMusic("Theme");
+                _AUDIO.PlayMusic("Won");
                 PauseGame();
                 break;
             case GameState.RESUME:
@@ -237,6 +253,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.VICTORY:
                 _PLAYER.transform.eulerAngles = new Vector3(0, 90, 0);
                 _PLAYER.anim.SetTrigger("Victory");
+                _AUDIO.PlayMusic("RomeClear");
                 break;
         }
     }

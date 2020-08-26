@@ -64,10 +64,10 @@ public class EnemyPatrol : ReaperJr
 
         if (isMouse)
 
-            _AUDIO.Play(this.GetComponent<AudioSource>(), "MouseRunning", awareDistance);
+            _AUDIO.Play(this.GetComponent<AudioSource>(), "MouseRunning", awareDistance + 3);
 
         if (isDog)
-            _AUDIO.Play(this.GetComponent<AudioSource>(), "Rattling", awareDistance);
+            _AUDIO.Play(this.GetComponent<AudioSource>(), "Rattling", awareDistance + 3);
     }
 
     // Update is called once per frame
@@ -84,7 +84,7 @@ public class EnemyPatrol : ReaperJr
             if(isChasing)
                 _AUDIO.Play(this.GetComponent<AudioSource>(), "DogSnarl", awareDistance);
             else
-                _AUDIO.Play(this.GetComponent<AudioSource>(), "Rattling", awareDistance);
+                _AUDIO.Play(this.GetComponent<AudioSource>(), "Rattling", awareDistance + 3);
         }
 
         //if is Mouse ==> setbool to same as ischasing, when ischasing true, mouse is running
@@ -136,7 +136,7 @@ public class EnemyPatrol : ReaperJr
         }
     }
 
-    void NextPatrolPoint()
+    public void NextPatrolPoint()
     {
         if (patrolPoints.Count > 0)
         {
@@ -164,7 +164,7 @@ public class EnemyPatrol : ReaperJr
         yield return null;
     }
 
-    public IEnumerator Chasing()
+    public void Chasing()
     {
         if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
         {
@@ -182,7 +182,11 @@ public class EnemyPatrol : ReaperJr
                 }
             }
         }
-        yield return null;
+        else
+        {
+            NextPatrolPoint();
+            isChasing = false;
+        }
     }
 
     public IEnumerator FakeSoulActivate()
