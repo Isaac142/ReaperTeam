@@ -531,6 +531,9 @@ public class PlayerMovement : Singleton<PlayerMovement>
                     }
                 }
             }
+
+            else
+                GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         }
     }
     #endregion

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1047960742958395682}
   - component: {fileID: 1047960742958395683}
   - component: {fileID: 1047960742958395708}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MoveableObjParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ ParticleSystem:
   looping: 1
   prewarm: 1
   playOnAwake: 1
-  useUnscaledTime: 0
+  useUnscaledTime: 1
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
   startDelay:
@@ -4733,7 +4733,7 @@ ParticleSystemRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 3
-  m_SortMode: 0
+  m_SortMode: 2
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
@@ -4766,7 +4766,7 @@ GameObject:
   - component: {fileID: 190417376607663438}
   - component: {fileID: 299072000325368128}
   - component: {fileID: 8417602440407660419}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}

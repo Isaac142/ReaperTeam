@@ -112,7 +112,7 @@ NavMeshObstacle:
   m_Extents: {x: 0.44500002, y: 0.47700003, z: 0.47300002}
   m_MoveThreshold: 0.1
   m_Carve: 1
-  m_CarveOnlyStationary: 1
+  m_CarveOnlyStationary: 0
   m_Center: {x: 0.001, y: 0, z: -0.001}
   m_TimeToStationary: 0.5
 --- !u!54 &3179970328529060788
@@ -151,7 +151,6 @@ MonoBehaviour:
   playerIn: 0
   isHolding: 0
   relasingThreshold: 0.3
-  gravityFactor: 7
   pickUpDist: 1
   emissionObj: []
   emiColorPlayerIn: {x: 0, y: 99, z: 219}
@@ -159,7 +158,6 @@ MonoBehaviour:
   emiColorHold: {x: 0, y: 42, z: 206}
   objectRB: {fileID: 0}
   isKeyItem: 0
-  justReleased: 0
 --- !u!1 &6614409779041965042
 GameObject:
   m_ObjectHideFlags: 0

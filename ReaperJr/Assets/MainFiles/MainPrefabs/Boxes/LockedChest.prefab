@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 379196681976102099}
   - component: {fileID: 1615416697958408944}
   - component: {fileID: 7791392872162701382}
+  - component: {fileID: 3775842139692368757}
   m_Layer: 0
   m_Name: LockedChest
   m_TagString: Untagged
@@ -299,7 +300,6 @@ MonoBehaviour:
   playerIn: 0
   isHolding: 0
   relasingThreshold: 0.3
-  gravityFactor: 7
   pickUpDist: 1
   emissionObj: []
   emiColorPlayerIn: {x: 0, y: 233, z: 255}
@@ -307,4 +307,19 @@ MonoBehaviour:
   emiColorHold: {x: 0, y: 157, z: 152}
   objectRB: {fileID: 0}
   isKeyItem: 0
-  justReleased: 0
+--- !u!208 &3775842139692368757
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9163753215537361336}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.4970001, y: 0.998, z: 1.056}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

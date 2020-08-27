@@ -33,7 +33,6 @@ public class MoveableItemTrigger : ReaperJr
             {
                 itemMovement.playerIn = false;
                 _GAME.playerIn = false;
-
             }
         }
     }

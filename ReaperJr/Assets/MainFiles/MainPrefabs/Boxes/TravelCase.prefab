@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 3864292845579712785}
   - component: {fileID: 8899112274835738301}
   - component: {fileID: 7035538262502570676}
+  - component: {fileID: -62532200003583736}
   m_Layer: 0
   m_Name: TravelCase
   m_TagString: Untagged
@@ -222,7 +223,6 @@ MonoBehaviour:
   playerIn: 0
   isHolding: 0
   relasingThreshold: 0.3
-  gravityFactor: 7
   pickUpDist: 1
   emissionObj: []
   emiColorPlayerIn: {x: 61, y: 61, z: 61}
@@ -230,7 +230,6 @@ MonoBehaviour:
   emiColorHold: {x: 102, y: 102, z: 65}
   objectRB: {fileID: 0}
   isKeyItem: 0
-  justReleased: 0
 --- !u!65 &7035538262502570676
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -244,3 +243,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.1, y: 1.2, z: 2.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &-62532200003583736
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4899423302723308621}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.4970001, y: 0.54800004, z: 1.08}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

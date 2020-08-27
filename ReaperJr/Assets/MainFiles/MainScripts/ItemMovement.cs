@@ -96,6 +96,19 @@ public class ItemMovement : ReaperJr
         if (playerIn && !_GAME.isHolding)
         {
             CanHold();
+
+            if (canHold && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
+            {
+                if (_UI.currMovingInfo != HintForMovingBoxes.CANHOLD)
+                    GameEvents.ReportMovableHintShown(HintForMovingBoxes.CANHOLD);
+                if (isKeyItem && _UI.currInteractInfo != HintForInteraction.KEYITEM)
+                    GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
+            }
+            else
+            {
+                GameEvents.ReportMovableHintShown(HintForMovingBoxes.DEFAULT);
+                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+            }
         }
 
         if (isHolding)
@@ -152,42 +165,19 @@ public class ItemMovement : ReaperJr
         RaycastHit ver;
         //test if the player is standing on the object
         if (Physics.Raycast(_PLAYER.transform.position, Vector3.down, out ver)) //test if player is on top of the object
-            onTop = (ver.collider.transform.position == transform.position) ? true : false;
+            onTop = (ver.collider.transform == transform) ? true : false;
 
-        RaycastHit hor;
-        Vector3 topPoint = _PLAYER.transform.position + Vector3.up * (height * 0.6f);
-        Vector3 bottomPoint = _PLAYER.transform.position + Vector3.up * 0.01f;
-        float radius = _PLAYER.GetComponent<CapsuleCollider>().radius - 0.03f;
-        //test if player is in front and close enough to the object
-        if (Physics.CapsuleCast(topPoint, bottomPoint, radius, _PLAYER.transform.right, out hor, pickUpDist))
-            inFront = (hor.transform == transform) ? true : false;
-
-        //test if player is holding other object.
-        if (!_GAME.isHolding && !_PLAYER.isCrouching)
-        {
-            canHold = (!onTop && inFront) ? true : false;
-        }
-        else
-            canHold = false;
-
-        if (canHold)
-        {
-            if (_UI.currCollectInfo == HintForItemCollect.DEFAULT)
-            {
-                if (_UI.currMovingInfo != HintForMovingBoxes.CANHOLD)
-                    GameEvents.ReportMovableHintShown(HintForMovingBoxes.CANHOLD);
-                if (isKeyItem && _UI.currInteractInfo != HintForInteraction.KEYITEM)
-                    GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
-            }
-        }
-        else
-        {
-            if(_UI.currMovingInfo != HintForMovingBoxes.DEFAULT)
-                GameEvents.ReportMovableHintShown(HintForMovingBoxes.DEFAULT);
-            if (isKeyItem && _UI.currInteractInfo != HintForInteraction.DEFAULT)
-                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
-        }
-
+            RaycastHit hor;
+            Vector3 topPoint = _PLAYER.transform.position + Vector3.up * (height * 0.6f);
+            Vector3 bottomPoint = _PLAYER.transform.position + Vector3.up * 0.01f;
+            float radius = _PLAYER.GetComponent<CapsuleCollider>().radius - 0.03f;
+            //test if player is in front and close enough to the object
+            if (Physics.CapsuleCast(topPoint, bottomPoint, radius, _PLAYER.transform.right, out hor, pickUpDist))
+                inFront = (hor.transform == transform) ? true : false;
+            
+            //test if player is holding other object.
+            if (!_GAME.isHolding && !_PLAYER.isCrouching)
+                canHold = (!onTop && inFront) ? true : false;
     }
 
     void PickUp()
