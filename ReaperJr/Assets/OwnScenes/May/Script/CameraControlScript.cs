@@ -118,14 +118,14 @@ public class CameraControlScript : Singleton<CameraControlScript>
                 transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase);
         }
 
-        if(camPos == CameraPosition.ZOOMIN)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                GameEvents.ReportGameStateChange(GameState.RESUME);
-                camPos = CameraPosition.GAMEPLAY;
-            }
-        }
+        //if(camPos == CameraPosition.ZOOMIN)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Escape))
+        //    {
+        //        GameEvents.ReportGameStateChange(GameState.RESUME);
+        //        camPos = CameraPosition.GAMEPLAY;
+        //    }
+        //}
     }
 
     private void FixedUpdate()
@@ -249,13 +249,7 @@ public class CameraControlScript : Singleton<CameraControlScript>
             Sequence mySequence = DOTween.Sequence();
             // Add a movement tween at the beginning
             mySequence.Append(transform.DOMove(_PLAYER.transform.position + new Vector3(0, 1.5f, -3f), zoomSpeed).SetEase(zoomEase));
-            // Add a rotation tween as soon as the previous one is finished
-            //mySequence.Append(transform.DORotate(new Vector3(0, 180, 0), 1));
-            // Delay the whole Sequence by 1 second
-            //mySequence.PrependInterval(1);
-            // Insert a scale tween for the whole duration of the Sequence
-            //mySequence.Insert(0, transform.DOScale(new Vector3(3, 3, 3), mySequence.Duration()));
-            mySequence.AppendInterval(3.5f);
+            mySequence.AppendInterval(1.5f);
             mySequence.Append(transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase)).OnComplete(() =>
             {
                 camPos = CameraPosition.GAMEPLAY;

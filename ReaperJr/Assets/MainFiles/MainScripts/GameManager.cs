@@ -66,6 +66,10 @@ public class GameManager : Singleton<GameManager>
     public bool isInvincible = false;
     public float invincibleTime = 5f;
     private float timerReturnSoul = 0, timerFinish = 0;
+    private int returnSoul = 0, finish = 0; // end of game hint show pass
+
+    enum EndGameState { DEFAULT, RETURNSOULS, GOTODOOR}
+    private EndGameState soulReturning;
 
     // Start is called before the first frame update
     void Start()
@@ -90,10 +94,13 @@ public class GameManager : Singleton<GameManager>
         _cDTimer = coolDown;
         onCD = false;
         _GAME.totalSoulNo = 0;
-        timerReturnSoul = 0;
-        timerFinish = 0;
+        //timerReturnSoul = 0;
+        //timerFinish = 0;
         returnSouls = false;
         //Time.timeScale = 1;
+        soulReturning = EndGameState.DEFAULT;
+        returnSoul = 0;
+        finish = 0;
     }
 
     // Update is called once per frame
@@ -132,26 +139,37 @@ public class GameManager : Singleton<GameManager>
                     _timer = 0;
                 }
 
-                if (totalSoulNo == 0 && !returnSouls) //show return soul info after collect all souls.
+                //if (totalSoulNo == 0 && !returnSouls) //show return soul info after collect all souls.
+                //{
+                //    GameEvents.ReportInteractHintShown(HintForInteraction.RETURNSOULS);
+                //    timerReturnSoul += Time.deltaTime;
+                //    if(timerReturnSoul >= 5f)
+                //    {
+                //        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+                //    }
+                //}
+
+                //if(returnSouls)
+                //{
+                //    GameEvents.ReportInteractHintShown(HintForInteraction.FINISH);
+                //    timerFinish += Time.deltaTime;
+                //    if (timerFinish >= 5f)
+                //    {
+                //        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+                //    }
+                //}
+                if (totalSoulNo == 0)
                 {
-                    GameEvents.ReportInteractHintShown(HintForInteraction.RETURNSOULS);
-                    timerReturnSoul += Time.deltaTime;
-                    if(timerReturnSoul == 5f)
+                    switch (soulReturning)
                     {
-                        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+                        case EndGameState.DEFAULT:
+                            if (!returnSouls && returnSoul == 0)
+                                SoulReturnCondition(EndGameState.RETURNSOULS);
+                            else if (returnSouls && finish == 0)
+                                SoulReturnCondition(EndGameState.GOTODOOR);
+                            break;
                     }
                 }
-
-                if(returnSouls)
-                {
-                    GameEvents.ReportInteractHintShown(HintForInteraction.FINISH);
-                    timerFinish += Time.deltaTime;
-                    if (timerFinish == 5f)
-                    {
-                        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
-                    }
-                }
-
                 break;
 
             case GameState.PAUSED:
@@ -188,7 +206,6 @@ public class GameManager : Singleton<GameManager>
         _timer -= punishmentTime;
         playerActive = false;
         _UI.SetHintPanel();
-        //_PLAYER.transform.position = checkPoints[checkPoints.Count - 1];
         
         if(checkPoints.Count <= 0) // return to starting point if no saved check point.
         {
@@ -260,14 +277,12 @@ public class GameManager : Singleton<GameManager>
 
     public void PauseGame()
     {
-        //Time.timeScale = 0;
         playerActive = false;
         isPaused = true;
     }
 
     IEnumerator ResumeGame()
     {
-        //Time.timeScale = 1;
         yield return new WaitForSeconds(0.5f);
 
         isPaused = false;
@@ -317,5 +332,34 @@ public class GameManager : Singleton<GameManager>
         _PLAYER.anim.SetTrigger("Death");
         yield return new WaitForSeconds(2f);
         PlayerDead();
+    }
+    
+    void SoulReturnCondition(EndGameState state)
+    {
+        soulReturning = state;
+        switch (state)
+        {
+            case EndGameState.DEFAULT:
+                GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+                break;
+
+            case EndGameState.RETURNSOULS:
+                returnSoul++;
+                GameEvents.ReportInteractHintShown(HintForInteraction.RETURNSOULS);
+                StartCoroutine(EndGameCounter());
+                break;
+
+            case EndGameState.GOTODOOR:
+                finish++;
+                GameEvents.ReportInteractHintShown(HintForInteraction.FINISH);
+                StartCoroutine(EndGameCounter());
+                break;
+        }
+    }
+
+    IEnumerator EndGameCounter()
+    {
+        yield return new WaitForSeconds(5f);
+        SoulReturnCondition(EndGameState.DEFAULT);
     }
 }

@@ -31,30 +31,37 @@ public class SoulJar : ReaperJr
 
     private void OnMouseOver()
     {
-        if (_GAME.totalSoulNo == 0)
+        if (!_GAME.returnSouls)
         {
-            if (playerIn)
+            if (_GAME.totalSoulNo == 0)
             {
-                GameEvents.ReportInteractHintShown(HintForInteraction.RETURN);
-
-                if (Input.GetMouseButtonDown(1))
+                if (playerIn)
                 {
-                    this.transform.localPosition = returnPos;
-                    this.transform.localEulerAngles = returnRot;
-                    lid.transform.localPosition = lidPos;
-                    lid.transform.localEulerAngles = lidRot;
-                    _GAME.returnSouls = true;
+                    GameEvents.ReportInteractHintShown(HintForInteraction.RETURN);
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        this.transform.localPosition = returnPos;
+                        this.transform.localEulerAngles = returnRot;
+                        lid.transform.localPosition = lidPos;
+                        lid.transform.localEulerAngles = lidRot;
+                        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+                        _GAME.returnSouls = true;
+                    }
                 }
+                else
+                    GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
             }
             else
-                GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
+                GameEvents.ReportInteractHintShown(HintForInteraction.JAR);
         }
         else
-            GameEvents.ReportInteractHintShown(HintForInteraction.JAR); ;
+            return;
     }
     private void OnMouseExit()
     {
-        GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
+        if(!_GAME.returnSouls)
+            GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
     }
 
     private void OnTriggerEnter(Collider other)

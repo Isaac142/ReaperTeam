@@ -184,7 +184,9 @@ public class EnemyPatrol : ReaperJr
         }
         else
         {
-            NextPatrolPoint();
+            agent.speed = patrolSpeed;
+            if (agent.remainingDistance < 0.5f)
+                NextPatrolPoint();
             isChasing = false;
         }
     }
