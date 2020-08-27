@@ -13,11 +13,13 @@ public static class GameEvents
     public static event Action<HintForInteraction> OnInteractHintShown = null;
     public static event Action<HintForItemCollect> OnCollectHintShown = null;
     public static event Action<KeyItem> OnKeyItemCollected = null;
+    public static event Action<KeyItem> OnKeyInPosition = null;
     public static event Action<bool> OnCrossHairOut = null;
     public static event Action<EnemyPatrol> OnFakeSoulChasing = null;
     public static event Action<FakeSoulController> OnFakeSoulCollected = null;
     public static event Action<bool> OnMovingObject = null;
     public static event Action<bool> OnFallDeath = null;
+    public static event Action<bool> OnTimeChnage = null;
 
     public static void ReportGameStateChange(GameState gameState)
     {
@@ -53,6 +55,12 @@ public static class GameEvents
     {
         if (OnKeyItemCollected != null)
             OnKeyItemCollected(itemCollected);
+    }
+
+    public static void ReportKeyItemInPosition(KeyItem key)
+    {
+        if (OnKeyItemCollected != null)
+            OnKeyInPosition(key);
     }
 
     public static void ReportCollectHintShown(HintForItemCollect action)
@@ -95,5 +103,11 @@ public static class GameEvents
     {
         if (OnFallDeath != null)
             OnFallDeath(fall);
+    }
+
+    public static void ReportOnTimeChange(bool time)
+    {
+        if (OnTimeChnage != null)
+            OnTimeChnage(time);
     }
 }

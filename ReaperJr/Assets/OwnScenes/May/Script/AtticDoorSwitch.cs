@@ -23,17 +23,6 @@ public class AtticDoorSwitch : ReaperJr
         switchActivated = false;
     }
 
-    private void Update()
-    {
-        for(int i = 0; i < keyItems.Count; i ++) // preventing holding more than one key at anytime
-        {
-            if (keyItems[i].isCollected && !keyItems[i].isInPosition)
-                _PLAYER.keyCollect = false;
-            else
-                _PLAYER.keyCollect = true;
-        }
-    }
-
     public void SetKey(KeyItem key, Vector3 keyPos)
     {
         key.transform.position = keyPos;

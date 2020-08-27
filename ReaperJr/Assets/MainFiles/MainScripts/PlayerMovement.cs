@@ -117,7 +117,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             }
         }
 
-        if(canCollect)
+        if(canCollect && !_GAME.isHolding)
             Collect();
 
         EquipScythe();
@@ -142,9 +142,12 @@ public class PlayerMovement : Singleton<PlayerMovement>
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        if (_UI.currMovingInfo != HintForMovingBoxes.DEFAULT)
         {
-            GameEvents.ReportOnMovingObject(_GAME.isHolding);
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                GameEvents.ReportOnMovingObject(_GAME.isHolding);
+            }
         }
         
         anim.SetBool("Holding", _GAME.isHolding);
@@ -474,7 +477,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                         if(keyCollect)
                             GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);
                         else
-                            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
+                            GameEvents.ReportCollectHintShown(HintForItemCollect.KEYLIMIT);
                     }
 
                     else
@@ -513,6 +516,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             _GAME.Timer += _GAME.rewardTime;
                             Destroy(hits[i].transform.gameObject);
                             GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
+                            GameEvents.ReportOnTimeChange(true);
                         }
 
                         if (hits[i].transform.tag == "KeyItem" && keyCollect)

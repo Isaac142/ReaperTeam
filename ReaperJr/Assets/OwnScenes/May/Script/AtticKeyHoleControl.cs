@@ -49,6 +49,7 @@ public class AtticKeyHoleControl : ReaperJr
                 if (Input.GetMouseButtonDown(1))
                 {
                     controller.SetKey(controller.keyItems[keyIndex], keyPos);
+                    GameEvents.ReportKeyItemInPosition(controller.keyItems[keyIndex]);
                 }
             }
         }
@@ -63,7 +64,9 @@ public class AtticKeyHoleControl : ReaperJr
                 if (!controller.keyItems[keyIndex].isInPosition)
                 {
                     if (playerDist <= clickDist)
+                    {
                         GameEvents.ReportInteractHintShown(HintForInteraction.SWITCH);
+                    }
                     else
                         GameEvents.ReportInteractHintShown(HintForInteraction.DISTANCEREQUIRED);
                 }

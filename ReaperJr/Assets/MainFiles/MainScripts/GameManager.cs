@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] //game states
     public bool playerActive = true, isPaused =  false;
     [HideInInspector] //holding object states
-    public bool isHolding = false, holdingLightObject = false;
+    public bool isHolding = false, holdingLightObject = false, playerIn = false;
     [HideInInspector] //scythe and its ability state
     public bool scytheEquiped = true, scytheaThrown = false, onCD = false;
     [HideInInspector] //grounding states
@@ -88,6 +88,7 @@ public class GameManager : Singleton<GameManager>
         _PLAYER.Restart();
         holdingLightObject = false;
         isHolding = false;
+        playerIn = false;
         onSpecialGround = false;
         _timer = maxTimerInSeconds;
         _energy = maxEnergy;
@@ -215,10 +216,11 @@ public class GameManager : Singleton<GameManager>
         else
             _PLAYER.transform.DOMove(checkPoints[checkPoints.Count - 1], 3)
             .OnComplete(() =>
-             GameEvents.ReportGameStateChange(GameState.RESUME));
- 
-        deadParticleEffect.SetActive(true);
-        StartCoroutine(InvincibleTimer());
+            {
+                StartCoroutine(InvincibleTimer());
+                GameEvents.ReportOnTimeChange(false);
+                GameEvents.ReportGameStateChange(GameState.RESUME);
+            });
     }
 
     public void OnGameStateChange(GameState state)
@@ -244,6 +246,7 @@ public class GameManager : Singleton<GameManager>
                     GameEvents.ReportGameStateChange(GameState.INGAME);
                 else
                 {
+                    deadParticleEffect.SetActive(true);
                     StartCoroutine(DeathTimer());
                     _AUDIO.PlayMusic("PlayerReset");
                 }
@@ -324,6 +327,8 @@ public class GameManager : Singleton<GameManager>
     IEnumerator DeadtoInGame()
     {
         yield return new WaitForSeconds(3f);
+        StartCoroutine(InvincibleTimer());
+        GameEvents.ReportOnTimeChange(false);
         GameEvents.ReportGameStateChange(GameState.RESUME);
     }
 

@@ -9,7 +9,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public enum HintForMovingBoxes { DEFAULT, CANHOLD, RELEASING, HEAVYOBJNOTE }
-public enum HintForItemCollect { DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING }
+public enum HintForItemCollect { DEFAULT, COLLECTSOULS, COLLECTITEMS, FAKESOULWARNING, KEYLIMIT }
 public enum HintForInteraction { DEFAULT, SWITCH, RETURN, REQUIRKEY, DISTANCEREQUIRED, KEYITEM, MOUSETRAP, RETURNSOULS, FINISH, JAR, CROUCH }
 
 public class UIManager : Singleton<UIManager>
@@ -40,7 +40,6 @@ public class UIManager : Singleton<UIManager>
     public List<SoulType> currSouls = new List<SoulType>();
     public GameObject soulPanel;
     public Text totalSoulNo;
-    public Text itemName, itemType, itemDescription;
     public Slider energyBar;
     public Image abilityCD;
     public GameObject scytheMasks, abilityMask;  //scythe icon masks
@@ -56,6 +55,8 @@ public class UIManager : Singleton<UIManager>
     public Image crosshairIcon;
     public Animator storyAnim, openningAnim;
     public TextMeshPro checkPointInfo;
+    public GameObject timeChangePanel;
+    public TextMeshProUGUI timeChangeMessage;
 
     [Header("GameStatePanels")]
     public GameObject inGamePanel;  //in game UI display (timer, scythe icons and souls)
@@ -248,6 +249,7 @@ public class UIManager : Singleton<UIManager>
         InstantOffPanel(deadPanel);
         InstantOffPanel(hintsPanel);
         InstantOffPanel(roomClearPanel);
+        InstantOffPanel(timeChangePanel);
     }
 
     public void DisableSoulIcons()
@@ -357,6 +359,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnInteractHintShown += OnInterActionHintShown;
         GameEvents.OnCrossHairOut += OnCrossHairOut;
         GameEvents.OnFallDeath += OnFallDeath;
+        GameEvents.OnTimeChnage += OnTimeChange;
     }
 
     private void OnDisable()
@@ -371,6 +374,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnCollectHintShown -= OnCollectHintShown;
         GameEvents.OnInteractHintShown -= OnInterActionHintShown;
         GameEvents.OnFallDeath -= OnFallDeath;
+        GameEvents.OnTimeChnage -= OnTimeChange;
     }
 
     void OnCrossHairOut(bool crosshair)
@@ -634,6 +638,10 @@ public class UIManager : Singleton<UIManager>
                 CollectingHint.text = "<color=#FFFFFF> Right click to collect the object(s).";
                 FadeInText(CollectingHint);
                 break;
+            case HintForItemCollect.KEYLIMIT:
+                CollectingHint.text = "<color=#FFFFFF> You can ONLY carry ONE of these Items.";
+                FadeInText(CollectingHint);
+                break;
             case HintForItemCollect.FAKESOULWARNING:
 
                 CollectingHint.text = "<color=red> <size=80> Fake Soul! RUN!!!";
@@ -711,6 +719,29 @@ public class UIManager : Singleton<UIManager>
             deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You Have Fell \n Return to Last Check Point";
         else
             deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You are in Danger \n Return to Last Check Point";
+    }
+
+    void OnTimeChange(bool changedTime)
+    {
+        if (changedTime)
+            timeChangeMessage.text = "<color=#FFC000> <size=60> +" + _GAME.rewardTime.ToString();
+        else
+            timeChangeMessage.text = "<color=red> <size=60> -" + _GAME.punishmentTime.ToString();
+        
+        timeChangeMessage.rectTransform.localPosition = new Vector3(0, 30f, 0);
+        timeChangeMessage.alpha = 1;
+
+        StartCoroutine(TimeChange());
+    }
+
+    public IEnumerator TimeChange () //show time rewards/punishment
+    {
+        FadeInPanel(timeChangePanel);
+        timeChangeMessage.rectTransform.DOLocalMoveY(50f, 2f);
+        timeChangeMessage.DOFade(0, 2.5f);
+
+        yield return new WaitForSeconds(2);
+        FadeOutPanel(timeChangePanel);
     }
 }
 

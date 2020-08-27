@@ -45,7 +45,6 @@ public class CameraControlScript : Singleton<CameraControlScript>
     public Vector3 camRotation = Vector3.zero; //default rotation
     public Vector3 topRot = Vector3.zero;  //rotation when camera reach the y max.
     public Vector3 bottomRot = Vector3.zero; //rotation when camera reach the y min.
-    public float stairRotFactor = 0f; //adjust rotation on stairs
     
     [VectorLabels("Move" , "Tilt")]
     public Vector2 followSpeed = new Vector2(2.5f, 2f); // how fast camera moves to follow player. x = movement speed, y = tilting speed.
@@ -58,10 +57,10 @@ public class CameraControlScript : Singleton<CameraControlScript>
     public float transparentFactor = 0.5f;
     private Color color;
 
-    public enum CameraState { INROOM, OUTROOM}
+    public enum CameraState {INROOM, OUTROOM}
     public CameraState camState;
 
-    public enum CameraPosition { GAMEPLAY, ZOOMOUT, ZOOMIN}
+    public enum CameraPosition {GAMEPLAY, ZOOMOUT, ZOOMIN}
     public CameraPosition camPos;
 
     private void Awake()

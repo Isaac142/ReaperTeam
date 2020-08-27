@@ -22,6 +22,7 @@ public class KeyItem : ReaperJr
         GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(emiColour.x / 255f, emiColour.y / 255f, emiColour.z / 255f));
         RotCenter = transform.position;
         isCollected = false;
+        isInPosition = false;
     }
 
     private void Update()
@@ -52,11 +53,13 @@ public class KeyItem : ReaperJr
     private void OnEnable()
     {
         GameEvents.OnKeyItemCollected += OnKeyItemCollected;
+        GameEvents.OnKeyInPosition += OnKeyInPosition;
     }
 
     private void OnDisable()
     {
         GameEvents.OnKeyItemCollected -= OnKeyItemCollected;
+        GameEvents.OnKeyInPosition -= OnKeyInPosition;
     }
 
     void OnKeyItemCollected(KeyItem keyItem)
@@ -64,7 +67,14 @@ public class KeyItem : ReaperJr
         if (keyItem == this)
         {           
             this.gameObject.SetActive(false);
+            _PLAYER.keyCollect = false;
             GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         }
+    }
+
+    void OnKeyInPosition(KeyItem key)
+    {
+        if (key == this)
+            _PLAYER.keyCollect = true;
     }
 }

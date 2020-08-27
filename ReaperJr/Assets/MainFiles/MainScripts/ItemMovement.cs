@@ -20,7 +20,6 @@ public class ItemMovement : ReaperJr
     private bool hasRB = false;
 
     public float relasingThreshold = 0.3f; //when curren - iniDistance > releasingThreshold, object is released.
-    public float gravityFactor = 7f;
     public float pickUpDist = 1f;
 
     [VectorLabels("R", "B", "G")]
@@ -39,7 +38,7 @@ public class ItemMovement : ReaperJr
     public bool isKeyItem = false;
 
     private GameObject centerMarker;
-    public bool justReleased = false;
+    private  bool justReleased = false;
     private GameObject oriParent;
 
     private void Start()
@@ -88,12 +87,13 @@ public class ItemMovement : ReaperJr
                 StartCoroutine(Release());
             return;
         }
+
         if (_PLAYER.isCrouching == true)
             return;
 
         EmissionControl();
 
-        if (playerIn)
+        if (playerIn && !_GAME.isHolding)
         {
             CanHold();
         }
@@ -172,14 +172,19 @@ public class ItemMovement : ReaperJr
 
         if (canHold)
         {
-            GameEvents.ReportMovableHintShown(HintForMovingBoxes.CANHOLD);
-            if (isKeyItem && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
-                GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
+            if (_UI.currCollectInfo == HintForItemCollect.DEFAULT)
+            {
+                if (_UI.currMovingInfo != HintForMovingBoxes.CANHOLD)
+                    GameEvents.ReportMovableHintShown(HintForMovingBoxes.CANHOLD);
+                if (isKeyItem && _UI.currInteractInfo != HintForInteraction.KEYITEM)
+                    GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
+            }
         }
         else
         {
-            GameEvents.ReportMovableHintShown(HintForMovingBoxes.DEFAULT);
-            if (isKeyItem)
+            if(_UI.currMovingInfo != HintForMovingBoxes.DEFAULT)
+                GameEvents.ReportMovableHintShown(HintForMovingBoxes.DEFAULT);
+            if (isKeyItem && _UI.currInteractInfo != HintForInteraction.DEFAULT)
                 GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
         }
 
@@ -355,7 +360,7 @@ public class ItemMovement : ReaperJr
 
     void OnMovingObject (bool holding)
     {
-        if (canHold || isHolding)
+        //if (canHold || isHolding)
             holding = _GAME.isHolding;
        
         if(canHold && !holding)

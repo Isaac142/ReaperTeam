@@ -8,7 +8,7 @@ public class MouseTrap : MonoBehaviour
 {
     public GameObject soul;
     public NavMeshAgent mouse;
-    public ItemMovement lure;
+    public CheeseMovement lure;
     public Transform mouseGoal;
     public Animator anim;
     public float trapSetTime = 3f;
@@ -91,6 +91,7 @@ public class MouseTrap : MonoBehaviour
         yield return new WaitForSeconds(trapSetTime);
         StopCoroutine(mouse.GetComponent<EnemyPatrol>().Flee());
         mouse.SetDestination(mouseGoal.transform.position);
+        mouse.speed = mouse.GetComponent<EnemyPatrol>().chasingSpeed;
     }
 
     IEnumerator TrapSetOff()
