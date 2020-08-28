@@ -359,7 +359,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnInteractHintShown += OnInterActionHintShown;
         GameEvents.OnCrossHairOut += OnCrossHairOut;
         GameEvents.OnFallDeath += OnFallDeath;
-        GameEvents.OnTimeChnage += OnTimeChange;
+        GameEvents.OnTimeChange += OnTimeChange;
     }
 
     private void OnDisable()
@@ -374,7 +374,7 @@ public class UIManager : Singleton<UIManager>
         GameEvents.OnCollectHintShown -= OnCollectHintShown;
         GameEvents.OnInteractHintShown -= OnInterActionHintShown;
         GameEvents.OnFallDeath -= OnFallDeath;
-        GameEvents.OnTimeChnage -= OnTimeChange;
+        GameEvents.OnTimeChange -= OnTimeChange;
     }
 
     void OnCrossHairOut(bool crosshair)

@@ -16,7 +16,7 @@ public class ItemMovement : ReaperJr
     public float massModifier = 2f;
     public float drag = 5f; //object's rigidbody's sliperness on ground
     [HideInInspector]
-    public bool isLigther = false, canHold = false, playerIn = false, isHolding = false;
+    public bool canHold = false, playerIn = false, isHolding = false;
     private bool hasRB = false;
 
     public float relasingThreshold = 0.3f; //when curren - iniDistance > releasingThreshold, object is released.
@@ -41,6 +41,12 @@ public class ItemMovement : ReaperJr
     private  bool justReleased = false;
     private GameObject oriParent;
 
+    [HideInInspector]
+    public enum ObjectType { HEAVY, LIGHT}
+    [HideInInspector]
+    public ObjectType weight;
+    bool canHoldTest = true;
+
     private void Start()
     {
         if(transform.parent != null)
@@ -50,9 +56,9 @@ public class ItemMovement : ReaperJr
         playerIn = false;
 
         if (mass < _GAME.playerMass)
-            isLigther = true;
+            weight = ObjectType.LIGHT;
         else
-            isLigther = false;
+            weight = ObjectType.HEAVY;
 
         if (GetComponent<Rigidbody>() != null)
         {
@@ -70,12 +76,16 @@ public class ItemMovement : ReaperJr
             mats.Add(obj.GetComponent<Renderer>().material);
         }
 
-        DefaultState();
-        if (!isLigther && hasRB)
+        switch(weight)
         {
-            centerMarker = new GameObject("Center");
-            centerMarker.transform.parent = this.transform;
-            centerMarker.transform.position = GetComponent<BoxCollider>().center + transform.position;
+            case ObjectType.HEAVY:
+                if(hasRB)
+                {
+                    centerMarker = new GameObject("Center");
+                    centerMarker.transform.parent = this.transform;
+                    centerMarker.transform.position = GetComponent<BoxCollider>().center + transform.position;
+                }
+                break;
         }
     }
 
@@ -93,7 +103,7 @@ public class ItemMovement : ReaperJr
 
         EmissionControl();
 
-        if (playerIn && !_GAME.isHolding)
+        if (playerIn && !_GAME.isHolding && canHoldTest)
         {
             CanHold();
 
@@ -114,23 +124,16 @@ public class ItemMovement : ReaperJr
         if (isHolding)
         {
             HoldingEvents();
-            if (hasRB && !isLigther)
-                AutoDrop();
+
+            switch(weight)
+            {
+                case ObjectType.HEAVY:
+                    if(hasRB)
+                        AutoDrop();
+                    break;
+            }
         }
     }
-
-    void DefaultState()
-    {
-        transform.parent = oriParent.transform;
-        if (hasRB)
-        {
-            GetComponent<Rigidbody>().isKinematic = false;
-            objectRB.constraints = RigidbodyConstraints.None;
-        }
-        if (justReleased)
-            StartCoroutine(JustRelaseReset());
-    }
-
     void EmissionControl()
     {
         for (int i = 0; i < mats.Count; i++)
@@ -156,6 +159,16 @@ public class ItemMovement : ReaperJr
         }
     }
 
+    void DefaultState()
+    {
+        transform.parent = oriParent.transform;
+        if (hasRB)
+        {
+            GetComponent<Rigidbody>().isKinematic = false;
+            objectRB.constraints = RigidbodyConstraints.None;
+        }
+    }
+
     void CanHold()
     {
         bool onTop = false;
@@ -178,10 +191,15 @@ public class ItemMovement : ReaperJr
             //test if player is holding other object.
             if (!_GAME.isHolding && !_PLAYER.isCrouching)
                 canHold = (!onTop && inFront) ? true : false;
+        if (canHold)
+            GameEvents.ReportOnCanHoldTest(true);
+        else
+            GameEvents.ReportOnCanHoldTest(false);
     }
 
     void PickUp()
     {
+        canHold = false;
         isHolding = true;
         justReleased = false;
         GameEvents.ReportScytheEquipped(false);
@@ -195,34 +213,41 @@ public class ItemMovement : ReaperJr
         _PLAYER.jumpForce -= mass * 20f;
         this.transform.parent = ReaperJr._PLAYER.transform;
 
-        if (isLigther)
-        {
-            transform.position = new Vector3(transform.position.x, _PLAYER.GetComponent<CapsuleCollider>().height / 2f + (GetComponent<Collider>().bounds.min.y), transform.position.z); //can change to hand position
-            transform.eulerAngles = Vector3.zero;
-            _GAME.holdingLightObject = true;
-        }
-        else
-            _GAME.holdingLightObject = false;
-
-        if (objectRB != null)
-        {
+        if(objectRB != null)
             Destroy(objectRB);
-            if(!isLigther)
-                iniDistance = Vector3.Distance(centerMarker.transform.position, _PLAYER.transform.position) + relasingThreshold;          
+
+        switch (weight)
+        {
+            case ObjectType.HEAVY:
+                _GAME.holdingLightObject = false;
+
+                if(objectRB != null)
+                    iniDistance = Vector3.Distance(centerMarker.transform.position, _PLAYER.transform.position) + relasingThreshold;
+                break;
+
+            case ObjectType.LIGHT:
+                transform.position = new Vector3(transform.position.x, _PLAYER.GetComponent<CapsuleCollider>().height / 2f + (GetComponent<Collider>().bounds.min.y), transform.position.z); //can change to hand position
+                transform.eulerAngles = Vector3.zero;
+                _GAME.holdingLightObject = true;
+                break;
         }
     }
 
     void HoldingEvents()
     {
-        if (!isLigther)
+        switch(weight)
         {
-            GameEvents.ReportMovableHintShown(HintForMovingBoxes.HEAVYOBJNOTE);
+            case ObjectType.HEAVY:
+                GameEvents.ReportMovableHintShown(HintForMovingBoxes.HEAVYOBJNOTE);
 
-            if (_GAME.scytheEquiped) //equip scythe releases heavy object
-                StartCoroutine(Release());
+                if (_GAME.scytheEquiped) //equip scythe releases heavy object
+                    StartCoroutine(Release());
+                break;
+
+            case ObjectType.LIGHT:
+                GameEvents.ReportMovableHintShown(HintForMovingBoxes.RELEASING);
+                break;
         }
-        else
-            GameEvents.ReportMovableHintShown(HintForMovingBoxes.RELEASING);
 
         if (isKeyItem && _UI.currCollectInfo == HintForItemCollect.DEFAULT)
             GameEvents.ReportInteractHintShown(HintForInteraction.KEYITEM);
@@ -252,10 +277,7 @@ public class ItemMovement : ReaperJr
         }
 
         if (CurrDist > iniDistance)
-        {
-            justReleased = true;
             StartCoroutine(Release());
-        }
     }
 
     void ConstrainSetUp() //testing the local upward axis and set up constrains.
@@ -286,14 +308,20 @@ public class ItemMovement : ReaperJr
 
         if (hasRB)
         {
-            if(objectRB == null)
-                objectRB = this.gameObject.AddComponent<Rigidbody>();
-            if (!isLigther)
+            if (objectRB == null)
             {
+                objectRB = this.gameObject.AddComponent<Rigidbody>();
                 objectRB.mass = mass;
                 objectRB.drag = drag;
-                GetComponent<BoxCollider>().isTrigger = true;
-                objectRB.isKinematic = false;
+            }
+
+            objectRB.isKinematic = false;
+
+            switch (weight)
+            {
+                case ObjectType.HEAVY:
+                    GetComponent<BoxCollider>().isTrigger = true;
+                    break;
             }
         }
 
@@ -310,6 +338,7 @@ public class ItemMovement : ReaperJr
 
     IEnumerator JustRelaseReset()
     {
+        justReleased = true;
         yield return new WaitForSeconds(2f);
         justReleased = false;
     }
@@ -326,8 +355,12 @@ public class ItemMovement : ReaperJr
         {
             if (other.tag == "Player" || other.tag == "Scythe")
             {
-                if (!isLigther)
-                    objectRB.isKinematic = true;
+                switch (weight)
+                {
+                    case ObjectType.HEAVY:
+                        objectRB.isKinematic = true;
+                        break;
+                }
             }
         }
     }
@@ -336,32 +369,44 @@ public class ItemMovement : ReaperJr
     {
         if (objectRB != null)
             objectRB.isKinematic = false;
+        GameEvents.ReportOnCanHoldTest(false);
     }
 
     private void OnEnable()
     {
-        GameEvents.OnMovingObject += OnMovingObject; 
+        GameEvents.OnMovingObject += OnMovingObject;
+        GameEvents.OnCanHold += OnCanHold;
     }
 
     private void OnDisable()
     {
         GameEvents.OnMovingObject -= OnMovingObject;
+        GameEvents.OnCanHold -= OnCanHold;
     }
 
     void OnMovingObject (bool holding)
     {
+        GameEvents.ReportOnCanHoldTest(false);
         //if (canHold || isHolding)
-            holding = _GAME.isHolding;
-       
-        if(canHold && !holding)
+        holding = _GAME.isHolding;
+
+        if (canHold && !holding)
         {
             PickUp();
         }
 
-        if(isHolding && holding)
+        if (isHolding && holding)
         {
             StartCoroutine(Release());
             iniDistance = 0f;
         }
+    }
+
+    void OnCanHold(bool canHoldReport) // ensure the character can only pick up one object.
+    {
+        if (canHoldReport && !canHold)
+            canHoldTest = false;
+        else
+            canHoldTest = true;
     }
 }

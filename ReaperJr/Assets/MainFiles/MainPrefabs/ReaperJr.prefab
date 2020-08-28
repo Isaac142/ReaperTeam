@@ -2600,9 +2600,9 @@ MonoBehaviour:
   movable: 1
   speedFactor: 7
   addForce: 600
-  gModifier: 0.7
+  gModifier: 0.5
   jumpBufferTime: 0.2
-  cayoteTime: 0.05
+  cayoteTime: 0.1
   timeToMove: 0.1
   collectableDist: 1
   collectableLayer:
@@ -2614,6 +2614,7 @@ MonoBehaviour:
   fallDist: 0
   facingDirection: 0
   canCollect: 0
+  keyCollect: 1
   anim: {fileID: 1741016118}
   walkHack: 0
   teleportStart: {fileID: 5373930650462368082}

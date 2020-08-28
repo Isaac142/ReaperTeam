@@ -14,12 +14,11 @@ public class CheeseTrigger : ReaperJr
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (itemMovement != null && !_GAME.playerIn)
+        if (itemMovement != null)
         {
             if (other.tag == "Player")
             {
                 itemMovement.playerIn = true;
-                _GAME.playerIn = true;
 
             }
         }
@@ -32,7 +31,6 @@ public class CheeseTrigger : ReaperJr
             if (other.tag == "Player")
             {
                 itemMovement.playerIn = false;
-                _GAME.playerIn = false;
 
             }
         }

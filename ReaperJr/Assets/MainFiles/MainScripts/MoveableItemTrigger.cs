@@ -14,13 +14,11 @@ public class MoveableItemTrigger : ReaperJr
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (itemMovement != null && !_GAME.playerIn)
+        if (other.tag == "Player")
         {
-                if (other.tag == "Player")
-                {
-                    itemMovement.playerIn = true;
-                    _GAME.playerIn = true;
-                
+            if (itemMovement != null)
+            {
+                itemMovement.playerIn = true;
             }
         }
     }
@@ -32,7 +30,6 @@ public class MoveableItemTrigger : ReaperJr
             if (other.tag == "Player")
             {
                 itemMovement.playerIn = false;
-                _GAME.playerIn = false;
             }
         }
     }

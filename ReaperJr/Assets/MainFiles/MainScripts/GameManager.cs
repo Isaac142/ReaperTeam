@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] //game states
     public bool playerActive = true, isPaused =  false;
     [HideInInspector] //holding object states
-    public bool isHolding = false, holdingLightObject = false, playerIn = false;
+    public bool isHolding = false, holdingLightObject = false;
     [HideInInspector] //scythe and its ability state
     public bool scytheEquiped = true, scytheaThrown = false, onCD = false;
     [HideInInspector] //grounding states
@@ -88,7 +88,6 @@ public class GameManager : Singleton<GameManager>
         _PLAYER.Restart();
         holdingLightObject = false;
         isHolding = false;
-        playerIn = false;
         onSpecialGround = false;
         _timer = maxTimerInSeconds;
         _energy = maxEnergy;
