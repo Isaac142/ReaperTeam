@@ -19,7 +19,7 @@ public static class GameEvents
     public static event Action<FakeSoulController> OnFakeSoulCollected = null;
     public static event Action<bool> OnMovingObject = null;
     public static event Action<bool> OnFallDeath = null;
-    public static event Action<bool> OnTimeChange = null;
+    public static event Action<bool, float> OnTimeChange = null;    // bool: true = reward time, false = punishment time; float = time duration 
     public static event Action<bool> OnCanHold = null;
 
     public static void ReportGameStateChange(GameState gameState)
@@ -106,10 +106,10 @@ public static class GameEvents
             OnFallDeath(fall);
     }
 
-    public static void ReportOnTimeChange(bool time)
+    public static void ReportOnTimeChange(bool time, float timer)
     {
         if (OnTimeChange != null)
-            OnTimeChange(time);
+            OnTimeChange(time, timer);
     }
 
     public static void ReportOnCanHoldTest (bool canHold)

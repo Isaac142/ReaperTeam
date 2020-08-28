@@ -27,6 +27,9 @@ public class EnemyPatrol : ReaperJr
     public float fakeSoulTurnTime = 1f;
     bool isChasing = false; //for both dog and mouse, if is chasing, play running animation, otherwise play walking animation, unless there's other animations.
     bool following = false;
+    private GameObject detectCollider;
+    [HideInInspector]
+    public bool playerIn;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +38,16 @@ public class EnemyPatrol : ReaperJr
         if (transform.tag == "Enemy")
         {
             enemyType = EnemyType.ENEMY;
+
+            //create a player detect sphere for hints.
+            detectCollider = new GameObject("Collider");
+            detectCollider.transform.parent = transform;
+            detectCollider.transform.position = transform.position;
+            detectCollider.layer = 2;
+            detectCollider.transform.localScale = new Vector3(1f, 1f, 1f);
+            SphereCollider collider = detectCollider.AddComponent<SphereCollider>();
+            collider.isTrigger = true;
+            collider.radius = awareDistance;
         }
         if (transform.tag == "Dummy")
         {
@@ -114,7 +127,7 @@ public class EnemyPatrol : ReaperJr
                 break;
 
             case EnemyType.FAKESOUL:
-                bool inSight = Physics.Linecast(transform.position, player.position);
+                bool inSight = Physics.Linecast(transform.position, player.position + Vector3.up * 0.5f);
                 if (toPlayer >= awareDistance || !inSight || _GAME.gameState == GameState.DEAD)
                 {
                     following = false;
@@ -124,7 +137,6 @@ public class EnemyPatrol : ReaperJr
                     if (agent.remainingDistance <= 0f)
                     {
                         agent.isStopped = true;
-                        anim.SetBool("Red", false);
                     }
                 }
                 else
@@ -132,6 +144,12 @@ public class EnemyPatrol : ReaperJr
                     agent.speed = chasingSpeed;
                     agent.SetDestination(_PLAYER.transform.position);
                 }
+
+                if(!following && agent.isStopped)
+                    anim.SetBool("Red", false);
+                else
+                    anim.SetBool("Red", true);
+
                 break;
         }
     }
@@ -154,7 +172,7 @@ public class EnemyPatrol : ReaperJr
             isChasing = true;
 
             agent.speed = chasingSpeed;
-            runDirection = (transform.position - _PLAYER.gameObject.transform.position);
+            runDirection = (transform.position - _PLAYER.gameObject.transform.position + Vector3.up * 0.5f);
             Vector3 newPosition = transform.position + runDirection;
             agent.SetDestination(newPosition);
             if (agent.remainingDistance < 0.5f)
@@ -166,9 +184,9 @@ public class EnemyPatrol : ReaperJr
 
     public void Chasing()
     {
-        if (toPlayer < awareDistance && _GAME.gameState == GameState.INGAME)
+        if (toPlayer <= awareDistance && _GAME.gameState == GameState.INGAME)
         {
-            if (Physics.Linecast(transform.position, _PLAYER.transform.position)) //check if character is in sight
+            if (!Physics.Linecast(transform.position, _PLAYER.transform.position)) //check if character is in sight
             {
                 if (!_GAME.isInvincible)
                 {
@@ -194,7 +212,6 @@ public class EnemyPatrol : ReaperJr
     public IEnumerator FakeSoulActivate()
     {
         GameEvents.ReportCollectHintShown(HintForItemCollect.FAKESOULWARNING);
-        anim.SetBool("Red", true);
         yield return new WaitForSeconds(fakeSoulTurnTime);
         agent.isStopped = false;
         following = true;

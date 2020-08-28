@@ -20,17 +20,9 @@ public class SoulJar : ReaperJr
         lidRot = Vector3.zero;        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (_GAME.totalSoulNo == 0 && !_GAME.returnSouls)
-            GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-        else
-            GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
-    }
-
     private void OnMouseOver()
     {
+        GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
         if (!_GAME.returnSouls)
         {
             if (_GAME.totalSoulNo == 0)
@@ -60,14 +52,19 @@ public class SoulJar : ReaperJr
     }
     private void OnMouseExit()
     {
-        if(!_GAME.returnSouls)
+        if(!playerIn)
+             GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+        if (!_GAME.returnSouls)
             GameEvents.ReportInteractHintShown(HintForInteraction.DEFAULT);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag == "Player")
+        {
             playerIn = true;
+            GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -75,6 +72,7 @@ public class SoulJar : ReaperJr
         if (other.transform.tag == "Player")
         {
             playerIn = false;
+            GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
         }
     }
 }

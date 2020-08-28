@@ -116,15 +116,6 @@ public class CameraControlScript : Singleton<CameraControlScript>
             else
                 transform.DOMove(playerPos + toPlayerDist + offset, zoomSpeed).SetEase(zoomEase);
         }
-
-        //if(camPos == CameraPosition.ZOOMIN)
-        //{
-        //    if (Input.GetKeyDown(KeyCode.Escape))
-        //    {
-        //        GameEvents.ReportGameStateChange(GameState.RESUME);
-        //        camPos = CameraPosition.GAMEPLAY;
-        //    }
-        //}
     }
 
     private void FixedUpdate()

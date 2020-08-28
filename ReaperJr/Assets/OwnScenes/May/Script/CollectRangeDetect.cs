@@ -27,6 +27,7 @@ public class CollectRangeDetect : ReaperJr
         if (other.tag == "Player" && !_GAME.isHolding)
         {
             _PLAYER.canCollect = false;
+            GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         }
     }
 }

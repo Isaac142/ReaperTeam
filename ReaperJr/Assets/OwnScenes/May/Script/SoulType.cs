@@ -72,6 +72,25 @@ public class SoulType : ReaperJr
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            switch (soulTypes)
+            {
+                case SoulTypes.SKITTISH:
+                    {
+                        Color color = rend.material.color;
+                        color.a = 0.8f;
+                        foreach (GameObject obj in childObj)
+                            obj.SetActive(true);
+                        break;
+                    }
+            }
+        }
+
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")

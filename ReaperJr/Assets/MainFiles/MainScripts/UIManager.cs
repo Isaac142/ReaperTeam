@@ -79,6 +79,8 @@ public class UIManager : Singleton<UIManager>
     public Toggle musicToggle, soundFXToggle;
     private int currSlide = 0;
     private float openningTimer = 0;
+    [HideInInspector]
+    public bool menuTest = false;
 
     [HideInInspector]
     public bool instructionOn = false, controlsOn = false, UIsOn = false, optionOn = false;
@@ -413,8 +415,13 @@ public class UIManager : Singleton<UIManager>
 
     public void Menu()
     {
-        GameEvents.ReportGameStateChange(GameState.MENU);
-        InstructionPanel();
+        if (menuTest)
+        {
+            GameEvents.ReportGameStateChange(GameState.MENU);
+            InstructionPanel();
+        }
+        else
+            return;
     }
 
     public void ControlsPanel()
@@ -643,7 +650,6 @@ public class UIManager : Singleton<UIManager>
                 FadeInText(CollectingHint);
                 break;
             case HintForItemCollect.FAKESOULWARNING:
-
                 CollectingHint.text = "<color=red> <size=80> Fake Soul! RUN!!!";
                 FadeInText(CollectingHint);
                 break;
@@ -721,26 +727,30 @@ public class UIManager : Singleton<UIManager>
             deadPanel.GetComponentInChildren<TextMeshProUGUI>().text = "You are in Danger \n Return to Last Check Point";
     }
 
-    void OnTimeChange(bool changedTime)
+    void OnTimeChange(bool changedTime, float time)
     {
         if (changedTime)
-            timeChangeMessage.text = "<color=#FFC000> <size=60> +" + _GAME.rewardTime.ToString();
+        {
+            timeChangeMessage.text = "<color=#FFC000> <size=80> +" + _GAME.rewardTime.ToString();
+            timeChangeMessage.rectTransform.localPosition = new Vector3(0, 0f, 0);
+        }
         else
-            timeChangeMessage.text = "<color=red> <size=60> -" + _GAME.punishmentTime.ToString();
-        
-        timeChangeMessage.rectTransform.localPosition = new Vector3(0, 30f, 0);
+        {
+            timeChangeMessage.text = "<color=red> <size=80> -" + _GAME.punishmentTime.ToString();
+            timeChangeMessage.rectTransform.localPosition = new Vector3(0, -30f, 0);
+        }
         timeChangeMessage.alpha = 1;
 
-        StartCoroutine(TimeChange());
+        StartCoroutine(TimeChange(time));
     }
 
-    public IEnumerator TimeChange () //show time rewards/punishment
+    public IEnumerator TimeChange (float time) //show time rewards/punishment
     {
         FadeInPanel(timeChangePanel);
-        timeChangeMessage.rectTransform.DOLocalMoveY(50f, 2f);
-        timeChangeMessage.DOFade(0, 2.5f);
+        timeChangeMessage.rectTransform.DOLocalMoveY(50f, time);
+        timeChangeMessage.DOFade(0, time + 0.5f);
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(time);
         FadeOutPanel(timeChangePanel);
     }
 }

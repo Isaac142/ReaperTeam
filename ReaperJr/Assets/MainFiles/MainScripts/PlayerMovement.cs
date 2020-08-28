@@ -95,7 +95,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (_GAME.gameState != GameState.INGAME)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isCrouching) // unable to jump while crouching
+        if (Input.GetButtonDown("Jump") && !isCrouching) // unable to jump while crouching
         {
             _AUDIO.Play(this.GetComponent<AudioSource>(), "Jump", 10);
             distToGround = 0f;
@@ -453,7 +453,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     #region Collecting
     void Collect()
-    {
+    { 
         if(_UI.currCollectInfo != HintForItemCollect.FAKESOULWARNING)
             GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
         RaycastHit[] hits;
@@ -465,8 +465,11 @@ public class PlayerMovement : Singleton<PlayerMovement>
         {
             if (hits[i].transform.tag != "Untagged")
             {
-                if (Physics.Linecast(transform.position, hits[i].transform.position, visionTestLayers))
+                if (Physics.Linecast(transform.position + Vector3.up * 0.5f, hits[i].transform.position, visionTestLayers))
+                {
+                    GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
                     return;
+                }
                 else
                 {
                     if (hits[i].transform.tag == "HiddenItem")
@@ -474,7 +477,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
                     else if (hits[i].transform.tag == "KeyItem")
                     {
-                        if(keyCollect)
+                        if (keyCollect)
                             GameEvents.ReportCollectHintShown(HintForItemCollect.COLLECTITEMS);
                         else
                             GameEvents.ReportCollectHintShown(HintForItemCollect.KEYLIMIT);
@@ -516,7 +519,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                             _GAME.Timer += _GAME.rewardTime;
                             Destroy(hits[i].transform.gameObject);
                             GameEvents.ReportCollectHintShown(HintForItemCollect.DEFAULT);
-                            GameEvents.ReportOnTimeChange(true);
+                            GameEvents.ReportOnTimeChange(true, 2f);
                         }
 
                         if (hits[i].transform.tag == "KeyItem" && keyCollect)

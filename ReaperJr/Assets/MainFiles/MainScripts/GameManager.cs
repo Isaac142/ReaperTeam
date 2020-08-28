@@ -217,7 +217,7 @@ public class GameManager : Singleton<GameManager>
             .OnComplete(() =>
             {
                 StartCoroutine(InvincibleTimer());
-                GameEvents.ReportOnTimeChange(false);
+                GameEvents.ReportOnTimeChange(false, 5f);
                 GameEvents.ReportGameStateChange(GameState.RESUME);
             });
     }
@@ -327,7 +327,7 @@ public class GameManager : Singleton<GameManager>
     {
         yield return new WaitForSeconds(3f);
         StartCoroutine(InvincibleTimer());
-        GameEvents.ReportOnTimeChange(false);
+        GameEvents.ReportOnTimeChange(false, 5f);
         GameEvents.ReportGameStateChange(GameState.RESUME);
     }
 
@@ -350,20 +350,20 @@ public class GameManager : Singleton<GameManager>
             case EndGameState.RETURNSOULS:
                 returnSoul++;
                 GameEvents.ReportInteractHintShown(HintForInteraction.RETURNSOULS);
-                StartCoroutine(EndGameCounter());
+                StartCoroutine(EndGameCounter(7f));
                 break;
 
             case EndGameState.GOTODOOR:
                 finish++;
                 GameEvents.ReportInteractHintShown(HintForInteraction.FINISH);
-                StartCoroutine(EndGameCounter());
+                StartCoroutine(EndGameCounter(5f));
                 break;
         }
     }
 
-    IEnumerator EndGameCounter()
+    IEnumerator EndGameCounter(float timer)
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(timer);
         SoulReturnCondition(EndGameState.DEFAULT);
     }
 }
