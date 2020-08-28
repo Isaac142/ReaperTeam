@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -608,11 +608,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OnMovableHintShown(HintForMovingBoxes action)
     {
-        FadeOutText(MovingObjHint);
         currMovingInfo = action;
         switch (action)
         {
             case HintForMovingBoxes.DEFAULT:
+                 FadeOutText(MovingObjHint);
                 break;
             case HintForMovingBoxes.CANHOLD:
                 MovingObjHint.text = "<color=#FFFFFF> Press E key to Hold Object in front.";
@@ -631,11 +631,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OnCollectHintShown(HintForItemCollect action)
     {
-        FadeOutText(CollectingHint);
         currCollectInfo = action;
         switch (action)
         {
             case HintForItemCollect.DEFAULT:
+                FadeOutText(CollectingHint);
                 break;
             case HintForItemCollect.COLLECTSOULS:
                 CollectingHint.text = "<color=#FFFFFF> Right click to collect the soul(s).\n <color=#EDC3FF> Don't collect fake soul(s).";
@@ -659,11 +659,11 @@ public class UIManager : Singleton<UIManager>
     public void OnInterActionHintShown(HintForInteraction action)
     {
         currInteractInfo = action;
-        FadeOutText(InteractionHint1);
-        FadeOutText(InteractionHint2);
         switch (action)
         {
             case HintForInteraction.DEFAULT:
+                FadeOutText(InteractionHint1);
+                FadeOutText(InteractionHint2);
                 break;
             case HintForInteraction.SWITCH:
                 InteractionHint1.text = "<color=#FFFFFF> Right click initiating it";
