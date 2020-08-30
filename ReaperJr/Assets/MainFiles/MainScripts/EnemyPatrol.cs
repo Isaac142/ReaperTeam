@@ -28,8 +28,6 @@ public class EnemyPatrol : ReaperJr
     bool isChasing = false; //for both dog and mouse, if is chasing, play running animation, otherwise play walking animation, unless there's other animations.
     bool following = false;
     private GameObject detectCollider;
-    [HideInInspector]
-    public bool playerIn;
 
     // Start is called before the first frame update
     void Start()
@@ -172,7 +170,7 @@ public class EnemyPatrol : ReaperJr
             isChasing = true;
 
             agent.speed = chasingSpeed;
-            runDirection = (transform.position - _PLAYER.gameObject.transform.position + Vector3.up * 0.5f);
+            runDirection = (transform.position - player.transform.position);
             Vector3 newPosition = transform.position + runDirection;
             agent.SetDestination(newPosition);
             if (agent.remainingDistance < 0.5f)
@@ -186,7 +184,7 @@ public class EnemyPatrol : ReaperJr
     {
         if (toPlayer <= awareDistance && _GAME.gameState == GameState.INGAME)
         {
-            if (!Physics.Linecast(transform.position, _PLAYER.transform.position)) //check if character is in sight
+            if (Physics.Linecast(transform.position, player.transform.position + Vector3.up * 0.5f)) //check if character is in sight
             {
                 if (!_GAME.isInvincible)
                 {
